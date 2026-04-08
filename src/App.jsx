@@ -54,9 +54,10 @@ export default function App() {
           <Route path="/case-studies"    element={<PageWrapper><CaseStudiesPage    /></PageWrapper>} />
           <Route path="/terms-of-service"element={<PageWrapper><TermsOfServicePage /></PageWrapper>} />
           <Route path="/thankyou"        element={<PageWrapper><ThankYouPage       /></PageWrapper>} />
-          <Route path="/signup"          element={<PageWrapper><SignUpPage         /></PageWrapper>} />
-          <Route path="/login"           element={<PageWrapper><LoginPage          /></PageWrapper>} />
-          <Route path="/account"         element={<PageWrapper><AccountPage        /></PageWrapper>} />
+          {/* Auth routes — uncomment at launch */}
+          {/* <Route path="/signup"      element={<PageWrapper><SignUpPage         /></PageWrapper>} /> */}
+          {/* <Route path="/login"       element={<PageWrapper><LoginPage          /></PageWrapper>} /> */}
+          {/* <Route path="/account"     element={<PageWrapper><AccountPage        /></PageWrapper>} /> */}
         </Routes>
       </AnimatePresence>
       {showFooter && <Footer />}
