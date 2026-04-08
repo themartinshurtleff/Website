@@ -18,10 +18,8 @@ const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
 // Map Shopify product titles/variants to subscription tiers
 // Update these to match your actual Shopify product names
 const TIER_MAP: Record<string, string> = {
-  "Pro Monthly": "pro_monthly",
-  "Pro Annual": "pro_annual",
-  "Pro - Monthly": "pro_monthly",
-  "Pro - Annual": "pro_annual",
+  "TradeNet Terminal - Pro (Monthly)": "pro_monthly",
+  "TradeNet Terminal - Pro (Annual)": "pro_annual",
   "Founding Member": "founding",
 };
 
