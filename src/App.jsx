@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Analytics } from '@vercel/analytics/react'
 import Header             from '@/components/layout/Header'
 import Footer             from '@/components/layout/Footer'
-import FreeGuidePopup     from '@/components/common/FreeGuidePopup'
+// import FreeGuidePopup     from '@/components/common/FreeGuidePopup'
 import ScrollToTop        from '@/components/common/ScrollToTop'
 import HomePage           from '@/pages/HomePage'
 import TerminalPage       from '@/pages/TerminalPage'
@@ -19,7 +19,7 @@ import AccountPage        from '@/pages/AccountPage'
 
 const noHeaderRoutes = ['/indicator', '/terms-of-service', '/contact', '/thankyou']
 const noFooterRoutes = ['/thankyou']
-const noPopupRoutes  = ['/thankyou']
+// const noPopupRoutes  = ['/thankyou']
 
 function PageWrapper({ children }) {
   return (
@@ -38,13 +38,10 @@ export default function App() {
   const location    = useLocation()
   const showHeader  = !noHeaderRoutes.includes(location.pathname)
   const showFooter  = !noFooterRoutes.includes(location.pathname)
-  const showPopup   = !noPopupRoutes.includes(location.pathname)
-
   return (
     <>
       <ScrollToTop />
       {showHeader && <Header />}
-      {showPopup  && <FreeGuidePopup />}
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/"                element={<PageWrapper><HomePage           /></PageWrapper>} />

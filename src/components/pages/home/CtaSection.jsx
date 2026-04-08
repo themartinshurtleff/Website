@@ -39,13 +39,15 @@ export default function CtaSection() {
               high-probability setups every day.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
-              <button
-                onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
+              <a
+                href="https://whop.com/joined/tradenet/products/tradenet-pro/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="btn-gold inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-[14px]"
               >
                 Get Access Now
                 <ArrowRight size={15} />
-              </button>
+              </a>
               <button
                 onClick={() => navigate('/case-studies')}
                 className="btn-outline inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-[14px]"

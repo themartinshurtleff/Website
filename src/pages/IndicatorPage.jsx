@@ -57,12 +57,14 @@ export default function IndicatorPage() {
             alt="TradeNet"
             className="h-7 w-auto"
           />
-          <button
-            onClick={() => navigate('/#pricing')}
+          <a
+            href="https://whop.com/joined/tradenet/products/tradenet-pro/"
+            target="_blank"
+            rel="noopener noreferrer"
             className="btn-gold px-5 py-2 text-sm rounded-lg"
           >
             Get Access Now
-          </button>
+          </a>
         </div>
       </nav>
 
@@ -183,8 +185,9 @@ export default function IndicatorPage() {
                   Get the complete indicator, education, and strategy suite plus 30 days of live trading room access for just $79.
                 </p>
                 <a
-                  href="/#pricing"
-                  onClick={(e) => { e.preventDefault(); window.location.href = '/#pricing' }}
+                  href="https://whop.com/joined/tradenet/products/tradenet-pro/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="btn-gold block text-center px-6 py-3 rounded-xl text-[15px] font-bold"
                 >
                   Get Instant Access
@@ -212,12 +215,14 @@ export default function IndicatorPage() {
             <h2 className="text-[clamp(28px,4vw,48px)] font-black tracking-[-0.03em]">
               <span className="gradient-text-gold">Ready to Trade with Confidence?</span>
             </h2>
-            <button
-              onClick={() => { window.location.href = '/#pricing' }}
+            <a
+              href="https://whop.com/joined/tradenet/products/tradenet-pro/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="btn-gold inline-flex items-center gap-2 px-7 py-3.5 rounded-xl text-[15px]"
             >
               Get Access Now <ArrowRight size={16} />
-            </button>
+            </a>
             <div className="flex flex-wrap justify-center gap-4">
               {trustBadges.map(({ icon: Icon, label }) => (
                 <div key={label} className="flex items-center gap-2 text-sm text-[#71717A]">
