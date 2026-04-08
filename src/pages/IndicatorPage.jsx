@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowLeft, ArrowRight, CheckCircle2, ShieldCheck, Zap, RefreshCw } from 'lucide-react'
 import FeatureList from '@/components/pages/indicator/FeatureList'
-import Footer from '@/components/layout/Footer'
+// import Footer from '@/components/layout/Footer'
 
 const images = [
   'https://storage.googleapis.com/hostinger-horizons-assets-prod/3d810307-bbc4-4f21-91d6-f292df1a885d/2debc5cbf1d7ba94744a2daf0c1ebd27.gif',
@@ -240,7 +240,6 @@ export default function IndicatorPage() {
           </p>
         </div>
       </main>
-      <Footer />
     </>
   )
 }
