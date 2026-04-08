@@ -225,7 +225,12 @@ function FeatureRow({ feature, index }) {
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.65, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           >
-            <ImagePlaceholder label={placeholder} aspectRatio="16/9" />
+            <img
+              src="/hero.png"
+              alt={placeholder}
+              className="w-full rounded-[20px] border border-white/[0.07] object-cover"
+              style={{ aspectRatio: '16/9' }}
+            />
           </motion.div>
         </div>
       </div>
@@ -438,10 +443,11 @@ export default function TerminalPage() {
               animate={heroInView ? { opacity: 1, x: 0 } : {}}
               transition={{ delay: 0.3, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
-              <ImagePlaceholder
-                label="Terminal Hero Screenshot"
-                aspectRatio="16/9"
-                className="w-full shadow-2xl"
+              <img
+                src="/hero.png"
+                alt="TradeNet Terminal"
+                className="w-full rounded-[20px] border border-white/[0.07] shadow-2xl object-cover"
+                style={{ aspectRatio: '16/9' }}
               />
             </motion.div>
           </div>

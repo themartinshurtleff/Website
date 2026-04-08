@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, useInView } from 'framer-motion'
 import { ArrowRight, Layers, Target, Zap, LayoutGrid } from 'lucide-react'
-import ImagePlaceholder from '@/components/common/ImagePlaceholder'
+
 
 const fadeUp = {
   hidden:  { opacity: 0, y: 24 },
@@ -101,10 +101,10 @@ export default function TerminalTeaserSection() {
             animate={inView ? 'visible' : 'hidden'}
             className="lg:row-span-2"
           >
-            <ImagePlaceholder
-              label="TradeNet Terminal"
-              aspectRatio="4/3"
-              className="h-full min-h-[240px]"
+            <img
+              src="/hero.png"
+              alt="TradeNet Terminal"
+              className="w-full h-full min-h-[240px] object-cover rounded-[20px] border border-white/[0.07]"
             />
           </motion.div>
 
