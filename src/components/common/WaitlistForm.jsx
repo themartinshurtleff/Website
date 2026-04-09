@@ -1,12 +1,13 @@
 import { useState } from 'react'
-import { ArrowRight, CheckCircle2 } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { ArrowRight } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
 export default function WaitlistForm({ className = '', source = 'website' }) {
   const [email, setEmail]       = useState('')
-  const [submitted, setSubmitted] = useState(false)
   const [error, setError]       = useState('')
   const [loading, setLoading]   = useState(false)
+  const navigate = useNavigate()
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -31,20 +32,7 @@ export default function WaitlistForm({ className = '', source = 'website' }) {
       return
     }
 
-    setSubmitted(true)
-    setEmail('')
-  }
-
-  if (submitted) {
-    return (
-      <div className={className}>
-        <div className="inline-flex items-center gap-2.5 text-sm text-[#A1A1AA] bg-black border border-white/[0.08] rounded-xl px-4 py-3">
-          <CheckCircle2 size={15} className="text-[#22C55E] flex-shrink-0" />
-          You're on the list. We'll be in touch soon.
-        </div>
-        <p className="text-xs text-[#3F3F46] mt-2.5">Currently in closed beta · Early access coming soon</p>
-      </div>
-    )
+    navigate('/thankyou')
   }
 
   return (
