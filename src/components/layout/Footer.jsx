@@ -25,7 +25,7 @@ export default function Footer() {
             <ul className="space-y-2.5">
               <li>
                 <Link to="/terminal" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
-                  Quantum Terminal
+                  TradeNet Terminal
                 </Link>
               </li>
               <li>
@@ -73,21 +73,36 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Support */}
+          {/* Resources */}
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-[#71717A] mb-4">Support</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-[#71717A] mb-4">Resources</p>
             <ul className="space-y-2.5">
+              <li>
+                <a href="/docs" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
+                  Documentation
+                </a>
+              </li>
+              <li>
+                <a href="/blog" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
+                  Blog
+                </a>
+              </li>
               <li>
                 <Link to="/contact" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
                   Contact
                 </Link>
+              </li>
+              <li>
+                <a href="https://discord.gg/tradenet" target="_blank" rel="noopener noreferrer" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
+                  Discord
+                </a>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="mt-10 pt-6 border-t border-white/[0.04] flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-[#71717A]">© 2025 TradeNet. All rights reserved.</p>
+          <p className="text-xs text-[#71717A]">© 2026 TradeNet L.L.C.. All rights reserved.</p>
           <p className="text-xs text-[#71717A] text-center sm:text-right max-w-sm">
             Trading involves substantial risk. Past performance is not indicative of future results.
           </p>

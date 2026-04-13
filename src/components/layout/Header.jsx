@@ -5,11 +5,12 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '@/contexts/AuthContext'
 
 const navLinks = [
-  { label: 'Home',      to: '/'           },
-  { label: 'Terminal',  to: '/terminal'   },
-  { label: 'Indicator', to: '/indicator'  },
-  { label: 'Reviews',   to: '/case-studies' },
-  { label: 'About',     to: '/about'      },
+  { label: 'Home',      to: '/'              },
+  { label: 'Terminal',  to: '/terminal'      },
+  { label: 'Indicator', to: '/indicator'     },
+  { label: 'Docs',      to: '/docs',      external: true },
+  { label: 'Blog',      to: '/blog',      external: true },
+  { label: 'About',     to: '/about'         },
 ]
 
 export default function Header() {
@@ -27,7 +28,11 @@ export default function Header() {
 
   useEffect(() => setOpen(false), [location])
 
-  function handleNav(to) {
+  function handleNav(to, external) {
+    if (external) {
+      window.location.href = to
+      return
+    }
     if (to.includes('#')) {
       const [path, hash] = to.split('#')
       if (location.pathname !== path && path !== '') {
@@ -75,7 +80,7 @@ export default function Header() {
             {navLinks.map((link) => (
               <button
                 key={link.label}
-                onClick={() => handleNav(link.to)}
+                onClick={() => handleNav(link.to, link.external)}
                 className={`px-3.5 py-2 text-sm transition-colors duration-150 rounded-md ${
                   isActive(link.to)
                     ? 'text-[#FAFAFA] bg-white/[0.06]'
@@ -148,7 +153,7 @@ export default function Header() {
               {navLinks.map((link) => (
                 <button
                   key={link.label}
-                  onClick={() => handleNav(link.to)}
+                  onClick={() => handleNav(link.to, link.external)}
                   className={`text-left px-3 py-2.5 text-sm rounded-md transition-colors ${
                     isActive(link.to)
                       ? 'text-[#FAFAFA] bg-white/[0.06]'
