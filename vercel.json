@@ -1,7 +1,5 @@
 {
   "rewrites": [
-    { "source": "/docs/:path*", "destination": "https://tradenet.mintlify.app/docs/:path*" },
-    { "source": "/blog/:path*", "destination": "https://tradenet.mintlify.app/blog/:path*" },
     { "source": "/((?!assets/).*)", "destination": "/index.html" }
   ]
 }

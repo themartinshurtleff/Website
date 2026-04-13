@@ -78,12 +78,12 @@ export default function Footer() {
             <p className="text-xs font-semibold uppercase tracking-widest text-[#71717A] mb-4">Resources</p>
             <ul className="space-y-2.5">
               <li>
-                <a href="/docs" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
+                <a href="https://tradenet.mintlify.app/docs" target="_blank" rel="noopener noreferrer" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
                   Documentation
                 </a>
               </li>
               <li>
-                <a href="/blog" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
+                <a href="https://tradenet.mintlify.app/blog" target="_blank" rel="noopener noreferrer" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
                   Blog
                 </a>
               </li>

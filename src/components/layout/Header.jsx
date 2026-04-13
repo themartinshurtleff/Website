@@ -8,8 +8,8 @@ const navLinks = [
   { label: 'Home',      to: '/'              },
   { label: 'Terminal',  to: '/terminal'      },
   { label: 'Indicator', to: '/indicator'     },
-  { label: 'Docs',      to: '/docs',      external: true },
-  { label: 'Blog',      to: '/blog',      external: true },
+  { label: 'Docs',      to: 'https://tradenet.mintlify.app/docs',  external: true },
+  { label: 'Blog',      to: 'https://tradenet.mintlify.app/blog', external: true },
   { label: 'About',     to: '/about'         },
 ]
 
