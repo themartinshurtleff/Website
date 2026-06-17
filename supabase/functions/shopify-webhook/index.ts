@@ -104,6 +104,25 @@ function noteAttr(order: any, name: string): string | null {
   return hit?.value ? String(hit.value) : null;
 }
 
+// The /cart/add checkout puts profile_id as a line-item property (_profile_id).
+function lineItemProp(order: any, name: string): string | null {
+  const items = Array.isArray(order?.line_items) ? order.line_items : [];
+  for (const it of items) {
+    const props = Array.isArray(it?.properties) ? it.properties : [];
+    const hit = props.find((p: any) => p?.name === name);
+    if (hit?.value) return String(hit.value);
+  }
+  return null;
+}
+
+// profile_id can arrive as a note attribute (old format) or a line-item
+// property (current /cart/add format, hidden via the leading underscore).
+function resolveProfileId(order: any): string | null {
+  return noteAttr(order, "profile_id")
+    || lineItemProp(order, "_profile_id")
+    || lineItemProp(order, "profile_id");
+}
+
 function addPeriod(from: Date, period: "month" | "year"): string {
   const d = new Date(from);
   if (period === "month") d.setUTCMonth(d.getUTCMonth() + 1);
@@ -176,7 +195,7 @@ async function handleOrdersPaid(order: any): Promise<string> {
     : (order?.line_items?.[0]?.selling_plan_allocation?.selling_plan?.id != null
         ? String(order.line_items[0].selling_plan_allocation.selling_plan.id) : null);
   const orderId = order?.id != null ? String(order.id) : null;
-  const profileId = noteAttr(order, "profile_id");
+  const profileId = resolveProfileId(order);
   const email = order?.customer?.email ? String(order.customer.email) : null;
 
   const userId = await findProfileId({ profileId });

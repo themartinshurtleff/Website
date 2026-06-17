@@ -6,10 +6,18 @@
 // (no email guessing). See agent-tasks-2026-06-15 §1.6 / §0.5.9.
 //
 // Branded checkout lives on the custom domain shop.tradenet.org (Shopify is the
-// merchant of record; PCI stays on Shopify). The cart permalink carries the
-// variant id, the selling plan (so it checks out as a recurring subscription,
-// not a one-time charge), and the profile_id attribute:
-//   https://shop.tradenet.org/cart/{VARIANT}:1?selling_plan={PLAN}&attributes[profile_id]={uid}
+// merchant of record; PCI stays on Shopify).
+//
+// IMPORTANT: a subscription-only variant CANNOT be added via the colon permalink
+// (`/cart/{v}:1?selling_plan=` errors, `/cart/{v}:1,selling_plan:` 404s on this
+// store). The format Shopify actually accepts is the /cart/add endpoint:
+//   /cart/add?id={VARIANT}&selling_plan={PLAN}&quantity=1
+//             &properties[_profile_id]={uid}&return_to=/checkout
+// - selling_plan makes it a recurring subscription (verified reaching /checkouts).
+// - the profile_id rides as a LINE-ITEM PROPERTY `_profile_id` (leading underscore
+//   = hidden from the storefront). The webhook reads it from line_items[].properties
+//   (it also still checks note_attributes for back-compat).
+// - return_to=/checkout jumps straight to payment instead of the cart page.
 // ----------------------------------------------------------------------------
 
 const CHECKOUT_DOMAIN = 'https://shop.tradenet.org'
@@ -39,8 +47,14 @@ export function isCheckoutConfigured(plan = 'monthly') {
 export function buildCheckoutUrl(plan, profileId) {
   const p = PLANS[plan]
   if (!p?.variantId || !p?.sellingPlanId || !profileId) return null
-  const attr = encodeURIComponent('attributes[profile_id]')
-  return `${CHECKOUT_DOMAIN}/cart/${p.variantId}:1?selling_plan=${p.sellingPlanId}&${attr}=${encodeURIComponent(profileId)}`
+  const params = new URLSearchParams({
+    id: p.variantId,
+    selling_plan: p.sellingPlanId,
+    quantity: '1',
+    'properties[_profile_id]': profileId,
+    return_to: '/checkout',
+  })
+  return `${CHECKOUT_DOMAIN}/cart/add?${params.toString()}`
 }
 
 // Manage-subscription portal (Shopify customer account). Filled when live.
