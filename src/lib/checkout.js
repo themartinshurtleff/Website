@@ -7,35 +7,40 @@
 //
 // Branded checkout lives on the custom domain shop.tradenet.org (Shopify is the
 // merchant of record; PCI stays on Shopify). The cart permalink carries the
-// variant id and the attribute:
-//   https://shop.tradenet.org/cart/{VARIANT_ID}:1?attributes[profile_id]={uid}
-//
-// VARIANT IDS pend Shopify Payments approval + Subscriptions setup. Until they
-// are filled in, isCheckoutConfigured() is false and the UI keeps the waitlist
-// behavior. Product ids (already known) live in the webhook allowlist; the
-// website only needs the *variant* id for the cart permalink.
+// variant id, the selling plan (so it checks out as a recurring subscription,
+// not a one-time charge), and the profile_id attribute:
+//   https://shop.tradenet.org/cart/{VARIANT}:1?selling_plan={PLAN}&attributes[profile_id]={uid}
 // ----------------------------------------------------------------------------
 
 const CHECKOUT_DOMAIN = 'https://shop.tradenet.org'
 
-// Fill these once the Subscriptions app is configured (one test checkout each
-// surfaces the variant id). Product ids for reference:
-//   monthly product 9349798396162, annual product 9349799018754.
+// MASTER SWITCH. true = Buy buttons route to live Shopify subscription checkout
+// and charge real cards. The site copy now matches the live Shopify prices
+// (Monthly $29.99/mo, Annual $384.99/yr); no "annual saves" framing since annual
+// is not the cheaper per-month option.
+//
+// GO-LIVE PREREQUISITE: the Shopify store password must be OFF — a locked store
+// redirects the cart link to /password and checkout fails. Keep the store public
+// while selling.
+const CHECKOUT_ENABLED = true
+
+// Live Shopify ids (read from the store's public product .js, 2026-06-17).
+// product ids (for the webhook allowlist): monthly 9349798396162, annual 9349799018754.
 export const PLANS = {
-  monthly: { label: 'Pro — Monthly', variantId: null /* TODO */ },
-  annual:  { label: 'Pro — Annual',  variantId: null /* TODO */ },
+  monthly: { label: 'Pro — Monthly', variantId: '47630993490178', sellingPlanId: '3893231874', priceUsd: 29.99 },
+  annual:  { label: 'Pro — Annual',  variantId: '47630994145538', sellingPlanId: '3893166338', priceUsd: 384.99 },
 }
 
 export function isCheckoutConfigured(plan = 'monthly') {
-  return Boolean(PLANS[plan]?.variantId)
+  return CHECKOUT_ENABLED && Boolean(PLANS[plan]?.variantId && PLANS[plan]?.sellingPlanId)
 }
 
-// Build the branded checkout URL with the profile_id binding.
+// Build the branded subscription checkout URL with the profile_id binding.
 export function buildCheckoutUrl(plan, profileId) {
-  const variantId = PLANS[plan]?.variantId
-  if (!variantId || !profileId) return null
+  const p = PLANS[plan]
+  if (!p?.variantId || !p?.sellingPlanId || !profileId) return null
   const attr = encodeURIComponent('attributes[profile_id]')
-  return `${CHECKOUT_DOMAIN}/cart/${variantId}:1?${attr}=${encodeURIComponent(profileId)}`
+  return `${CHECKOUT_DOMAIN}/cart/${p.variantId}:1?selling_plan=${p.sellingPlanId}&${attr}=${encodeURIComponent(profileId)}`
 }
 
 // Manage-subscription portal (Shopify customer account). Filled when live.

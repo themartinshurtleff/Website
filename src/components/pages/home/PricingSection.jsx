@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, useInView } from 'framer-motion'
-import { CheckCircle2, Lock } from 'lucide-react'
+import { CheckCircle2 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { isCheckoutConfigured, buildCheckoutUrl } from '@/lib/checkout'
 
@@ -166,33 +166,12 @@ export default function PricingSection() {
                     </span>
                   </div>
                   <div className="flex items-end gap-2 mb-1">
-                    <span className="text-[48px] font-black tracking-tight text-[#FAFAFA]">$32</span>
-                    <span className="text-sm text-[#71717A] mb-3">/mo</span>
+                    <span className="text-[48px] font-black tracking-tight text-[#FAFAFA]">$384.99</span>
+                    <span className="text-sm text-[#71717A] mb-3">/yr</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <span className="text-[#71717A] line-through">$468/yr</span>
-                    <span className="text-[#FAFAFA] font-semibold">$384/yr</span>
-                    <span className="text-[#c9a84c] font-bold text-xs">Save $84</span>
-                  </div>
-                </div>
-
-                {/* Founding member callout */}
-                <div
-                  className="rounded-xl p-4 flex items-start gap-3"
-                  style={{
-                    background: 'rgba(201,168,76,0.06)',
-                    border: '1px solid rgba(201,168,76,0.2)',
-                  }}
-                >
-                  <Lock size={16} className="text-[#c9a84c] flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-sm font-bold text-[#c9a84c]">
-                      Founding Member: $24/mo — locked forever
-                    </p>
-                    <p className="text-xs text-[#A1A1AA] mt-1">
-                      First 100 annual members only. Price never increases.
-                    </p>
-                  </div>
+                  <p className="text-sm text-[#A1A1AA]">
+                    Billed once a year. Lock your price for 12 months.
+                  </p>
                 </div>
 
                 <ul className="flex flex-col gap-2.5 flex-1">
@@ -223,11 +202,11 @@ export default function PricingSection() {
                   <span className="text-xs text-[#71717A] ml-2">Billed Monthly</span>
                 </div>
                 <div className="flex items-end gap-2 mb-1">
-                  <span className="text-[48px] font-black tracking-tight text-[#FAFAFA]">$39</span>
+                  <span className="text-[48px] font-black tracking-tight text-[#FAFAFA]">$29.99</span>
                   <span className="text-sm text-[#71717A] mb-3">/mo</span>
                 </div>
-                <p className="text-sm text-[#c9a84c]">
-                  Save 18% with annual billing →
+                <p className="text-sm text-[#A1A1AA]">
+                  Billed monthly. Cancel anytime.
                 </p>
               </div>
               <ul className="flex flex-col gap-2.5 flex-1">
@@ -254,17 +233,6 @@ export default function PricingSection() {
         >
           <p className="text-sm text-[#71717A]">
             Elite tier — coming soon. Join the waitlist to be notified when early access opens.
-          </p>
-          <p
-            className="inline-block text-sm font-bold tracking-widest px-5 py-2.5 rounded-lg"
-            style={{
-              fontFamily: '"JetBrains Mono", "IBM Plex Mono", monospace',
-              color: '#39ff14',
-              background: 'rgba(57,255,20,0.05)',
-              border: '1px solid rgba(57,255,20,0.15)',
-            }}
-          >
-            [ FOUNDING SPOTS REMAINING: 94 / 100 ]
           </p>
         </motion.div>
       </div>
