@@ -57,8 +57,18 @@ export function buildCheckoutUrl(plan, profileId) {
   return `${CHECKOUT_DOMAIN}/cart/add?${params.toString()}`
 }
 
-// Manage-subscription portal (Shopify customer account). Filled when live.
-export const MANAGE_SUBSCRIPTION_URL = `${CHECKOUT_DOMAIN}/account`
+// Manage-subscription portal = Shopify "new customer accounts" page.
+// IMPORTANT: new customer accounts must live on a subdomain of the Shopify
+// PRIMARY domain (verified: help.shopify.com 2026 — "a subdomain of your primary
+// domain name"). The store's primary domain is shop.tradenet.org, so the account
+// subdomain must be account.SHOP.tradenet.org — NOT account.tradenet.org (that's
+// a sibling of the primary, which Shopify refuses -> 403 + no managed cert).
+// Connect it in Settings > Customer accounts > Change domain (DNS: CNAME
+// account.shop.tradenet.org -> shops.myshopify.com). Served at fixed paths
+// (/authentication/login, /orders, /account/pages/<id>); the root redirects to
+// sign-in / the account home where the customer manages their plan. Dormant until
+// the cert provisions. If you pick a different prefix, change this one line.
+export const MANAGE_SUBSCRIPTION_URL = 'https://account.shop.tradenet.org'
 
 // Terminal download (filled when the desktop build ships a public URL).
 export const TERMINAL_DOWNLOAD_URL = null
