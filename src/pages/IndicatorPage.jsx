@@ -57,14 +57,12 @@ export default function IndicatorPage() {
             alt="TradeNet"
             className="h-7 w-auto"
           />
-          <a
-            href="https://whop.com/joined/tradenet/products/tradenet-pro/"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to="/#pricing"
             className="btn-gold px-5 py-2 text-sm rounded-lg"
           >
             Get Access Now
-          </a>
+          </Link>
         </div>
       </nav>
 
@@ -184,14 +182,12 @@ export default function IndicatorPage() {
                 <p className="text-[15px] text-[#A1A1AA] leading-relaxed">
                   Get the complete indicator, education, and strategy suite plus 30 days of live trading room access for just $79.
                 </p>
-                <a
-                  href="https://whop.com/joined/tradenet/products/tradenet-pro/"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  to="/#pricing"
                   className="btn-gold block text-center px-6 py-3 rounded-xl text-[15px] font-bold"
                 >
                   Get Instant Access
-                </a>
+                </Link>
                 <div className="grid grid-cols-3 gap-2 pt-2">
                   {trustBadges.map(({ icon: Icon, label }) => (
                     <div key={label} className="flex flex-col items-center gap-1.5 py-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
@@ -215,14 +211,12 @@ export default function IndicatorPage() {
             <h2 className="text-[clamp(28px,4vw,48px)] font-black tracking-[-0.03em]">
               <span className="gradient-text-gold">Ready to Trade with Confidence?</span>
             </h2>
-            <a
-              href="https://whop.com/joined/tradenet/products/tradenet-pro/"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              to="/#pricing"
               className="btn-gold inline-flex items-center gap-2 px-7 py-3.5 rounded-xl text-[15px]"
             >
               Get Access Now <ArrowRight size={16} />
-            </a>
+            </Link>
             <div className="flex flex-wrap justify-center gap-4">
               {trustBadges.map(({ icon: Icon, label }) => (
                 <div key={label} className="flex items-center gap-2 text-sm text-[#71717A]">

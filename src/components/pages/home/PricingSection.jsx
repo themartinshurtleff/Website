@@ -1,9 +1,9 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, useInView } from 'framer-motion'
 import { CheckCircle2 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
-import { isCheckoutConfigured, buildCheckoutUrl } from '@/lib/checkout'
+import { isCheckoutConfigured, startCheckout } from '@/lib/checkout'
 
 const fadeUp = {
   hidden:  { opacity: 0, y: 24 },
@@ -50,15 +50,15 @@ export default function PricingSection() {
   const inView = useInView(ref, { once: true, margin: '-80px' })
   const navigate = useNavigate()
   const { user } = useAuth()
+  const [buyingPlan, setBuyingPlan] = useState(null)
+  const [checkoutError, setCheckoutError] = useState('')
 
   function goToWaitlist() {
     navigate('/terminal')
     setTimeout(() => document.getElementById('terminal-waitlist')?.scrollIntoView({ behavior: 'smooth' }), 350)
   }
 
-  // Account-first buy flow. Until Shopify variant ids are configured, checkout
-  // is not live -> fall back to the waitlist so the page still works.
-  function handleBuy(plan) {
+  async function handleBuy(plan) {
     if (!isCheckoutConfigured(plan)) {
       goToWaitlist()
       return
@@ -67,9 +67,19 @@ export default function PricingSection() {
       navigate('/login?return=' + encodeURIComponent('/#pricing'))
       return
     }
-    const url = buildCheckoutUrl(plan, user.id)  // note_attributes.profile_id = user.id
-    if (url) window.location.href = url
-    else goToWaitlist()
+
+    setCheckoutError('')
+    setBuyingPlan(plan)
+    try {
+      const url = await startCheckout(plan)
+      if (url) window.location.href = url
+      else goToWaitlist()
+    } catch (e) {
+      console.error('checkout failed', e)
+      setCheckoutError('Checkout is unavailable. Please try again in a moment.')
+    } finally {
+      setBuyingPlan(null)
+    }
   }
 
   const buyLabel = isCheckoutConfigured() ? 'Get Pro' : 'Join Waitlist'
@@ -179,9 +189,10 @@ export default function PricingSection() {
                 </ul>
                 <button
                   onClick={() => handleBuy('annual')}
-                  className="btn-gold text-center text-[14px] px-5 py-3 rounded-xl font-bold mt-auto w-full"
+                  disabled={Boolean(buyingPlan)}
+                  className="btn-gold text-center text-[14px] px-5 py-3 rounded-xl font-bold mt-auto w-full disabled:opacity-60 disabled:cursor-wait"
                 >
-                  {buyLabel}
+                  {buyingPlan === 'annual' ? 'Opening...' : buyLabel}
                 </button>
               </div>
             </div>
@@ -214,14 +225,21 @@ export default function PricingSection() {
               </ul>
               <button
                 onClick={() => handleBuy('monthly')}
-                className="btn-outline text-center text-[14px] px-5 py-3 rounded-xl font-semibold mt-auto block w-full"
+                disabled={Boolean(buyingPlan)}
+                className="btn-outline text-center text-[14px] px-5 py-3 rounded-xl font-semibold mt-auto block w-full disabled:opacity-60 disabled:cursor-wait"
               >
-                {buyLabel}
+                {buyingPlan === 'monthly' ? 'Opening...' : buyLabel}
               </button>
             </div>
           </motion.div>
 
         </div>
+
+        {checkoutError && (
+          <p className="mt-5 text-center text-sm text-red-400">
+            {checkoutError}
+          </p>
+        )}
 
         {/* Below cards */}
         <motion.div

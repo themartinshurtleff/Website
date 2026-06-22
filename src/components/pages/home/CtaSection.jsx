@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { motion, useInView } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 
@@ -39,15 +39,13 @@ export default function CtaSection() {
               high-probability setups every day.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
-              <a
-                href="https://whop.com/joined/tradenet/products/tradenet-pro/"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                to="/#pricing"
                 className="btn-gold inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-[14px]"
               >
                 Get Access Now
                 <ArrowRight size={15} />
-              </a>
+              </Link>
               <button
                 onClick={() => navigate('/case-studies')}
                 className="btn-outline inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-[14px]"

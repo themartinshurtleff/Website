@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { motion, useInView } from 'framer-motion'
 import { BookOpen, ArrowRight } from 'lucide-react'
 
@@ -32,15 +33,13 @@ export default function HandguideSection() {
               </div>
               <span className="text-sm text-[#A1A1AA]">90 pages of institutional-grade education</span>
             </div>
-            <a
-              href="https://whop.com/joined/tradenet/products/tradenet-starter/"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              to="/terminal"
               className="btn-gold inline-flex items-center gap-2 px-6 py-3 rounded-xl text-[15px]"
             >
               Access for Free
               <ArrowRight size={15} />
-            </a>
+            </Link>
           </motion.div>
 
           {/* Book visual */}

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -69,15 +70,13 @@ export default function FreeGuidePopup() {
                     </p>
                     <p className="text-xs text-[#c9a84c] mt-2 font-semibold">⚡ 12 spots left</p>
                   </div>
-                  <a
-                    href="https://whop.com/checkout/plan_vpZI2qjyG8yxs?d2c=true"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <Link
+                    to="/terminal"
                     onClick={dismiss}
                     className="btn-gold text-center text-sm px-5 py-2.5 rounded-lg w-full"
                   >
                     CLAIM FREE GUIDE
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

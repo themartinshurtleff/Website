@@ -3,7 +3,7 @@ import { useNavigate, Link, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { User, Mail, Shield, LogOut, RefreshCw, Download, ExternalLink } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
-import { MANAGE_SUBSCRIPTION_URL, TERMINAL_DOWNLOAD_URL } from '@/lib/checkout'
+import { openBillingPortal, TERMINAL_DOWNLOAD_URL } from '@/lib/checkout'
 
 // access_tier (derived security tier) -> display. NOT subscription_tier.
 const tierLabels = {
@@ -28,6 +28,8 @@ export default function AccountPage() {
   const navigate = useNavigate()
   const [params, setParams] = useSearchParams()
   const [refreshing, setRefreshing] = useState(false)
+  const [portalLoading, setPortalLoading] = useState(false)
+  const [portalError, setPortalError] = useState('')
   const [activating, setActivating] = useState(params.get('activating') === '1')
   const pollRef = useRef(null)
 
@@ -84,6 +86,20 @@ export default function AccountPage() {
   async function handleRefresh() {
     setRefreshing(true)
     try { await refreshAccess() } finally { setRefreshing(false) }
+  }
+
+  async function handleManageSubscription() {
+    setPortalError('')
+    setPortalLoading(true)
+    try {
+      const url = await openBillingPortal()
+      window.location.href = url
+    } catch (e) {
+      console.error('billing portal failed', e)
+      setPortalError('Subscription management is unavailable. Please try again in a moment.')
+    } finally {
+      setPortalLoading(false)
+    }
   }
 
   async function handleSignOut() {
@@ -160,17 +176,20 @@ export default function AccountPage() {
                 Refresh access
               </button>
               {isElevated && (
-                <a
-                  href={MANAGE_SUBSCRIPTION_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors"
+                <button
+                  type="button"
+                  onClick={handleManageSubscription}
+                  disabled={portalLoading}
+                  className="inline-flex items-center gap-2 text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors disabled:opacity-60 disabled:cursor-wait"
                 >
                   <ExternalLink size={14} />
-                  Manage subscription
-                </a>
+                  {portalLoading ? 'Opening portal...' : 'Manage subscription'}
+                </button>
               )}
             </div>
+            {portalError && (
+              <p className="text-sm text-red-400">{portalError}</p>
+            )}
           </div>
 
           {/* Terminal download — desktop-eligible tiers only (the desktop app

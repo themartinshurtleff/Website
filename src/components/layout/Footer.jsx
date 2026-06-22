@@ -39,14 +39,9 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <a
-                  href="https://whop.com/checkout/plan_vpZI2qjyG8yxs?d2c=true"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors"
-                >
+                <Link to="/#pricing" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
                   Try Risk Free
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

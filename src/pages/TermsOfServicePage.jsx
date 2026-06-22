@@ -28,7 +28,7 @@ const sections = [
   },
   {
     title: '7. Payment Processing and Refund Policy',
-    body: `All payments are processed through Whop.com. By purchasing a subscription or lifetime access, you agree to Whop's terms of service in addition to ours. All sales are final. We do not offer refunds on digital products, indicator access, or educational content once access has been granted. Monthly subscribers may cancel at any time; cancellation will take effect at the end of the current billing period. We reserve the right to modify our pricing at any time with reasonable notice.`,
+    body: `Paid subscriptions are processed through Stripe or another payment processor we designate. By purchasing a subscription, you authorize recurring charges for the selected plan until cancellation. All sales are final unless otherwise required by law. We do not offer refunds on digital products, terminal access, indicator access, or educational content once access has been granted. Monthly and annual subscribers may cancel at any time; cancellation will take effect at the end of the current billing period. We reserve the right to modify our pricing at any time with reasonable notice.`,
   },
   {
     title: '8. Disclaimer of Warranties',
@@ -91,7 +91,7 @@ export default function TermsOfServicePage() {
             <h1 className="text-[clamp(28px,4vw,44px)] font-black tracking-[-0.03em] text-[#FAFAFA] mb-3">
               Terms of Service
             </h1>
-            <p className="text-sm text-[#71717A]">Last updated: July 8, 2025</p>
+            <p className="text-sm text-[#71717A]">Last updated: June 22, 2026</p>
           </div>
 
           <div className="space-y-8">
