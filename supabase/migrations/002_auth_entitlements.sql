@@ -14,7 +14,7 @@
 --   * access_tier        = DERIVED security tier (written ONLY by
 --     recalc_entitlements). For the beta launch, every active-paid
 --     subscription_tier (founding/pro_monthly/pro_annual) collapses to
---     access_tier='pro' (both Shopify products -> one 'pro' entitlement;
+--     access_tier='pro' (all paid beta products -> one 'pro' entitlement;
 --     monthly vs annual differ only in plan_expires_at). Re-expand later by
 --     editing recalc step 4 only -- no schema change, no token refresh.
 --   * tradenet_access / terminal_access = "this account has DATA access" (free
@@ -50,13 +50,10 @@ alter table public.profiles add column if not exists access_expires_at        ti
 alter table public.profiles add column if not exists plan_started_at          timestamptz;
 alter table public.profiles add column if not exists plan_expires_at          timestamptz;
 
--- billing (Shopify now; billing_provider lets a 2nd provider reuse recalc later)
+-- billing provider fields
 alter table public.profiles add column if not exists billing_provider         text;
 alter table public.profiles add column if not exists billing_status           text;
 alter table public.profiles add column if not exists billing_customer_id      text;
--- shopify_customer_id already exists from 001; keep it.
-alter table public.profiles add column if not exists shopify_subscription_id  text;
-alter table public.profiles add column if not exists shopify_order_id         text;
 
 -- Bitunix (PHASE 2 -- columns + derivation exist; no verify flow built this pass)
 alter table public.profiles add column if not exists bitunix_uid              text;
@@ -112,8 +109,6 @@ alter table public.profiles
 create index if not exists profiles_email_lower_idx       on public.profiles (lower(email));
 create index if not exists profiles_status_tier_idx       on public.profiles (access_status, access_tier);
 create index if not exists profiles_bitunix_uid_idx       on public.profiles (bitunix_uid);
-create index if not exists profiles_shopify_customer_idx  on public.profiles (shopify_customer_id);
-create index if not exists profiles_shopify_sub_idx       on public.profiles (shopify_subscription_id);
 create unique index if not exists profiles_founding_number_uidx
   on public.profiles (founding_member_number)
   where founding_member_number is not null;
@@ -158,9 +153,6 @@ create table if not exists public.pending_entitlements (
   subscription_tier       text,
   billing_provider        text,
   billing_status          text,
-  shopify_customer_id     text,
-  shopify_subscription_id text,
-  shopify_order_id        text,
   plan_started_at         timestamptz,
   plan_expires_at         timestamptz,
   created_at              timestamptz not null default now()
@@ -224,7 +216,7 @@ create policy "app_config service role" on public.app_config
 --    wired for forward-compat.
 -- ----------------------------------------------------------------------------
 -- No hard maxvalue: a cap of 100 would make nextval() RAISE at exhaustion and
--- trigger a Shopify retry storm. The "first 100 founders" rule is enforced in
+-- trigger a billing retry storm. The "first 100 founders" rule is enforced in
 -- application logic (the webhook stops assigning past 100); the sequence itself
 -- never crashes. Dormant in beta regardless (beta sells pro_monthly/pro_annual).
 create sequence if not exists public.founding_member_seq as int minvalue 1;
@@ -236,7 +228,7 @@ create sequence if not exists public.founding_member_seq as int minvalue 1;
 --      (b) a BEFORE UPDATE guard trigger: hard-blocks changes to locked columns
 --          from any non-service / non-definer context (belt and suspenders).
 --    recalc_entitlements() is SECURITY DEFINER owned by the migration role, so
---    it bypasses both. The Shopify webhook uses the service role, which bypasses
+--    it bypasses both. Billing webhooks use the service role, which bypasses
 --    both. Locked: subscription_tier, access_tier, terminal_access,
 --    entitlements, entitlements_version (+ all billing/bitunix derivation cols).
 -- ----------------------------------------------------------------------------
@@ -521,13 +513,10 @@ begin
          set subscription_tier       = coalesce(pend.subscription_tier, subscription_tier),
              billing_provider        = pend.billing_provider,
              billing_status          = pend.billing_status,
-             shopify_customer_id     = pend.shopify_customer_id,
-             shopify_subscription_id = pend.shopify_subscription_id,
-             shopify_order_id        = pend.shopify_order_id,
              plan_started_at         = pend.plan_started_at,
              plan_expires_at         = pend.plan_expires_at,
              access_status           = case when pend.subscription_tier is not null then 'active' else access_status end,
-             access_source           = 'shopify_pending_claim'
+             access_source           = 'pending_entitlement_claim'
        where id = new.id;
 
       delete from public.pending_entitlements where email_norm = lower(trim(new.email));

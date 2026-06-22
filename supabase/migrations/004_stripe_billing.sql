@@ -49,8 +49,6 @@ begin
      or new.billing_customer_id is distinct from old.billing_customer_id
      or new.stripe_customer_id is distinct from old.stripe_customer_id
      or new.stripe_subscription_id is distinct from old.stripe_subscription_id
-     or new.shopify_subscription_id is distinct from old.shopify_subscription_id
-     or new.shopify_order_id   is distinct from old.shopify_order_id
      or new.plan_started_at    is distinct from old.plan_started_at
      or new.plan_expires_at    is distinct from old.plan_expires_at
      or new.founding_member_number is distinct from old.founding_member_number
@@ -68,4 +66,3 @@ $$;
 revoke update on public.profiles from authenticated;
 grant update (email, marketing_opt_in, cohort, invite_code, signup_source)
   on public.profiles to authenticated;
-
