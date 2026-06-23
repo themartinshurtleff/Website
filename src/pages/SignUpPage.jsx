@@ -47,7 +47,7 @@ export default function SignUpPage() {
       >
         <h1 className="text-3xl font-black text-[#FAFAFA] mb-2">Create Account</h1>
         <p className="text-sm text-[#71717A] mb-8">
-          Already have an account?{' '}
+          Save your login for beta launch access. Already have an account?{' '}
           <Link to="/login" className="text-[#c9a84c] hover:text-[#f0c040] transition-colors">Sign in</Link>
         </p>
 

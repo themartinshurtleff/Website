@@ -36,8 +36,8 @@ const valueProps = [
   },
   {
     icon: Zap,
-    title: 'Native Performance',
-    body:  'Built in Rust. GPU-accelerated via wgpu. Handles thousands of trades per second without a stutter — no Electron, no browser overhead.',
+    title: 'Tauri Desktop Core',
+    body:  'A Rust-owned desktop shell protects credentials and trusted state while the web UI owns fast chart, DOM, tape, and workspace rendering.',
     accent: '#22C55E',
     bg:     'rgba(34,197,94,0.08)',
     border: 'rgba(34,197,94,0.18)',
@@ -56,13 +56,13 @@ const features = [
   {
     eyebrow: 'Flagship Chart',
     title:   'Footprint Charts Built for Crypto Futures',
-    body:    'Price-grouped, interval-aggregated trade data overlaid on OHLC candlesticks. Three cluster modes — Bid/Ask, Volume Profile, and Delta Profile — give you a complete picture of how volume is distributed at each price level.',
+    body:    'Price-grouped, interval-aggregated trade data overlaid on OHLC candlesticks. Bid/Ask, Volume Profile, and Delta Profile modes give you a complete picture of how volume is distributed at each price level.',
     bullets: [
       'Bid/Ask, Volume Profile, and Delta Profile modes',
       'Imbalance highlighting — stacked and diagonal',
       'Naked Point of Control (POC) detection',
       '9-row Bar Statistics panel',
-      '24H CVD and OI CVD (server-computed)',
+      'Daily CVD and Daily OI CVD from server-owned data',
       'Liquidation data per candle',
     ],
     placeholder: 'Footprint Chart',
@@ -75,7 +75,7 @@ const features = [
     bullets: [
       'Binance, Bybit, OKX, and Hyperliquid — all in one feed',
       'BTC, ETH, and SOL supported across exchanges',
-      'Aggregated 24H CVD and Open Interest CVD',
+      'Aggregated Daily CVD and Daily OI CVD',
       'Switch between per-exchange and aggregated view instantly',
     ],
     placeholder: 'Aggregated Orderflow',
@@ -110,12 +110,12 @@ const features = [
   {
     eyebrow: 'Workspace',
     title:   'Built for Multi-Monitor Power-User Setups',
-    body:    "Pop any pane into its own window. Arrange charts and panels in any grid configuration. Link groups keep multiple panes in sync — switch one ticker and every linked view updates instantly.",
+    body:    'Arrange split layouts or the new freeform canvas workspace. Spawn, drag, resize, and layer charts, DOM, tape, and indicator panes while keeping the stable split layout as a fallback.',
     bullets: [
-      'Pop-out any pane to its own window',
-      'Pane grid — split into any arrangement',
-      'Link groups A–I for instant ticker sync',
-      'Named layouts — save, load, clone, and restore',
+      'Split and canvas workspace modes',
+      'Drag, resize, reorder, and snap freeform panes',
+      'Flow Desk templates for chart, DOM, and Time & Sales',
+      'Named layouts for save, load, clone, and restore',
     ],
     placeholder: 'Workspace Layout',
     reverse: false,
@@ -123,12 +123,12 @@ const features = [
 ]
 
 const techSpecs = [
-  { key: 'Language',   val: 'Rust 2024',              desc: 'Memory-safe, zero-cost abstractions, no GC pauses' },
-  { key: 'GUI',        val: 'Iced 0.13+',             desc: 'Daemon mode, native multi-window desktop' },
-  { key: 'Rendering',  val: 'wgpu (GPU)',              desc: 'All charts GPU-accelerated via canvas::Program' },
-  { key: 'Async',      val: 'Tokio',                  desc: 'Concurrent WebSocket streams via Iced subscriptions' },
-  { key: 'WebSocket',  val: 'rustls + tungstenite',   desc: 'Custom TLS, exchange-direct data feeds' },
-  { key: 'Platform',   val: 'Win · macOS · Linux',    desc: 'True native — no Electron, no browser runtime' },
+  { key: 'Shell',        val: 'Tauri v2',                desc: 'Native desktop packaging, updater path, windows, filesystem, and secure host integration' },
+  { key: 'Trusted Core', val: 'Rust services',           desc: 'Credentials, auth/session handling, trading commands, persistence, logs, and native bridges stay Rust-owned' },
+  { key: 'UI',           val: 'React + TypeScript',      desc: 'Workspace chrome, pane controls, modals, settings, chart interaction, DOM, and tape surfaces' },
+  { key: 'Rendering',    val: 'Canvas/WebGL path',       desc: 'High-frequency chart, footprint, heatmap, and orderflow views are built for measured rendering load' },
+  { key: 'Scripting',    val: 'Lua IDE + data taps',     desc: 'Monaco-based Lua authoring with pane-local access to loaded footprint, heatmap, tape, L1, OI, and liquidation state' },
+  { key: 'Data Routing', val: 'Backend + aggr-server',   desc: 'Python owns OI, liquidations, and heatmaps; aggr-server owns aggregated trades, klines, footprints, DOM, and tape' },
 ]
 
 const compareRows = [
@@ -136,11 +136,12 @@ const compareRows = [
   { feature: 'Crypto-native',             tn: true,  bm: 'Partial', atas: 'Partial', tv: true  },
   { feature: 'Liquidation prediction',    tn: true,  bm: false, atas: false,  tv: false  },
   { feature: 'Native desktop app',        tn: true,  bm: true,  atas: true,   tv: false  },
-  { feature: 'GPU-accelerated rendering', tn: true,  bm: false, atas: false,  tv: false  },
+  { feature: 'Freeform pane canvas',      tn: true,  bm: false, atas: false,  tv: false  },
   { feature: 'Aggregated OI / CVD',       tn: true,  bm: false, atas: false,  tv: false  },
+  { feature: 'In-terminal Lua IDE',       tn: true,  bm: false, atas: false,  tv: false  },
   { feature: 'Footprint charts',          tn: true,  bm: true,  atas: true,   tv: false  },
   { feature: 'DOM ladder',               tn: true,  bm: true,  atas: true,   tv: false  },
-  { feature: 'Free during beta',          tn: true,  bm: false, atas: false,  tv: 'Partial' },
+  { feature: 'Launch waitlist open',      tn: true,  bm: false, atas: false,  tv: false },
 ]
 
 function Cell({ val }) {
@@ -377,7 +378,7 @@ export default function TerminalPage() {
                 initial="hidden"
                 animate={heroInView ? 'visible' : 'hidden'}
               >
-                <span className="eyebrow-gold">v0.8.6 — Closed Beta</span>
+                <span className="eyebrow-gold">Launching Soon - Beta Access</span>
               </motion.div>
 
               <motion.div
@@ -402,8 +403,8 @@ export default function TerminalPage() {
                 className="text-[17px] text-[#A1A1AA] leading-[1.75] max-w-[500px]"
               >
                 TradeNet Quantum aggregates live orderflow from Binance, Bybit, OKX, and Hyperliquid
-                into a single footprint chart. With proprietary liquidation prediction and GPU-accelerated
-                rendering built in Rust — no browser, no lag, no compromises.
+                into a single terminal. The new Tauri architecture keeps credentials and trusted
+                actions in Rust while the UI focuses on fast charts, panes, Lua tools, DOM, and tape.
               </motion.p>
 
               <motion.div
@@ -427,7 +428,7 @@ export default function TerminalPage() {
                   { val: 'Multi',     label: 'Exchange' },
                   { val: '3,000+',    label: 'Symbols' },
                   { val: 'Real-Time', label: 'Prediction' },
-                  { val: 'Native',    label: 'Desktop' },
+                  { val: 'Tauri',     label: 'Desktop' },
                 ].map(({ val, label }) => (
                   <div key={label} className="flex flex-col items-center justify-center gap-1 py-4 px-2 bg-[#0e0e10]">
                     <span className="text-base font-black tracking-tight gradient-text-gold text-center leading-tight">{val}</span>
@@ -485,19 +486,19 @@ export default function TerminalPage() {
 
         <div className="section-container relative">
           <div className="max-w-xl">
-            <span className="eyebrow-gold mb-6 inline-block">Closed Beta</span>
+            <span className="eyebrow-gold mb-6 inline-block">Launching Soon</span>
             <h2 className="text-[clamp(32px,4.5vw,56px)] font-black tracking-[-0.035em] leading-[1.06] mb-5">
-              <span className="text-[#FAFAFA]">Get early access to</span><br />
+              <span className="text-[#FAFAFA]">Join the launch waitlist for</span><br />
               <span className="gradient-text-gold">Quantum Terminal</span>
             </h2>
             <p className="text-[16px] text-[#A1A1AA] leading-[1.75] mb-8 max-w-md">
-              We're onboarding a limited number of professional traders. Join the waitlist and
-              we'll reach out when a spot opens.
+              We are staging controlled beta access before reopening public checkout.
+              Join the waitlist and we will reach out as launch seats open.
             </p>
 
             <ul className="space-y-2.5 mb-8">
               {[
-                'Free during the beta period',
+                'Launch notification before checkout reopens',
                 'Direct feedback channel with the team',
                 'Early access to new features',
                 'Windows, macOS, and Linux builds',

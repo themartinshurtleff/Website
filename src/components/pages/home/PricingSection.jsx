@@ -1,9 +1,8 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, useInView } from 'framer-motion'
-import { CheckCircle2 } from 'lucide-react'
-import { useAuth } from '@/contexts/AuthContext'
-import { isCheckoutConfigured, startCheckout } from '@/lib/checkout'
+import { ArrowRight, Bell, CheckCircle2, Clock, ShieldCheck, UserPlus } from 'lucide-react'
+import WaitlistForm from '@/components/common/WaitlistForm'
 
 const fadeUp = {
   hidden:  { opacity: 0, y: 24 },
@@ -13,245 +12,141 @@ const fadeUp = {
   }),
 }
 
-function Check({ text, gold }) {
-  return (
-    <li className="flex items-start gap-2.5 text-sm text-[#A1A1AA]">
-      <CheckCircle2 size={14} className={`${gold ? 'text-[#c9a84c]' : 'text-[#c9a84c]/70'} flex-shrink-0 mt-0.5`} />
-      {text}
-    </li>
-  )
-}
-
-const proFeatures = [
-  'All coins (BTC, ETH, SOL + more)',
-  'Real-time self-calibrating liquidation prediction heatmap',
-  'Real-time orderbook heatmap',
-  'Unlimited charts & layouts',
-  'Full footprint charts (multi-exchange)',
-  'Bar stats panel (all 9 rows)',
-  'Full OI tools & CVD',
-  'Liq bubbles overlay',
-  'No watermark on screenshots',
-  'Priority support',
+const launchSteps = [
+  {
+    icon: Bell,
+    title: 'Join the waitlist',
+    body: 'We are collecting launch interest before opening public paid plans.',
+  },
+  {
+    icon: UserPlus,
+    title: 'Create an account',
+    body: 'Accounts stay open, so beta access can be attached to the same login used in the terminal.',
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Access is gated',
+    body: 'Supabase entitlements remain server-side; the terminal checks access before protected requests run.',
+  },
 ]
 
-const freeFeatures = [
-  'BTC only',
-  'Delayed liquidation heatmap (5 min delay)',
-  '1 chart layout',
-  'Orderbook heatmap',
-  'Footprint chart',
-  'Watermarked screenshots',
-  'Requires Bitunix signup via referral link',
+const included = [
+  'Launch notifications before public purchase links return',
+  'Priority beta onboarding for selected traders',
+  'Account-based terminal access when your invite is approved',
+  'No early checkout or surprise charge while launch access is paused',
 ]
 
 export default function PricingSection() {
-  const ref    = useRef(null)
+  const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
   const navigate = useNavigate()
-  const { user } = useAuth()
-  const [buyingPlan, setBuyingPlan] = useState(null)
-  const [checkoutError, setCheckoutError] = useState('')
-
-  function goToWaitlist() {
-    navigate('/terminal')
-    setTimeout(() => document.getElementById('terminal-waitlist')?.scrollIntoView({ behavior: 'smooth' }), 350)
-  }
-
-  async function handleBuy(plan) {
-    if (!isCheckoutConfigured(plan)) {
-      goToWaitlist()
-      return
-    }
-    if (!user) {
-      navigate('/login?return=' + encodeURIComponent('/#pricing'))
-      return
-    }
-
-    setCheckoutError('')
-    setBuyingPlan(plan)
-    try {
-      const url = await startCheckout(plan)
-      if (url) window.location.href = url
-      else goToWaitlist()
-    } catch (e) {
-      console.error('checkout failed', e)
-      setCheckoutError('Checkout is unavailable. Please try again in a moment.')
-    } finally {
-      setBuyingPlan(null)
-    }
-  }
-
-  const buyLabel = isCheckoutConfigured() ? 'Get Pro' : 'Join Waitlist'
 
   return (
     <section id="pricing" className="py-28 bg-black relative overflow-hidden" ref={ref}>
-      {/* Subtle ambient gradient */}
       <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] opacity-[0.04] pointer-events-none"
+        className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse, #c9a84c, transparent 70%)',
-          filter: 'blur(60px)',
+          background:
+            'radial-gradient(ellipse 70% 55% at 50% 42%, rgba(201,168,76,0.06), transparent 70%)',
         }}
       />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#c9a84c]/20 to-transparent" />
 
-      <div className="section-container">
-        {/* Header */}
+      <div className="section-container relative">
         <motion.div
-          className="text-center mb-14"
-          variants={fadeUp}
-          custom={0}
+          className="grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-10 lg:gap-14 items-center"
           initial="hidden"
           animate={inView ? 'visible' : 'hidden'}
         >
-          <span className="eyebrow mb-4">Pricing</span>
-          <h2 className="text-[clamp(32px,4vw,48px)] font-black tracking-[-0.03em] text-[#FAFAFA] mt-4">
-            Simple Pricing. Serious Edge.
-          </h2>
-          <p className="text-[#A1A1AA] mt-4 text-[16px] max-w-md mx-auto">
-            Start free. Upgrade when you're ready. No hidden fees.
-          </p>
-        </motion.div>
+          <motion.div className="space-y-7" variants={fadeUp} custom={0}>
+            <span className="eyebrow-gold">
+              <Clock size={13} />
+              Launching Soon
+            </span>
 
-        {/* Plans */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
-
-          {/* ── Free ── */}
-          <motion.div
-            variants={fadeUp}
-            custom={1}
-            initial="hidden"
-            animate={inView ? 'visible' : 'hidden'}
-            className="relative flex flex-col"
-          >
-            <div className="bento-card flex-1 flex flex-col p-7 gap-6">
-              <div>
-                <p className="text-sm font-semibold text-[#71717A] mb-4">Free</p>
-                <div className="flex items-end gap-2 mb-1">
-                  <span className="text-[48px] font-black tracking-tight text-[#FAFAFA]">$0</span>
-                  <span className="text-sm text-[#71717A] mb-3">/mo</span>
-                </div>
-                <p className="text-sm text-[#A1A1AA]">Get started with the essentials.</p>
-              </div>
-              <ul className="flex flex-col gap-2.5 flex-1">
-                {freeFeatures.map((f) => <Check key={f} text={f} />)}
-              </ul>
-              <p className="text-[11px] text-[#71717A] leading-relaxed border-t border-white/[0.05] pt-3">
-                Free access is powered by our exchange partnership. Sign up to Bitunix through our link — no deposit required.
+            <div className="space-y-4">
+              <h2 className="text-[clamp(34px,4.6vw,58px)] font-black tracking-[-0.035em] leading-[1.04]">
+                <span className="text-[#FAFAFA]">Pricing is paused.</span><br />
+                <span className="gradient-text-gold">Launch access opens next.</span>
+              </h2>
+              <p className="text-[16px] text-[#A1A1AA] leading-[1.75] max-w-xl">
+                We are holding checkout while the terminal moves into beta launch readiness.
+                Join the waitlist now and we will notify you when controlled access opens.
               </p>
+            </div>
+
+            <div className="max-w-xl">
+              <WaitlistForm source="launch_waitlist" />
+            </div>
+
+            <div className="flex flex-wrap gap-3">
               <button
-                onClick={goToWaitlist}
-                className="btn-outline text-center text-[14px] px-5 py-3 rounded-xl font-semibold mt-auto block w-full"
+                onClick={() => navigate('/signup')}
+                className="btn-outline inline-flex items-center gap-2 px-5 py-3 rounded-xl text-[14px]"
               >
-                Join Waitlist
+                Create Account
+                <ArrowRight size={15} />
+              </button>
+              <button
+                onClick={() => navigate('/terminal')}
+                className="inline-flex items-center gap-2 text-[#c9a84c] hover:text-[#f0c040] font-semibold text-[14px] transition-colors"
+              >
+                View terminal details
+                <ArrowRight size={15} />
               </button>
             </div>
           </motion.div>
 
-          {/* ── Pro Annual (Featured) ── */}
-          <motion.div
-            variants={fadeUp}
-            custom={2}
-            initial="hidden"
-            animate={inView ? 'visible' : 'hidden'}
-            className="relative flex flex-col"
-          >
+          <motion.div variants={fadeUp} custom={1}>
             <div
-              className="flex-1 flex flex-col scale-[1.02] origin-bottom rounded-[20px] relative"
-              style={{
-                background: '#000',
-                border: '1px solid rgba(201,168,76,0.4)',
-                boxShadow: '0 0 30px rgba(201,168,76,0.08), 0 0 60px rgba(201,168,76,0.04)',
-              }}
+              className="rounded-[20px] border border-[#c9a84c]/25 bg-[#09090B] overflow-hidden"
+              style={{ boxShadow: '0 0 44px rgba(201,168,76,0.08)' }}
             >
-              <div className="flex flex-col flex-1 p-7 gap-6">
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <span className="text-sm font-semibold text-[#c9a84c]">Pro</span>
-                      <span className="text-xs text-[#71717A] ml-2">Billed Annually</span>
+              <div className="p-6 sm:p-8 border-b border-white/[0.06]">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-widest text-[#c9a84c] mb-2">
+                      Beta Launch Status
+                    </p>
+                    <h3 className="text-2xl font-black text-[#FAFAFA] tracking-[-0.02em]">
+                      Waitlist-first rollout
+                    </h3>
+                  </div>
+                  <span className="w-fit rounded-full bg-[#c9a84c] text-black text-[11px] font-black uppercase tracking-widest px-3 py-1.5">
+                    Checkout closed
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 border-b border-white/[0.06]">
+                {launchSteps.map(({ icon: Icon, title, body }, i) => (
+                  <div key={title} className="p-6 border-white/[0.06] sm:border-r last:border-r-0">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#c9a84c]/10 border border-[#c9a84c]/20 mb-4">
+                      <Icon size={17} className="text-[#c9a84c]" />
                     </div>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#09090B] bg-[#c9a84c] px-2.5 py-1 rounded-full">
-                      Most Popular
-                    </span>
+                    <p className="text-sm font-bold text-[#FAFAFA] mb-2">{title}</p>
+                    <p className="text-xs text-[#71717A] leading-relaxed">{body}</p>
+                    <p className="text-[10px] text-[#3F3F46] mt-4 font-semibold uppercase tracking-wider">
+                      Step {i + 1}
+                    </p>
                   </div>
-                  <div className="flex items-end gap-2 mb-1">
-                    <span className="text-[48px] font-black tracking-tight text-[#FAFAFA]">$384.99</span>
-                    <span className="text-sm text-[#71717A] mb-3">/yr</span>
-                  </div>
-                  <p className="text-sm text-[#A1A1AA]">
-                    Billed once a year. Lock your price for 12 months.
-                  </p>
-                </div>
+                ))}
+              </div>
 
-                <ul className="flex flex-col gap-2.5 flex-1">
-                  {proFeatures.map((f) => <Check key={f} text={f} gold />)}
+              <div className="p-6 sm:p-8">
+                <p className="text-sm font-bold text-[#FAFAFA] mb-4">What joining gets you</p>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {included.map((item) => (
+                    <li key={item} className="flex items-start gap-2.5 text-sm text-[#A1A1AA] leading-relaxed">
+                      <CheckCircle2 size={15} className="text-[#c9a84c] flex-shrink-0 mt-0.5" />
+                      {item}
+                    </li>
+                  ))}
                 </ul>
-                <button
-                  onClick={() => handleBuy('annual')}
-                  disabled={Boolean(buyingPlan)}
-                  className="btn-gold text-center text-[14px] px-5 py-3 rounded-xl font-bold mt-auto w-full disabled:opacity-60 disabled:cursor-wait"
-                >
-                  {buyingPlan === 'annual' ? 'Opening...' : buyLabel}
-                </button>
               </div>
             </div>
           </motion.div>
-
-          {/* ── Pro Monthly ── */}
-          <motion.div
-            variants={fadeUp}
-            custom={3}
-            initial="hidden"
-            animate={inView ? 'visible' : 'hidden'}
-            className="relative flex flex-col"
-          >
-            <div className="bento-card flex-1 flex flex-col p-7 gap-6">
-              <div>
-                <div className="mb-4">
-                  <span className="text-sm font-semibold text-[#71717A]">Pro</span>
-                  <span className="text-xs text-[#71717A] ml-2">Billed Monthly</span>
-                </div>
-                <div className="flex items-end gap-2 mb-1">
-                  <span className="text-[48px] font-black tracking-tight text-[#FAFAFA]">$29.99</span>
-                  <span className="text-sm text-[#71717A] mb-3">/mo</span>
-                </div>
-                <p className="text-sm text-[#A1A1AA]">
-                  Billed monthly. Cancel anytime.
-                </p>
-              </div>
-              <ul className="flex flex-col gap-2.5 flex-1">
-                {proFeatures.map((f) => <Check key={f} text={f} />)}
-              </ul>
-              <button
-                onClick={() => handleBuy('monthly')}
-                disabled={Boolean(buyingPlan)}
-                className="btn-outline text-center text-[14px] px-5 py-3 rounded-xl font-semibold mt-auto block w-full disabled:opacity-60 disabled:cursor-wait"
-              >
-                {buyingPlan === 'monthly' ? 'Opening...' : buyLabel}
-              </button>
-            </div>
-          </motion.div>
-
-        </div>
-
-        {checkoutError && (
-          <p className="mt-5 text-center text-sm text-red-400">
-            {checkoutError}
-          </p>
-        )}
-
-        {/* Below cards */}
-        <motion.div
-          className="mt-10 text-center space-y-5"
-          variants={fadeUp}
-          custom={4}
-          initial="hidden"
-          animate={inView ? 'visible' : 'hidden'}
-        >
-          <p className="text-sm text-[#71717A]">
-            Elite tier — coming soon. Join the waitlist to be notified when early access opens.
-          </p>
         </motion.div>
       </div>
     </section>

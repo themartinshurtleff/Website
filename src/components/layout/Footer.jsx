@@ -39,8 +39,8 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/#pricing" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
-                  Try Risk Free
+                <Link to="/terminal" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
+                  Launch Waitlist
                 </Link>
               </li>
             </ul>

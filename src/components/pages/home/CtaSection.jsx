@@ -29,21 +29,21 @@ export default function CtaSection() {
         >
           {/* Community CTA */}
           <div className="bento-card p-8 space-y-5" style={{ background: '#000' }}>
-            <span className="eyebrow">Community & Indicator</span>
+            <span className="eyebrow">Launching Soon</span>
             <h2 className="text-[clamp(24px,3vw,36px)] font-black tracking-[-0.03em] leading-[1.1]">
-              <span className="text-[#FAFAFA]">Ready to Elevate</span><br />
-              <span className="gradient-text-gold">Your Trading?</span>
+              <span className="text-[#FAFAFA]">TradeNet access is</span><br />
+              <span className="gradient-text-gold">opening soon.</span>
             </h2>
             <p className="text-[15px] text-[#A1A1AA]">
-              Join 1,000+ traders already using TradeNet to find consistent,
-              high-probability setups every day.
+              We are pausing checkout while beta access is staged. Join the waitlist now
+              so we can notify you when terminal onboarding opens.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
-                to="/#pricing"
+                to="/terminal"
                 className="btn-gold inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-[14px]"
               >
-                Get Access Now
+                Join Waitlist
                 <ArrowRight size={15} />
               </Link>
               <button
@@ -74,15 +74,15 @@ export default function CtaSection() {
               <span className="gradient-text-gold">Every Exchange.</span>
             </h2>
             <p className="text-[15px] text-[#A1A1AA] relative">
-              Multi-exchange aggregation, liquidation prediction, and GPU-accelerated
-              performance. Built in Rust. Currently in closed beta.
+              Multi-exchange aggregation, liquidation prediction, Lua scripting, and
+              a Tauri desktop shell with Rust-owned secure state.
             </p>
             <div className="relative">
               <button
                 onClick={() => navigate('/terminal')}
                 className="inline-flex items-center gap-2 bg-[#c9a84c] hover:bg-[#f0c040] text-black font-semibold text-[14px] px-6 py-3 rounded-xl transition-colors"
               >
-                Join Terminal Waitlist
+                Join Launch Waitlist
                 <ArrowRight size={15} />
               </button>
             </div>

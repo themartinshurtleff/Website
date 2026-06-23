@@ -91,10 +91,10 @@ export default function SplineAccentSection() {
 
             <div style={{ pointerEvents: 'auto' }}>
               <button
-                onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => navigate('/terminal')}
                 className="btn-gold inline-flex items-center gap-2 px-6 py-3 rounded-xl text-[15px]"
               >
-                Get Access Now
+                Join Launch Waitlist
                 <ArrowRight size={15} />
               </button>
             </div>

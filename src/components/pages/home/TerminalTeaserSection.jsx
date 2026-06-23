@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { motion, useInView } from 'framer-motion'
 import { ArrowRight, Layers, Target, Zap, LayoutGrid } from 'lucide-react'
 
-
 const fadeUp = {
   hidden:  { opacity: 0, y: 24 },
   visible: (i = 0) => ({
@@ -24,15 +23,15 @@ const highlights = [
   {
     icon:   Target,
     title:  'Liquidation Prediction',
-    body:   'Predict where liquidations will cluster — proprietary real-time algorithm.',
+    body:   'Predict where liquidations will cluster with a proprietary real-time server model.',
     accent: '#c9a84c',
     bg:     'rgba(201,168,76,0.08)',
     border: 'rgba(201,168,76,0.15)',
   },
   {
     icon:   Zap,
-    title:  'Native Rust Performance',
-    body:   'GPU-accelerated. No Electron. Thousands of trades per second, zero stutter.',
+    title:  'Tauri Desktop Core',
+    body:   'Rust-owned secure state with a fast web UI for charts, panes, DOM, tape, and trading controls.',
     accent: '#22C55E',
     bg:     'rgba(34,197,94,0.08)',
     border: 'rgba(34,197,94,0.15)',
@@ -40,7 +39,7 @@ const highlights = [
   {
     icon:   LayoutGrid,
     title:  'Complete Toolkit',
-    body:   'Footprint charts, heatmaps, DOM ladder, time & sales — everything in one place.',
+    body:   'Footprint charts, heatmaps, DOM ladder, time and sales, Lua scripts, and freeform panes.',
     accent: '#A78BFA',
     bg:     'rgba(167,139,250,0.08)',
     border: 'rgba(167,139,250,0.15)',
@@ -48,8 +47,8 @@ const highlights = [
 ]
 
 export default function TerminalTeaserSection() {
-  const ref      = useRef(null)
-  const inView   = useInView(ref, { once: true, margin: '-80px' })
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-80px' })
   const navigate = useNavigate()
 
   return (
@@ -57,7 +56,6 @@ export default function TerminalTeaserSection() {
       ref={ref}
       className="py-28 bg-black border-y border-white/[0.04] relative overflow-hidden"
     >
-      {/* Ambient blue tint */}
       <div
         className="absolute top-0 right-0 w-[500px] h-[400px] opacity-[0.04] pointer-events-none"
         style={{
@@ -67,7 +65,6 @@ export default function TerminalTeaserSection() {
       />
 
       <div className="section-container relative">
-        {/* Header */}
         <motion.div
           className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12"
           variants={fadeUp}
@@ -76,7 +73,7 @@ export default function TerminalTeaserSection() {
           animate={inView ? 'visible' : 'hidden'}
         >
           <div>
-            <span className="eyebrow-gold mb-4 block w-fit">New — TradeNet Terminal</span>
+            <span className="eyebrow-gold mb-4 block w-fit">Launching soon - TradeNet Terminal</span>
             <h2 className="text-[clamp(28px,3.8vw,48px)] font-black tracking-[-0.03em] text-[#FAFAFA] leading-[1.08]">
               A trading terminal built<br />
               <span className="gradient-text-gold">from the ground up.</span>
@@ -91,9 +88,7 @@ export default function TerminalTeaserSection() {
           </button>
         </motion.div>
 
-        {/* Bento grid — image + 4 highlight cards */}
         <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-4">
-          {/* Main image placeholder */}
           <motion.div
             variants={fadeUp}
             custom={1}
@@ -108,7 +103,6 @@ export default function TerminalTeaserSection() {
             />
           </motion.div>
 
-          {/* 4 highlight cards — 2×2 on large, stacked on small */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {highlights.map(({ icon: Icon, title, body, accent, bg, border }, i) => (
               <motion.div
@@ -134,7 +128,6 @@ export default function TerminalTeaserSection() {
           </div>
         </div>
 
-        {/* CTA strip */}
         <motion.div
           className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-6 border-t border-white/[0.04]"
           variants={fadeUp}
@@ -146,11 +139,11 @@ export default function TerminalTeaserSection() {
             onClick={() => navigate('/terminal')}
             className="inline-flex items-center gap-2 bg-[#c9a84c] hover:bg-[#f0c040] text-black font-semibold text-sm px-5 py-2.5 rounded-xl transition-colors"
           >
-            Join the Waitlist
+            Join Launch Waitlist
             <ArrowRight size={14} />
           </button>
           <p className="text-sm text-[#52525B]">
-            Currently in closed beta · v0.8.6
+            Pricing is paused while beta launch access is staged.
           </p>
         </motion.div>
       </div>

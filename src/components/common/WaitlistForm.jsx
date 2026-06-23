@@ -56,7 +56,7 @@ export default function WaitlistForm({ className = '', source = 'website' }) {
         </button>
       </form>
       {error && <p className="text-xs text-red-400 mt-2">{error}</p>}
-      <p className="text-xs text-[#3F3F46] mt-2.5">Currently in closed beta · Early access coming soon</p>
+      <p className="text-xs text-[#3F3F46] mt-2.5">Launching soon - early access is opening in stages</p>
     </div>
   )
 }

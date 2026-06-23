@@ -208,16 +208,16 @@ export default function AccountPage() {
             </a>
           )}
 
-          {/* Upgrade prompt for free/waitlist */}
+          {/* Launch prompt for free/waitlist */}
           {!isElevated && (
             <div
               className="rounded-xl p-4"
               style={{ background: 'rgba(201,168,76,0.04)', border: '1px solid rgba(201,168,76,0.12)' }}
             >
               <p className="text-sm text-[#A1A1AA]">
-                You're on the {tierLabels[tier] || tier} plan.{' '}
-                <Link to="/#pricing" className="text-[#c9a84c] hover:text-[#f0c040] font-semibold transition-colors">
-                  Upgrade to Pro →
+                You're on the {tierLabels[tier] || tier} plan. Public checkout is paused while beta launch access is staged.{' '}
+                <Link to="/terminal" className="text-[#c9a84c] hover:text-[#f0c040] font-semibold transition-colors">
+                  Join the launch waitlist -&gt;
                 </Link>
               </p>
             </div>

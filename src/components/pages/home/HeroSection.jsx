@@ -8,7 +8,7 @@ const stats = [
   { value: 'Multi',      label: 'Exchange'           },
   { value: '3,000+',     label: 'Symbols'            },
   { value: 'Real-Time',  label: 'Prediction'        },
-  { value: 'Native',     label: 'Desktop'           },
+  { value: 'Tauri',      label: 'Desktop'           },
 ]
 
 const fadeUp = {
@@ -22,7 +22,7 @@ const fadeUp = {
 export default function HeroSection() {
   const navigate = useNavigate()
 
-  function scrollToPricing() {
+  function scrollToLaunchAccess() {
     document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })
   }
 
@@ -65,7 +65,7 @@ export default function HeroSection() {
             <motion.div variants={fadeUp} custom={0} initial="hidden" animate="visible">
               <span className="eyebrow-gold">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#c9a84c]" />
-                The Only Terminal With Real-Time Liquidation Prediction
+                Launching Soon - Waitlist Now Open
               </span>
             </motion.div>
 
@@ -95,7 +95,7 @@ export default function HeroSection() {
             >
               TradeNet Terminal delivers real-time liquidation prediction,
               aggregated order flow, and multi-exchange derivatives analytics
-              in a GPU-accelerated native desktop terminal.
+              in a Tauri desktop terminal built for the beta launch.
               Built for traders who trade differently.
             </motion.p>
 
@@ -116,10 +116,10 @@ export default function HeroSection() {
                 <ArrowRight size={16} />
               </button>
               <button
-                onClick={scrollToPricing}
+                onClick={scrollToLaunchAccess}
                 className="btn-outline inline-flex items-center gap-2 px-6 py-3 rounded-xl text-[15px]"
               >
-                See It In Action
+                Launch Access
               </button>
             </motion.div>
 

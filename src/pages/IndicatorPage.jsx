@@ -26,8 +26,8 @@ const included = [
 ]
 
 const trustBadges = [
-  { icon: Zap, label: 'Instant Access' },
-  { icon: ShieldCheck, label: '7-Day Free Trial' },
+  { icon: Zap, label: 'Launch Waitlist' },
+  { icon: ShieldCheck, label: 'Account Ready' },
   { icon: RefreshCw, label: 'Lifetime Updates' },
 ]
 
@@ -58,10 +58,10 @@ export default function IndicatorPage() {
             className="h-7 w-auto"
           />
           <Link
-            to="/#pricing"
+            to="/terminal"
             className="btn-gold px-5 py-2 text-sm rounded-lg"
           >
-            Get Access Now
+            Join Waitlist
           </Link>
         </div>
       </nav>
@@ -169,24 +169,21 @@ export default function IndicatorPage() {
                 <FeatureList items={included} />
               </div>
 
-              {/* Limited time offer */}
+              {/* Launch waitlist */}
               <div className="gradient-border p-8 space-y-4">
-                <span className="eyebrow text-xs">Limited Time Offer</span>
-                <div className="flex items-end gap-3">
-                  <span className="text-5xl font-black text-[#FAFAFA] tracking-tight">$79</span>
-                  <div className="pb-1">
-                    <p className="text-sm text-[#71717A] line-through">was $279</p>
-                    <p className="text-sm font-bold text-[#c9a84c]">71% OFF</p>
-                  </div>
-                </div>
+                <span className="eyebrow text-xs">Launching Soon</span>
+                <h3 className="text-3xl font-black text-[#FAFAFA] tracking-[-0.03em] leading-tight">
+                  Indicator access opens with the beta launch.
+                </h3>
                 <p className="text-[15px] text-[#A1A1AA] leading-relaxed">
-                  Get the complete indicator, education, and strategy suite plus 30 days of live trading room access for just $79.
+                  Public checkout is paused while TradeNet stages controlled beta access.
+                  Join the waitlist and create an account now, then we will attach access as launch seats open.
                 </p>
                 <Link
-                  to="/#pricing"
+                  to="/terminal"
                   className="btn-gold block text-center px-6 py-3 rounded-xl text-[15px] font-bold"
                 >
-                  Get Instant Access
+                  Join Launch Waitlist
                 </Link>
                 <div className="grid grid-cols-3 gap-2 pt-2">
                   {trustBadges.map(({ icon: Icon, label }) => (
@@ -212,10 +209,10 @@ export default function IndicatorPage() {
               <span className="gradient-text-gold">Ready to Trade with Confidence?</span>
             </h2>
             <Link
-              to="/#pricing"
+              to="/terminal"
               className="btn-gold inline-flex items-center gap-2 px-7 py-3.5 rounded-xl text-[15px]"
             >
-              Get Access Now <ArrowRight size={16} />
+              Join Launch Waitlist <ArrowRight size={16} />
             </Link>
             <div className="flex flex-wrap justify-center gap-4">
               {trustBadges.map(({ icon: Icon, label }) => (

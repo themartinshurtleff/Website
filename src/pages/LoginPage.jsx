@@ -12,6 +12,7 @@ export default function LoginPage() {
   const { signIn } = useAuth()
   const navigate = useNavigate()
   const [params] = useSearchParams()
+  const resetComplete = params.get('reset') === '1'
 
   // Only honor in-app relative returns (defense against open redirect): a
   // single-leading-slash path (not '//host') or a bare '#fragment'. Anything
@@ -50,6 +51,15 @@ export default function LoginPage() {
           <Link to="/signup" className="text-[#c9a84c] hover:text-[#f0c040] transition-colors">Create one</Link>
         </p>
 
+        {resetComplete && (
+          <div
+            className="rounded-xl p-3 mb-5"
+            style={{ background: 'rgba(201,168,76,0.06)', border: '1px solid rgba(201,168,76,0.18)' }}
+          >
+            <p className="text-sm text-[#A1A1AA]">Password updated. Sign in with your new password.</p>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="text-xs text-[#71717A] uppercase tracking-wider block mb-1.5">Email</label>
@@ -64,7 +74,12 @@ export default function LoginPage() {
             />
           </div>
           <div>
-            <label className="text-xs text-[#71717A] uppercase tracking-wider block mb-1.5">Password</label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="text-xs text-[#71717A] uppercase tracking-wider">Password</label>
+              <Link to="/forgot-password" className="text-xs text-[#c9a84c] hover:text-[#f0c040] transition-colors">
+                Forgot?
+              </Link>
+            </div>
             <input
               type="password"
               value={password}

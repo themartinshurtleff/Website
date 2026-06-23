@@ -7,15 +7,13 @@
 
 import { supabase } from '@/lib/supabase'
 
-const CHECKOUT_ENABLED = true
+// Public checkout is paused during the beta launch waitlist phase.
+const CHECKOUT_ENABLED = false
 
-export const PLANS = {
-  monthly: { label: 'Pro - Monthly', priceUsd: 29.99 },
-  annual:  { label: 'Pro - Annual',  priceUsd: 384.99 },
-}
+export const PLANS = {}
 
-export function isCheckoutConfigured(plan = 'monthly') {
-  return CHECKOUT_ENABLED && Boolean(PLANS[plan])
+export function isCheckoutConfigured() {
+  return CHECKOUT_ENABLED
 }
 
 async function invokeBillingFunction(name, body) {
@@ -27,9 +25,8 @@ async function invokeBillingFunction(name, body) {
   return data.url
 }
 
-export async function startCheckout(plan) {
-  if (!isCheckoutConfigured(plan)) return null
-  return await invokeBillingFunction('stripe-checkout', { plan })
+export async function startCheckout() {
+  return null
 }
 
 export async function openBillingPortal() {
