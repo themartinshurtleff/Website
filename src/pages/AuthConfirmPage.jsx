@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight, Loader2 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { markPasswordRecoveryPending } from '@/lib/authRecovery'
 
 const allowedTypes = new Set(['signup', 'invite', 'magiclink', 'recovery', 'email_change', 'email'])
 
@@ -53,6 +54,8 @@ export default function AuthConfirmPage() {
         setError(verifyError.message || 'This verification link is invalid or expired.')
         return
       }
+
+      if (type === 'recovery') markPasswordRecoveryPending()
 
       navigate(safeRedirectTarget(redirectTo, type), { replace: true })
     }

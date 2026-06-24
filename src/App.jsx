@@ -1,7 +1,14 @@
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
+import { supabase } from '@/lib/supabase'
+import {
+  hasPasswordRecoveryPending,
+  isPasswordRecoveryUrl,
+  markPasswordRecoveryPending,
+} from '@/lib/authRecovery'
 import Header             from '@/components/layout/Header'
 import Footer             from '@/components/layout/Footer'
 // import FreeGuidePopup     from '@/components/common/FreeGuidePopup'
@@ -38,12 +45,43 @@ function PageWrapper({ children }) {
   )
 }
 
+function PasswordRecoveryRedirect() {
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const isAuthConfirmRoute = window.location.pathname === '/auth/confirm'
+
+    function redirectToReset() {
+      if (window.location.pathname === '/reset-password') return
+      navigate(`/reset-password${window.location.hash || ''}`, { replace: true })
+    }
+
+    if (!isAuthConfirmRoute && (isPasswordRecoveryUrl() || hasPasswordRecoveryPending())) {
+      markPasswordRecoveryPending()
+      redirectToReset()
+    }
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        markPasswordRecoveryPending()
+        redirectToReset()
+      }
+    })
+
+    return () => subscription.unsubscribe()
+  }, [location.pathname, navigate])
+
+  return null
+}
+
 export default function App() {
   const location    = useLocation()
   const showHeader  = !noHeaderRoutes.includes(location.pathname)
   const showFooter  = !noFooterRoutes.includes(location.pathname)
   return (
     <>
+      <PasswordRecoveryRedirect />
       <ScrollToTop />
       {showHeader && <Header />}
       <AnimatePresence mode="wait">

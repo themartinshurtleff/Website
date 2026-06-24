@@ -1,7 +1,13 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
+import { markPasswordRecoveryPending } from '@/lib/authRecovery'
 
 const AuthContext = createContext(null)
+
+function redirectToPasswordReset() {
+  if (window.location.pathname === '/reset-password') return
+  window.location.replace(`/reset-password${window.location.hash || ''}`)
+}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
@@ -38,7 +44,11 @@ export function AuthProvider({ children }) {
       setLoading(false)
     })
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, s) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        markPasswordRecoveryPending()
+        redirectToPasswordReset()
+      }
       setSession(s)
       setUser(s?.user ?? null)
       if (s?.user) fetchProfile(s.user.id)

@@ -4,6 +4,11 @@ import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
+import {
+  clearPasswordRecoveryPending,
+  getRecoveryHashSession,
+  hasPasswordRecoveryPending,
+} from '@/lib/authRecovery'
 
 export default function ResetPasswordPage() {
   const [password, setPassword] = useState('')
@@ -31,6 +36,7 @@ export default function ResetPasswordPage() {
 
     async function initRecoverySession() {
       const code = new URLSearchParams(window.location.search).get('code')
+      const hashSession = getRecoveryHashSession()
 
       if (code) {
         const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
@@ -45,10 +51,25 @@ export default function ResetPasswordPage() {
         return
       }
 
+      if (hashSession) {
+        const { error: sessionError } = await supabase.auth.setSession(hashSession)
+        if (!mounted) return
+        if (sessionError) {
+          clearPasswordRecoveryPending()
+          setError(sessionError.message || 'This reset link is invalid or expired.')
+          setChecking(false)
+          return
+        }
+        window.history.replaceState(null, '', '/reset-password')
+        markReady()
+        return
+      }
+
       const { data: { session } } = await supabase.auth.getSession()
       if (!mounted) return
       if (session) markReady()
       else {
+        if (hasPasswordRecoveryPending()) clearPasswordRecoveryPending()
         setError('This reset link is invalid or expired.')
         setChecking(false)
       }
@@ -78,6 +99,7 @@ export default function ResetPasswordPage() {
     setLoading(true)
     try {
       await updatePassword(password)
+      clearPasswordRecoveryPending()
       await signOut()
       navigate('/login?reset=1', { replace: true })
     } catch (err) {
@@ -155,4 +177,3 @@ export default function ResetPasswordPage() {
     </main>
   )
 }
-
