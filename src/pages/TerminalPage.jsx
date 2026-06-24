@@ -5,7 +5,6 @@ import {
 } from 'lucide-react'
 import AuroraBackground from '@/components/common/AuroraBackground'
 import WaitlistForm from '@/components/common/WaitlistForm'
-import ImagePlaceholder from '@/components/common/ImagePlaceholder'
 
 // ─── Animation helpers ────────────────────────────────────────────────────────
 const fadeUp = {
@@ -66,6 +65,7 @@ const features = [
       'Liquidation data per candle',
     ],
     placeholder: 'Footprint Chart',
+    imageSrc: '/hero2.png',
     reverse: false,
   },
   {
@@ -79,6 +79,7 @@ const features = [
       'Switch between per-exchange and aggregated view instantly',
     ],
     placeholder: 'Aggregated Orderflow',
+    imageSrc: '/hero.png',
     reverse: true,
   },
   {
@@ -92,6 +93,7 @@ const features = [
       'Configurable minimum notional filter',
     ],
     placeholder: 'Liquidation Heatmap',
+    imageSrc: '/hero.png',
     reverse: false,
   },
   {
@@ -105,6 +107,7 @@ const features = [
       'Grouped price levels and configurable tick size',
     ],
     placeholder: 'Orderbook Heatmap',
+    imageSrc: '/hero2.png',
     reverse: true,
   },
   {
@@ -118,6 +121,7 @@ const features = [
       'Named layouts for save, load, clone, and restore',
     ],
     placeholder: 'Workspace Layout',
+    imageSrc: '/hero.png',
     reverse: false,
   },
 ]
@@ -189,7 +193,7 @@ function ValueProps() {
 function FeatureRow({ feature, index }) {
   const ref    = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
-  const { eyebrow, title, body, bullets, placeholder, reverse } = feature
+  const { eyebrow, title, body, bullets, placeholder, imageSrc, reverse } = feature
 
   return (
     <section
@@ -227,9 +231,10 @@ function FeatureRow({ feature, index }) {
             transition={{ duration: 0.65, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           >
             <img
-              src="/hero.png"
+              src={imageSrc}
               alt={placeholder}
               className="w-full rounded-[20px] border border-white/[0.07] object-cover"
+              loading="lazy"
               style={{ aspectRatio: '16/9' }}
             />
           </motion.div>
@@ -445,9 +450,10 @@ export default function TerminalPage() {
               transition={{ delay: 0.3, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
               <img
-                src="/hero.png"
-                alt="TradeNet Terminal"
+                src="/hero2.png"
+                alt="TradeNet Terminal liquidation heatmap and footprint workspace"
                 className="w-full rounded-[20px] border border-white/[0.07] shadow-2xl object-cover"
+                loading="eager"
                 style={{ aspectRatio: '16/9' }}
               />
             </motion.div>
