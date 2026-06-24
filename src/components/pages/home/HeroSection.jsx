@@ -35,7 +35,7 @@ export default function HeroSection() {
         src="/herogif.gif"
         alt="TradeNet Quantum Terminal live orderflow workspace"
         className="absolute inset-0 h-full w-full object-cover object-center"
-        fetchPriority="high"
+        fetchpriority="high"
       />
 
       <div

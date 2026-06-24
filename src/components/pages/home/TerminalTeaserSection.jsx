@@ -88,42 +88,41 @@ export default function TerminalTeaserSection() {
           </button>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1.45fr_0.95fr] gap-4 items-stretch">
+        <motion.figure
+          variants={fadeUp}
+          custom={1}
+          initial="hidden"
+          animate={inView ? 'visible' : 'hidden'}
+          className="rounded-[22px] border border-white/[0.08] bg-[#050506] p-2 shadow-[0_24px_80px_rgba(0,0,0,0.45)]"
+        >
+          <img
+            src="/hero.png"
+            alt="TradeNet Terminal multi-panel workspace"
+            className="w-full aspect-[1920/1030] object-contain rounded-[16px]"
+            loading="lazy"
+          />
+        </motion.figure>
+
+        <div className="mt-4 grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-4 items-stretch">
           <motion.div
             variants={fadeUp}
-            custom={1}
+            custom={2}
             initial="hidden"
             animate={inView ? 'visible' : 'hidden'}
-            className="h-full"
           >
             <img
-              src="/hero.png"
-              alt="TradeNet Terminal multi-panel workspace"
-              className="w-full h-full min-h-[300px] object-cover rounded-[20px] border border-white/[0.07]"
+              src="/hero2.png"
+              alt="TradeNet Terminal liquidation heatmap and footprint chart"
+              className="w-full h-full min-h-[260px] object-contain rounded-[20px] border border-white/[0.07] bg-[#050506]"
               loading="lazy"
             />
           </motion.div>
 
-          <div className="grid grid-cols-1 gap-4">
-            <motion.div
-              variants={fadeUp}
-              custom={2}
-              initial="hidden"
-              animate={inView ? 'visible' : 'hidden'}
-            >
-              <img
-                src="/hero2.png"
-                alt="TradeNet Terminal liquidation heatmap and footprint chart"
-                className="w-full aspect-[16/9] object-cover rounded-[20px] border border-white/[0.07]"
-                loading="lazy"
-              />
-            </motion.div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {highlights.map(({ icon: Icon, title, body, accent, bg, border }, i) => (
               <motion.div
                 key={title}
-                className="bento-card p-5 flex flex-col gap-3"
+                className="bento-card p-5 flex flex-col gap-3 min-h-[145px]"
                 variants={fadeUp}
                 custom={i + 3}
                 initial="hidden"
@@ -141,7 +140,6 @@ export default function TerminalTeaserSection() {
                 </div>
               </motion.div>
             ))}
-            </div>
           </div>
         </div>
 
