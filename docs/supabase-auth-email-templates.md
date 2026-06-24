@@ -10,10 +10,26 @@ TradeNet <noreply@tradenet.org>
 
 Notes:
 
-- These templates use Supabase Go-template variables such as `{{ .ConfirmationURL }}`, `{{ .Token }}`, `{{ .Email }}`, and `{{ .NewEmail }}`.
+- These templates use Supabase Go-template variables such as `{{ .TokenHash }}`, `{{ .RedirectTo }}`, `{{ .Token }}`, `{{ .Email }}`, and `{{ .NewEmail }}`.
+- The buttons intentionally point to `https://tradenet.org/auth/confirm` through `{{ .SiteURL }}` instead of showing the raw Supabase verification URL.
 - Keep the reset link flow pointed at the website recovery page through Supabase redirect configuration.
 - These use the public email logo at `https://tradenet.org/assets/text-logo.png`.
 - The image has `alt="TradeNet"` so blocked-image clients still show a useful fallback.
+
+Required Supabase redirect allowlist entries:
+
+```text
+https://tradenet.org/auth/confirm
+https://tradenet.org/reset-password
+http://localhost:5173/auth/confirm
+http://localhost:5173/reset-password
+```
+
+Supabase Auth Site URL should be:
+
+```text
+https://tradenet.org
+```
 
 ## Confirm Signup
 
@@ -42,10 +58,9 @@ HTML:
               <h1 style="margin:0 0 14px;font-size:28px;line-height:1.15;color:#fafafa;">Confirm your TradeNet account</h1>
               <p style="margin:0 0 22px;font-size:15px;line-height:1.7;color:#a1a1aa;">Welcome to TradeNet. Confirm this email address to finish creating your account and prepare it for beta launch access.</p>
               <p style="margin:0 0 26px;">
-                <a href="{{ .ConfirmationURL }}" style="display:inline-block;background:#c9a84c;color:#050506;text-decoration:none;font-weight:800;font-size:14px;padding:14px 22px;border-radius:12px;">Confirm account</a>
+                <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=signup&redirect_to={{ .RedirectTo }}" style="display:inline-block;background:#c9a84c;color:#050506;text-decoration:none;font-weight:800;font-size:14px;padding:14px 22px;border-radius:12px;">Confirm account</a>
               </p>
-              <p style="margin:0 0 8px;font-size:13px;line-height:1.6;color:#71717a;">If the button does not work, copy and paste this link into your browser:</p>
-              <p style="margin:0;font-size:12px;line-height:1.6;word-break:break-all;color:#c9a84c;">{{ .ConfirmationURL }}</p>
+              <p style="margin:0;font-size:13px;line-height:1.6;color:#71717a;">This secure link can only be used once and may expire.</p>
             </td>
           </tr>
           <tr>
@@ -87,10 +102,9 @@ HTML:
               <h1 style="margin:0 0 14px;font-size:28px;line-height:1.15;color:#fafafa;">Reset your password</h1>
               <p style="margin:0 0 22px;font-size:15px;line-height:1.7;color:#a1a1aa;">We received a request to reset the password for your TradeNet account. Use the secure link below to choose a new password.</p>
               <p style="margin:0 0 26px;">
-                <a href="{{ .ConfirmationURL }}" style="display:inline-block;background:#c9a84c;color:#050506;text-decoration:none;font-weight:800;font-size:14px;padding:14px 22px;border-radius:12px;">Reset password</a>
+                <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery&redirect_to={{ .RedirectTo }}" style="display:inline-block;background:#c9a84c;color:#050506;text-decoration:none;font-weight:800;font-size:14px;padding:14px 22px;border-radius:12px;">Reset password</a>
               </p>
-              <p style="margin:0 0 8px;font-size:13px;line-height:1.6;color:#71717a;">If the button does not work, copy and paste this link into your browser:</p>
-              <p style="margin:0;font-size:12px;line-height:1.6;word-break:break-all;color:#c9a84c;">{{ .ConfirmationURL }}</p>
+              <p style="margin:0;font-size:13px;line-height:1.6;color:#71717a;">This secure link can only be used once and may expire.</p>
             </td>
           </tr>
           <tr>
@@ -132,12 +146,11 @@ HTML:
               <h1 style="margin:0 0 14px;font-size:28px;line-height:1.15;color:#fafafa;">Sign in to TradeNet</h1>
               <p style="margin:0 0 22px;font-size:15px;line-height:1.7;color:#a1a1aa;">Use this secure link to sign in to your TradeNet account.</p>
               <p style="margin:0 0 26px;">
-                <a href="{{ .ConfirmationURL }}" style="display:inline-block;background:#c9a84c;color:#050506;text-decoration:none;font-weight:800;font-size:14px;padding:14px 22px;border-radius:12px;">Sign in</a>
+                <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&redirect_to={{ .RedirectTo }}" style="display:inline-block;background:#c9a84c;color:#050506;text-decoration:none;font-weight:800;font-size:14px;padding:14px 22px;border-radius:12px;">Sign in</a>
               </p>
               <p style="margin:0 0 8px;font-size:13px;line-height:1.6;color:#71717a;">One-time code:</p>
               <p style="margin:0 0 18px;font-size:24px;letter-spacing:6px;font-weight:900;color:#fafafa;">{{ .Token }}</p>
-              <p style="margin:0 0 8px;font-size:13px;line-height:1.6;color:#71717a;">If the button does not work, copy and paste this link into your browser:</p>
-              <p style="margin:0;font-size:12px;line-height:1.6;word-break:break-all;color:#c9a84c;">{{ .ConfirmationURL }}</p>
+              <p style="margin:0;font-size:13px;line-height:1.6;color:#71717a;">This secure link and code can only be used once and may expire.</p>
             </td>
           </tr>
           <tr>
@@ -179,10 +192,9 @@ HTML:
               <h1 style="margin:0 0 14px;font-size:28px;line-height:1.15;color:#fafafa;">Your TradeNet invitation is ready</h1>
               <p style="margin:0 0 22px;font-size:15px;line-height:1.7;color:#a1a1aa;">You have been invited to create a TradeNet account. Accept the invitation below to finish setup.</p>
               <p style="margin:0 0 26px;">
-                <a href="{{ .ConfirmationURL }}" style="display:inline-block;background:#c9a84c;color:#050506;text-decoration:none;font-weight:800;font-size:14px;padding:14px 22px;border-radius:12px;">Accept invitation</a>
+                <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=invite&redirect_to={{ .RedirectTo }}" style="display:inline-block;background:#c9a84c;color:#050506;text-decoration:none;font-weight:800;font-size:14px;padding:14px 22px;border-radius:12px;">Accept invitation</a>
               </p>
-              <p style="margin:0 0 8px;font-size:13px;line-height:1.6;color:#71717a;">If the button does not work, copy and paste this link into your browser:</p>
-              <p style="margin:0;font-size:12px;line-height:1.6;word-break:break-all;color:#c9a84c;">{{ .ConfirmationURL }}</p>
+              <p style="margin:0;font-size:13px;line-height:1.6;color:#71717a;">This secure invitation link can only be used once and may expire.</p>
             </td>
           </tr>
           <tr>
@@ -225,10 +237,9 @@ HTML:
               <p style="margin:0 0 14px;font-size:15px;line-height:1.7;color:#a1a1aa;">A request was made to change your TradeNet account email.</p>
               <p style="margin:0 0 22px;font-size:14px;line-height:1.7;color:#71717a;">Current email: <span style="color:#fafafa;">{{ .Email }}</span><br>New email: <span style="color:#fafafa;">{{ .NewEmail }}</span></p>
               <p style="margin:0 0 26px;">
-                <a href="{{ .ConfirmationURL }}" style="display:inline-block;background:#c9a84c;color:#050506;text-decoration:none;font-weight:800;font-size:14px;padding:14px 22px;border-radius:12px;">Confirm email change</a>
+                <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email_change&redirect_to={{ .RedirectTo }}" style="display:inline-block;background:#c9a84c;color:#050506;text-decoration:none;font-weight:800;font-size:14px;padding:14px 22px;border-radius:12px;">Confirm email change</a>
               </p>
-              <p style="margin:0 0 8px;font-size:13px;line-height:1.6;color:#71717a;">If the button does not work, copy and paste this link into your browser:</p>
-              <p style="margin:0;font-size:12px;line-height:1.6;word-break:break-all;color:#c9a84c;">{{ .ConfirmationURL }}</p>
+              <p style="margin:0;font-size:13px;line-height:1.6;color:#71717a;">This secure link can only be used once and may expire.</p>
             </td>
           </tr>
           <tr>

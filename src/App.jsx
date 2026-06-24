@@ -19,6 +19,7 @@ import LoginPage          from '@/pages/LoginPage'
 import AccountPage        from '@/pages/AccountPage'
 import ForgotPasswordPage from '@/pages/ForgotPasswordPage'
 import ResetPasswordPage  from '@/pages/ResetPasswordPage'
+import AuthConfirmPage    from '@/pages/AuthConfirmPage'
 
 const noHeaderRoutes = ['/indicator', '/terms-of-service', '/contact', '/thankyou']
 const noFooterRoutes = ['/thankyou']
@@ -59,6 +60,7 @@ export default function App() {
           <Route path="/login"           element={<PageWrapper><LoginPage          /></PageWrapper>} />
           <Route path="/forgot-password" element={<PageWrapper><ForgotPasswordPage /></PageWrapper>} />
           <Route path="/reset-password"  element={<PageWrapper><ResetPasswordPage  /></PageWrapper>} />
+          <Route path="/auth/confirm"    element={<PageWrapper><AuthConfirmPage    /></PageWrapper>} />
           <Route path="/account"         element={<PageWrapper><AccountPage        /></PageWrapper>} />
         </Routes>
       </AnimatePresence>
