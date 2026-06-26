@@ -28,7 +28,7 @@ import ForgotPasswordPage from '@/pages/ForgotPasswordPage'
 import ResetPasswordPage  from '@/pages/ResetPasswordPage'
 import AuthConfirmPage    from '@/pages/AuthConfirmPage'
 
-const BLOG_URL = 'https://tradenet.mintlify.dev/blog'
+const BLOG_URL = 'https://www.tradenet.org/docs/blog'
 
 const noHeaderRoutes = ['/indicator', '/terms-of-service', '/contact', '/thankyou']
 const noFooterRoutes = ['/thankyou']

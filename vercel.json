@@ -2,22 +2,22 @@
   "redirects": [
     {
       "source": "/blog",
-      "destination": "https://tradenet.mintlify.dev/blog",
+      "destination": "https://www.tradenet.org/docs/blog",
       "permanent": false
     },
     {
       "source": "/blog/:match*",
-      "destination": "https://tradenet.mintlify.dev/blog/:match*",
+      "destination": "https://www.tradenet.org/docs/blog/:match*",
       "permanent": false
     },
     {
       "source": "/blogs",
-      "destination": "https://tradenet.mintlify.dev/blog",
+      "destination": "https://www.tradenet.org/docs/blog",
       "permanent": false
     },
     {
       "source": "/blogs/:match*",
-      "destination": "https://tradenet.mintlify.dev/blog/:match*",
+      "destination": "https://www.tradenet.org/docs/blog/:match*",
       "permanent": false
     }
   ],
