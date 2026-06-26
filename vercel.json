@@ -1,16 +1,6 @@
 {
   "redirects": [
     {
-      "source": "/docs",
-      "destination": "https://tradenet.mintlify.dev/docs",
-      "permanent": false
-    },
-    {
-      "source": "/docs/:match*",
-      "destination": "https://tradenet.mintlify.dev/docs/:match*",
-      "permanent": false
-    },
-    {
       "source": "/blog",
       "destination": "https://tradenet.mintlify.dev/blog",
       "permanent": false
@@ -32,6 +22,14 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/docs",
+      "destination": "https://tradenet.mintlify.dev/docs"
+    },
+    {
+      "source": "/docs/:match*",
+      "destination": "https://tradenet.mintlify.dev/docs/:match*"
+    },
     {
       "source": "/((?!assets/).*)",
       "destination": "/index.html"

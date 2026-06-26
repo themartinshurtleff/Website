@@ -28,7 +28,6 @@ import ForgotPasswordPage from '@/pages/ForgotPasswordPage'
 import ResetPasswordPage  from '@/pages/ResetPasswordPage'
 import AuthConfirmPage    from '@/pages/AuthConfirmPage'
 
-const DOCS_URL = 'https://tradenet.mintlify.dev/docs'
 const BLOG_URL = 'https://tradenet.mintlify.dev/blog'
 
 const noHeaderRoutes = ['/indicator', '/terms-of-service', '/contact', '/thankyou']
@@ -113,7 +112,6 @@ export default function App() {
           <Route path="/contact"         element={<PageWrapper><ContactPage        /></PageWrapper>} />
           <Route path="/case-studies"    element={<PageWrapper><CaseStudiesPage    /></PageWrapper>} />
           <Route path="/terms-of-service"element={<PageWrapper><TermsOfServicePage /></PageWrapper>} />
-          <Route path="/docs/*"          element={<ExternalRedirect basePath="/docs"  destination={DOCS_URL} />} />
           <Route path="/blog/*"          element={<ExternalRedirect basePath="/blog"  destination={BLOG_URL} />} />
           <Route path="/blogs/*"         element={<ExternalRedirect basePath="/blogs" destination={BLOG_URL} />} />
           <Route path="/thankyou"        element={<PageWrapper><ThankYouPage       /></PageWrapper>} />
