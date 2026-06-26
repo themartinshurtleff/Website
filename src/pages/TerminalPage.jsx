@@ -192,14 +192,17 @@ function FeatureRow({ feature, index }) {
   const ref    = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
   const { eyebrow, title, body, bullets, placeholder, imageSrc, reverse } = feature
+  const layoutClass = reverse
+    ? 'lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)] lg:[&>*:first-child]:order-2'
+    : 'lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)]'
 
   return (
     <section
       ref={ref}
-      className={`py-24 ${index % 2 === 0 ? 'bg-black' : 'bg-black'} border-t border-white/[0.04]`}
+      className={`py-28 ${index % 2 === 0 ? 'bg-black' : 'bg-black'} border-t border-white/[0.04]`}
     >
-      <div className="section-container">
-        <div className={`grid grid-cols-1 lg:grid-cols-2 gap-14 xl:gap-20 items-center ${reverse ? 'lg:[&>*:first-child]:order-2' : ''}`}>
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className={`grid grid-cols-1 gap-12 xl:gap-16 items-center ${layoutClass}`}>
           {/* Text */}
           <motion.div
             className="space-y-6"
@@ -231,7 +234,7 @@ function FeatureRow({ feature, index }) {
             <img
               src={imageSrc}
               alt={placeholder}
-              className="w-full rounded-[20px] border border-white/[0.07] object-contain bg-[#050506]"
+              className="w-full rounded-[22px] border border-white/[0.08] object-contain bg-[#050506] shadow-2xl"
               loading="lazy"
               style={{ aspectRatio: '16/9' }}
             />
@@ -371,8 +374,8 @@ export default function TerminalPage() {
           }}
         />
 
-        <div className="relative section-container py-20 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-12 xl:gap-16 items-center">
+        <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-20 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-[0.86fr_1.14fr] gap-10 xl:gap-14 items-center">
             {/* Left copy */}
             <div className="space-y-8">
               <motion.div
@@ -448,9 +451,9 @@ export default function TerminalPage() {
               transition={{ delay: 0.3, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
               <img
-                src="/tradinghero.png"
-                alt="TradeNet Terminal trading workspace"
-                className="w-full rounded-[20px] border border-white/[0.07] shadow-2xl object-contain bg-[#050506]"
+                src="/herogif.gif"
+                alt="TradeNet Quantum Terminal live orderflow workspace"
+                className="w-full rounded-[22px] border border-white/[0.08] shadow-2xl object-contain object-center bg-[#050506]"
                 loading="eager"
                 style={{ aspectRatio: '16/9' }}
               />
