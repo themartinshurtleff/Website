@@ -1,21 +1,37 @@
 {
-  "rewrites": [
+  "redirects": [
     {
       "source": "/docs",
-      "destination": "https://tradenet.mintlify.dev/docs"
+      "destination": "https://tradenet.mintlify.dev/docs",
+      "permanent": false
     },
     {
       "source": "/docs/:match*",
-      "destination": "https://tradenet.mintlify.dev/docs/:match*"
+      "destination": "https://tradenet.mintlify.dev/docs/:match*",
+      "permanent": false
     },
     {
       "source": "/blog",
-      "destination": "https://tradenet.mintlify.dev/blog"
+      "destination": "https://tradenet.mintlify.dev/blog",
+      "permanent": false
     },
     {
       "source": "/blog/:match*",
-      "destination": "https://tradenet.mintlify.dev/blog/:match*"
+      "destination": "https://tradenet.mintlify.dev/blog/:match*",
+      "permanent": false
     },
+    {
+      "source": "/blogs",
+      "destination": "https://tradenet.mintlify.dev/blog",
+      "permanent": false
+    },
+    {
+      "source": "/blogs/:match*",
+      "destination": "https://tradenet.mintlify.dev/blog/:match*",
+      "permanent": false
+    }
+  ],
+  "rewrites": [
     {
       "source": "/((?!assets/).*)",
       "destination": "/index.html"

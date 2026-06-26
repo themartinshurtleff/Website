@@ -11,35 +11,43 @@ const fadeUp = {
   }),
 }
 
-const highlights = [
+const showcasePanels = [
   {
     icon:   Layers,
-    title:  '4 Exchanges, 1 View',
-    body:   'Aggregated orderflow from Binance, Bybit, OKX, and Hyperliquid in one footprint chart.',
+    title:  'Trading + Risk Controls',
+    body:   'Bitunix execution controls sit beside the chart, with position monitoring, order history, TP/SL, and reduce-only controls in the same workspace.',
+    image:  '/tradinghero.png',
+    alt:    'TradeNet trading workspace with order controls',
     accent: '#c9a84c',
     bg:     'rgba(201,168,76,0.08)',
     border: 'rgba(201,168,76,0.15)',
   },
   {
     icon:   Target,
-    title:  'Liquidation Prediction',
-    body:   'Predict where liquidations will cluster with a proprietary real-time server model.',
+    title:  'Liquidations + Footprint',
+    body:   'Server-owned liquidation heatmap levels and live liquidation bubbles pair with footprint volume, delta, CVD, and OI context.',
+    image:  '/liqheatmap & footprint.png',
+    alt:    'TradeNet liquidation heatmap and footprint workspace',
     accent: '#c9a84c',
     bg:     'rgba(201,168,76,0.08)',
     border: 'rgba(201,168,76,0.15)',
   },
   {
     icon:   Zap,
-    title:  'Tauri Desktop Core',
-    body:   'Rust-owned secure state with a fast web UI for charts, panes, DOM, tape, and trading controls.',
+    title:  'OB Heatmap + Depth',
+    body:   'Orderbook heatmaps show resting liquidity over time while the depth panel keeps per-exchange, aggregate, and proxy data modes explicit.',
+    image:  '/obheatmap & dom.png',
+    alt:    'TradeNet orderbook heatmap and aggregated depth workspace',
     accent: '#22C55E',
     bg:     'rgba(34,197,94,0.08)',
     border: 'rgba(34,197,94,0.15)',
   },
   {
     icon:   LayoutGrid,
-    title:  'Complete Toolkit',
-    body:   'Footprint charts, heatmaps, DOM ladder, time and sales, Lua scripts, and freeform panes.',
+    title:  'Tauri Workspace',
+    body:   'A Rust-owned desktop shell handles trusted native state while the web UI owns the charting, DOM, tape, panels, and interaction layer.',
+    image:  '/hero.png',
+    alt:    'TradeNet multi-panel terminal workspace',
     accent: '#A78BFA',
     bg:     'rgba(167,139,250,0.08)',
     border: 'rgba(167,139,250,0.15)',
@@ -103,31 +111,23 @@ export default function TerminalTeaserSection() {
           />
         </motion.figure>
 
-        <div className="mt-4 grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-4 items-stretch">
-          <motion.div
-            variants={fadeUp}
-            custom={2}
-            initial="hidden"
-            animate={inView ? 'visible' : 'hidden'}
-          >
-            <img
-              src="/hero2.png"
-              alt="TradeNet Terminal liquidation heatmap and footprint chart"
-              className="w-full h-full min-h-[260px] object-contain rounded-[20px] border border-white/[0.07] bg-[#050506]"
-              loading="lazy"
-            />
-          </motion.div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {highlights.map(({ icon: Icon, title, body, accent, bg, border }, i) => (
-              <motion.div
-                key={title}
-                className="bento-card p-5 flex flex-col gap-3 min-h-[145px]"
-                variants={fadeUp}
-                custom={i + 3}
-                initial="hidden"
-                animate={inView ? 'visible' : 'hidden'}
-              >
+        <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {showcasePanels.map(({ icon: Icon, title, body, image, alt, accent, bg, border }, i) => (
+            <motion.article
+              key={title}
+              className="grid grid-cols-1 xl:grid-cols-[1.18fr_0.82fr] gap-4 items-stretch rounded-[22px] border border-white/[0.07] bg-[#050506] p-2"
+              variants={fadeUp}
+              custom={i + 2}
+              initial="hidden"
+              animate={inView ? 'visible' : 'hidden'}
+            >
+              <img
+                src={image}
+                alt={alt}
+                className="w-full h-full min-h-[210px] object-contain rounded-[16px] bg-black"
+                loading="lazy"
+              />
+              <div className="flex flex-col justify-center gap-3 p-4 sm:p-5">
                 <div
                   className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
                   style={{ background: bg, border: `1px solid ${border}` }}
@@ -138,9 +138,9 @@ export default function TerminalTeaserSection() {
                   <p className="text-[14px] font-bold text-[#FAFAFA] mb-1">{title}</p>
                   <p className="text-xs text-[#71717A] leading-relaxed">{body}</p>
                 </div>
-              </motion.div>
-            ))}
-          </div>
+              </div>
+            </motion.article>
+          ))}
         </div>
 
         <motion.div

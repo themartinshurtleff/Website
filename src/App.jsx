@@ -28,6 +28,9 @@ import ForgotPasswordPage from '@/pages/ForgotPasswordPage'
 import ResetPasswordPage  from '@/pages/ResetPasswordPage'
 import AuthConfirmPage    from '@/pages/AuthConfirmPage'
 
+const DOCS_URL = 'https://tradenet.mintlify.dev/docs'
+const BLOG_URL = 'https://tradenet.mintlify.dev/blog'
+
 const noHeaderRoutes = ['/indicator', '/terms-of-service', '/contact', '/thankyou']
 const noFooterRoutes = ['/thankyou']
 // const noPopupRoutes  = ['/thankyou']
@@ -75,6 +78,23 @@ function PasswordRecoveryRedirect() {
   return null
 }
 
+function ExternalRedirect({ basePath, destination }) {
+  const location = useLocation()
+
+  useEffect(() => {
+    const suffix = location.pathname.startsWith(basePath)
+      ? location.pathname.slice(basePath.length)
+      : ''
+    window.location.replace(`${destination}${suffix}${location.search}${location.hash}`)
+  }, [basePath, destination, location.hash, location.pathname, location.search])
+
+  return (
+    <main className="min-h-screen bg-black flex items-center justify-center px-6">
+      <p className="text-sm text-[#A1A1AA]">Redirecting...</p>
+    </main>
+  )
+}
+
 export default function App() {
   const location    = useLocation()
   const showHeader  = !noHeaderRoutes.includes(location.pathname)
@@ -93,6 +113,9 @@ export default function App() {
           <Route path="/contact"         element={<PageWrapper><ContactPage        /></PageWrapper>} />
           <Route path="/case-studies"    element={<PageWrapper><CaseStudiesPage    /></PageWrapper>} />
           <Route path="/terms-of-service"element={<PageWrapper><TermsOfServicePage /></PageWrapper>} />
+          <Route path="/docs/*"          element={<ExternalRedirect basePath="/docs"  destination={DOCS_URL} />} />
+          <Route path="/blog/*"          element={<ExternalRedirect basePath="/blog"  destination={BLOG_URL} />} />
+          <Route path="/blogs/*"         element={<ExternalRedirect basePath="/blogs" destination={BLOG_URL} />} />
           <Route path="/thankyou"        element={<PageWrapper><ThankYouPage       /></PageWrapper>} />
           <Route path="/signup"          element={<PageWrapper><SignUpPage         /></PageWrapper>} />
           <Route path="/login"           element={<PageWrapper><LoginPage          /></PageWrapper>} />

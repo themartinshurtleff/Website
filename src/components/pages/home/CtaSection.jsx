@@ -71,10 +71,10 @@ export default function CtaSection() {
             <span className="eyebrow-gold relative">Quantum Terminal</span>
             <h2 className="text-[clamp(24px,3vw,36px)] font-black tracking-[-0.03em] leading-[1.1] relative">
               <span className="text-[#FAFAFA]">Professional Orderflow.</span><br />
-              <span className="gradient-text-gold">Every Exchange.</span>
+              <span className="gradient-text-gold">Core Futures Markets.</span>
             </h2>
             <p className="text-[15px] text-[#A1A1AA] relative">
-              Multi-exchange aggregation, liquidation prediction, Lua scripting, and
+              Multi-exchange aggregation, liquidation heatmaps, Lua scripting, and
               a Tauri desktop shell with Rust-owned secure state.
             </p>
             <div className="relative">

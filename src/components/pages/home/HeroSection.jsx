@@ -5,8 +5,8 @@ import ScrollIndicator from '@/components/common/ScrollIndicator'
 
 const stats = [
   { value: 'Multi',     label: 'Exchange' },
-  { value: '3,000+',    label: 'Symbols' },
-  { value: 'Real-Time', label: 'Prediction' },
+  { value: 'BTC ETH SOL', label: 'Core' },
+  { value: 'Real-Time', label: 'Heatmaps' },
   { value: 'Tauri',     label: 'Desktop' },
 ]
 
@@ -98,9 +98,9 @@ export default function HeroSection() {
               animate="visible"
               className="text-[17px] text-[#D4D4D8] leading-[1.75] max-w-[470px]"
             >
-              TradeNet Terminal delivers real-time liquidation prediction,
+              TradeNet Terminal delivers server-owned liquidation heatmaps,
               aggregated order flow, and multi-exchange derivatives analytics
-              in a Tauri desktop terminal built for the beta launch.
+              for BTC, ETH, and SOL in a Tauri desktop terminal built for the beta launch.
               Built for traders who trade differently.
             </motion.p>
 

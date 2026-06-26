@@ -6,7 +6,7 @@ import {
 import AuroraBackground from '@/components/common/AuroraBackground'
 import WaitlistForm from '@/components/common/WaitlistForm'
 
-// ─── Animation helpers ────────────────────────────────────────────────────────
+// Animation helpers
 const fadeUp = {
   hidden:  { opacity: 0, y: 28 },
   visible: (i = 0) => ({
@@ -15,112 +15,110 @@ const fadeUp = {
   }),
 }
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
+// Data
 const valueProps = [
   {
     icon: Layers,
-    title: '4 Exchanges, 1 View',
-    body:  'Aggregated orderflow from Binance, Bybit, OKX, and Hyperliquid — unified into a single footprint chart. True price discovery.',
+    title: 'Aggregated Core Markets',
+    body: 'BTC, ETH, and SOL views route across Binance, Bybit, OKX, and Hyperliquid where the terminal supports true aggregate data.',
     accent: '#c9a84c',
-    bg:     'rgba(201,168,76,0.08)',
+    bg: 'rgba(201,168,76,0.08)',
     border: 'rgba(201,168,76,0.18)',
   },
   {
     icon: Target,
-    title: 'Liquidation Prediction',
-    body:  'Not just historical data — predict where liquidations will cluster before they happen. Proprietary server-side algorithm, real-time.',
+    title: 'Liquidation Intelligence',
+    body: 'Server-owned liquidation heatmaps, live liquidation rows, and notional filters surface forced-flow context around price.',
     accent: '#c9a84c',
-    bg:     'rgba(201,168,76,0.08)',
+    bg: 'rgba(201,168,76,0.08)',
     border: 'rgba(201,168,76,0.18)',
   },
   {
     icon: Zap,
     title: 'Tauri Desktop Core',
-    body:  'A Rust-owned desktop shell protects credentials and trusted state while the web UI owns fast chart, DOM, tape, and workspace rendering.',
+    body: 'A Rust-owned desktop shell protects credentials and trusted state while the web UI owns fast chart, DOM, tape, and workspace rendering.',
     accent: '#22C55E',
-    bg:     'rgba(34,197,94,0.08)',
+    bg: 'rgba(34,197,94,0.08)',
     border: 'rgba(34,197,94,0.18)',
   },
   {
     icon: LayoutGrid,
-    title: 'Professional Toolkit',
-    body:  'Footprint charts, DOM ladder, time & sales, liquidation heatmap, orderbook heatmap. Every tool a serious futures trader needs.',
+    title: 'Orderflow Toolkit',
+    body: 'Footprint charts, DOM ladder, time and sales, liquidation heatmap, orderbook heatmap, Lua scripts, and workspace templates.',
     accent: '#A78BFA',
-    bg:     'rgba(167,139,250,0.08)',
+    bg: 'rgba(167,139,250,0.08)',
     border: 'rgba(167,139,250,0.18)',
   },
 ]
 
 const features = [
   {
-    eyebrow: 'Flagship Chart',
-    title:   'Footprint Charts Built for Crypto Futures',
-    body:    'Price-grouped, interval-aggregated trade data overlaid on OHLC candlesticks. Bid/Ask, Volume Profile, and Delta Profile modes give you a complete picture of how volume is distributed at each price level.',
+    eyebrow: 'Execution Surface',
+    title: 'Trading Controls Stay Inside the Terminal',
+    body: 'The trading workspace connects chart context to Bitunix execution controls, position monitoring, and order management while the Tauri shell keeps trusted state, credentials, and trading commands Rust-owned.',
     bullets: [
-      'Bid/Ask, Volume Profile, and Delta Profile modes',
-      'Imbalance highlighting — stacked and diagonal',
-      'Naked Point of Control (POC) detection',
-      '9-row Bar Statistics panel',
-      'Daily CVD and Daily OI CVD from server-owned data',
-      'Liquidation data per candle',
+      'Bitunix trading integration staged behind beta access',
+      'Order ticket, leverage, margin, TP/SL, and reduce-only controls',
+      'Positions, open orders, order history, and trade history in the bottom dock',
+      'Rust-owned secure state for credentials, sessions, and trading actions',
     ],
-    placeholder: 'Footprint Chart',
-    imageSrc: '/hero2.png',
+    placeholder: 'TradeNet trading workspace',
+    imageSrc: '/tradinghero.png',
     reverse: false,
   },
   {
-    eyebrow: 'Unique to TradeNet',
-    title:   'Multi-Exchange Aggregation — See the Real Market',
-    body:    "Most terminals show you one exchange. TradeNet's AGGREGATED ticker combines live orderflow from all four major crypto futures exchanges into a single unified view. No other desktop terminal does this.",
+    eyebrow: 'Core Market View',
+    title: 'Multi-Exchange Aggregation for BTC, ETH, and SOL',
+    body: "TradeNet's aggregated views focus on the core futures markets first: Binance, Bybit, OKX, and Hyperliquid coverage for BTC, ETH, and SOL where aggregate routes are supported.",
     bullets: [
-      'Binance, Bybit, OKX, and Hyperliquid — all in one feed',
-      'BTC, ETH, and SOL supported across exchanges',
-      'Aggregated Daily CVD and Daily OI CVD',
-      'Switch between per-exchange and aggregated view instantly',
+      'Aggregated candles, trades, volume, and footprint data from aggr-server',
+      'Backend-owned OI, OI CVD, liquidation events, and heatmap routes',
+      'Per-exchange and aggregate data modes are labeled separately',
+      'Workspace templates pair charts with DOM and Time & Sales panes',
     ],
-    placeholder: 'Aggregated Orderflow',
+    placeholder: 'Aggregated orderflow workspace',
     imageSrc: '/hero.png',
     reverse: true,
   },
   {
-    eyebrow: 'Proprietary Intelligence',
-    title:   'Liquidation Prediction — Before It Happens',
-    body:    'Most tools show you where liquidations already occurred. TradeNet predicts where they will cluster — in real time, server-side, using proprietary algorithms. Combined with a 12-hour historical heatmap, you see the full picture.',
+    eyebrow: 'Liquidations + Footprint',
+    title: 'Liquidation Heatmap With Footprint Confirmation',
+    body: 'The liquidation workspace pairs server-side liquidation heatmap levels and live liquidation bubbles with a footprint pane, so sweep zones can be checked against actual bid/ask volume, delta, CVD, and OI context.',
     bullets: [
-      '12-hour historical liquidation grid overlay',
-      'Live cluster level prediction with USD notional',
-      'Aggregated across Binance, Bybit, and OKX',
-      'Configurable minimum notional filter',
+      'Historical liquidation heatmap overlays with USD notional filters',
+      'Live long and short liquidation bubbles on the chart',
+      'Footprint panes expose bid/ask volume, delta, CVD, and OI indicators',
+      'Backend owns liquidation rows, OI, OI CVD, and heatmap data',
     ],
-    placeholder: 'Liquidation Heatmap',
-    imageSrc: '/hero.png',
+    placeholder: 'Liquidation heatmap and footprint workspace',
+    imageSrc: '/liqheatmap & footprint.png',
     reverse: false,
   },
   {
     eyebrow: 'Market Depth',
-    title:   'Orderbook Heatmap & DOM Ladder',
-    body:    '30-second resolution, 12-hour historical orderbook heatmap lets you see where large resting orders have sat and moved. Paired with a real-time DOM ladder showing L2 depth with trade volume overlay.',
+    title: 'Orderbook Heatmap and True Aggregated Depth',
+    body: 'Orderbook heatmap views show where resting liquidity sits and moves, while the depth panel is designed around explicit per-exchange, aggregate, or proxy labels so traders know exactly what feed they are reading.',
     bullets: [
-      'p50 / p95 percentile normalization for clean rendering',
-      'Large resting orders rendered as colored bands',
-      'Real-time L2 depth with recent trade volume overlay',
-      'Grouped price levels and configurable tick size',
+      'OB heatmap rendering uses noise filtering and scaled intensity for readability',
+      'Depth ladders separate Binance, Bybit, OKX, and Hyperliquid columns',
+      'True aggregated DOM and Tape routes live in aggr-server while frontend integration is staged',
+      'Temporary proxy paths must be labeled instead of shown as aggregate data',
     ],
-    placeholder: 'Orderbook Heatmap',
-    imageSrc: '/hero2.png',
+    placeholder: 'Orderbook heatmap and aggregated DOM workspace',
+    imageSrc: '/obheatmap & dom.png',
     reverse: true,
   },
   {
     eyebrow: 'Workspace',
-    title:   'Built for Multi-Monitor Power-User Setups',
-    body:    'Arrange split layouts or the new freeform canvas workspace. Spawn, drag, resize, and layer charts, DOM, tape, and indicator panes while keeping the stable split layout as a fallback.',
+    title: 'Workspace Layouts for Real Orderflow Work',
+    body: 'The terminal is built around a Tauri desktop shell with a web UI dedicated to layout, chrome, chart interaction, DOM, tape, settings panels, and high-frequency canvas/WebGL rendering.',
     bullets: [
-      'Split and canvas workspace modes',
-      'Drag, resize, reorder, and snap freeform panes',
-      'Flow Desk templates for chart, DOM, and Time & Sales',
-      'Named layouts for save, load, clone, and restore',
+      'Chart styles include candlestick, footprint, heatmap, comparison, DOM, and Time & Sales workflows',
+      'Templates include one-chart, split, grid, focus, and Flow Desk layouts',
+      'Web UI owns visual surfaces while Rust owns trusted native integration',
+      'Lua scripts read pane-loaded data rather than querying backend routes directly',
     ],
-    placeholder: 'Workspace Layout',
+    placeholder: 'Workspace layout',
     imageSrc: '/hero.png',
     reverse: false,
   },
@@ -138,7 +136,7 @@ const techSpecs = [
 const compareRows = [
   { feature: 'Multi-exchange aggregation', tn: true,  bm: false, atas: false,  tv: false  },
   { feature: 'Crypto-native',             tn: true,  bm: 'Partial', atas: 'Partial', tv: true  },
-  { feature: 'Liquidation prediction',    tn: true,  bm: false, atas: false,  tv: false  },
+  { feature: 'Liquidation heatmap + events', tn: true,  bm: false, atas: false,  tv: false  },
   { feature: 'Native desktop app',        tn: true,  bm: true,  atas: true,   tv: false  },
   { feature: 'Freeform pane canvas',      tn: true,  bm: false, atas: false,  tv: false  },
   { feature: 'Aggregated OI / CVD',       tn: true,  bm: false, atas: false,  tv: false  },
@@ -154,7 +152,7 @@ function Cell({ val }) {
   return <span className="text-[#71717A] text-xs">{val}</span>
 }
 
-// ─── Section components ───────────────────────────────────────────────────────
+// Section components
 function ValueProps() {
   const ref    = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
@@ -233,7 +231,7 @@ function FeatureRow({ feature, index }) {
             <img
               src={imageSrc}
               alt={placeholder}
-              className="w-full rounded-[20px] border border-white/[0.07] object-cover"
+              className="w-full rounded-[20px] border border-white/[0.07] object-contain bg-[#050506]"
               loading="lazy"
               style={{ aspectRatio: '16/9' }}
             />
@@ -300,7 +298,7 @@ function ComparisonTable() {
         >
           <span className="eyebrow-gold mb-4 block w-fit">How We Compare</span>
           <h2 className="text-[clamp(28px,3.5vw,44px)] font-black tracking-[-0.03em] text-[#FAFAFA]">
-            The only terminal built for crypto.
+            Built for crypto orderflow.
           </h2>
         </motion.div>
 
@@ -350,7 +348,7 @@ function ComparisonTable() {
   )
 }
 
-// ─── Main page ────────────────────────────────────────────────────────────────
+// Main page
 export default function TerminalPage() {
   const heroRef    = useRef(null)
   const heroInView = useInView(heroRef, { once: true })
@@ -358,7 +356,7 @@ export default function TerminalPage() {
   return (
     <main className="bg-black">
 
-      {/* ── Hero ── */}
+      {/* Hero */}
       <section
         ref={heroRef}
         className="relative min-h-screen flex items-center overflow-hidden bg-black pt-20"
@@ -375,7 +373,7 @@ export default function TerminalPage() {
 
         <div className="relative section-container py-20 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-12 xl:gap-16 items-center">
-            {/* Left — copy */}
+            {/* Left copy */}
             <div className="space-y-8">
               <motion.div
                 variants={fadeUp}
@@ -395,7 +393,7 @@ export default function TerminalPage() {
               >
                 <h1 className="text-[clamp(40px,5.5vw,72px)] font-black leading-[1.01] tracking-[-0.04em] text-[#FAFAFA]">
                   Professional Orderflow.<br />
-                  Every Exchange.<br />
+                  Core Futures Markets.<br />
                   <span className="gradient-text-gold">One Terminal.</span>
                 </h1>
               </motion.div>
@@ -431,8 +429,8 @@ export default function TerminalPage() {
               >
                 {[
                   { val: 'Multi',     label: 'Exchange' },
-                  { val: '3,000+',    label: 'Symbols' },
-                  { val: 'Real-Time', label: 'Prediction' },
+                  { val: 'BTC ETH SOL', label: 'Core' },
+                  { val: 'Real-Time', label: 'Heatmaps' },
                   { val: 'Tauri',     label: 'Desktop' },
                 ].map(({ val, label }) => (
                   <div key={label} className="flex flex-col items-center justify-center gap-1 py-4 px-2 bg-[#0e0e10]">
@@ -443,16 +441,16 @@ export default function TerminalPage() {
               </motion.div>
             </div>
 
-            {/* Right — hero image placeholder */}
+            {/* Right hero image */}
             <motion.div
               initial={{ opacity: 0, x: 24 }}
               animate={heroInView ? { opacity: 1, x: 0 } : {}}
               transition={{ delay: 0.3, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
               <img
-                src="/hero2.png"
-                alt="TradeNet Terminal liquidation heatmap and footprint workspace"
-                className="w-full rounded-[20px] border border-white/[0.07] shadow-2xl object-cover"
+                src="/tradinghero.png"
+                alt="TradeNet Terminal trading workspace"
+                className="w-full rounded-[20px] border border-white/[0.07] shadow-2xl object-contain bg-[#050506]"
                 loading="eager"
                 style={{ aspectRatio: '16/9' }}
               />
@@ -461,21 +459,21 @@ export default function TerminalPage() {
         </div>
       </section>
 
-      {/* ── Value props ── */}
+      {/* Value props */}
       <ValueProps />
 
-      {/* ── Feature deep-dives ── */}
+      {/* Feature deep-dives */}
       {features.map((f, i) => (
         <FeatureRow key={f.title} feature={f} index={i} />
       ))}
 
-      {/* ── Tech specs ── */}
+      {/* Tech specs */}
       <TechSpecs />
 
-      {/* ── Comparison table ── */}
+      {/* Comparison table */}
       <ComparisonTable />
 
-      {/* ── Bottom waitlist CTA ── */}
+      {/* Bottom waitlist CTA */}
       <section
         id="terminal-waitlist"
         className="py-32 bg-black border-t border-white/[0.04] relative overflow-hidden"
