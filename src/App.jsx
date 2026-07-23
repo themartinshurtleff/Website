@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react'
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
+import { Navigate, Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
@@ -24,7 +24,6 @@ import ThankYouPage       from '@/pages/ThankYouPage'
 import SignUpPage         from '@/pages/SignUpPage'
 import LoginPage          from '@/pages/LoginPage'
 import AccountPage        from '@/pages/AccountPage'
-import PricingPage        from '@/pages/PricingPage'
 import ForgotPasswordPage from '@/pages/ForgotPasswordPage'
 import ResetPasswordPage  from '@/pages/ResetPasswordPage'
 import AuthConfirmPage    from '@/pages/AuthConfirmPage'
@@ -124,8 +123,8 @@ export default function App() {
           <Route path="/reset-password"  element={<PageWrapper><ResetPasswordPage  /></PageWrapper>} />
           <Route path="/auth/confirm"    element={<PageWrapper><AuthConfirmPage    /></PageWrapper>} />
           <Route path="/account"         element={<PageWrapper><AccountPage        /></PageWrapper>} />
-          <Route path="/pricing"         element={<PageWrapper><PricingPage        /></PageWrapper>} />
-          <Route path="/buy"             element={<PageWrapper><PricingPage        /></PageWrapper>} />
+          <Route path="/pricing"         element={<Navigate to="/terminal" replace />} />
+          <Route path="/buy"             element={<Navigate to="/terminal" replace />} />
           <Route
             path="/admin/dashboard"
             element={(

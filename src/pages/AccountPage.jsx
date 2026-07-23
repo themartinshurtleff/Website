@@ -7,7 +7,7 @@ import { openBillingPortal, TERMINAL_DOWNLOAD_URL } from '@/lib/checkout'
 
 // access_tier (derived security tier) -> display. NOT subscription_tier.
 const tierLabels = {
-  waitlist:          'No active plan',
+  waitlist:          'Waitlist',
   free:              'Free',
   referral_verified: 'Referral (Bitunix)',
   beta:              'Beta',
@@ -16,7 +16,7 @@ const tierLabels = {
 }
 
 const statusLabels = {
-  waitlist: 'Inactive',
+  waitlist: 'On the waitlist',
   active:   'Active',
   comped:   'Comped',
   past_due: 'Payment past due',
@@ -224,16 +224,16 @@ export default function AccountPage() {
             </Link>
           )}
 
-          {/* Upgrade prompt for accounts without terminal access */}
+          {/* Launch prompt for accounts without terminal access */}
           {!isElevated && (
             <div
               className="rounded-xl p-4"
               style={{ background: 'rgba(201,168,76,0.04)', border: '1px solid rgba(201,168,76,0.12)' }}
             >
               <p className="text-sm text-[#A1A1AA]">
-                This account does not have active terminal access.{' '}
-                <Link to="/pricing" className="text-[#c9a84c] hover:text-[#f0c040] font-semibold transition-colors">
-                  Choose a Pro plan -&gt;
+                Public checkout is paused while beta access is staged.{' '}
+                <Link to="/terminal" className="text-[#c9a84c] hover:text-[#f0c040] font-semibold transition-colors">
+                  Join the launch waitlist -&gt;
                 </Link>
               </p>
             </div>

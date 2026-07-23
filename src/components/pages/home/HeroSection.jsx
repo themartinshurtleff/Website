@@ -43,7 +43,7 @@ export default function HeroSection() {
 
       <div className="tn-hero-copy">
         <motion.p className="tn-kicker" variants={reveal} custom={0.08} initial="hidden" animate="visible">
-          Public beta access
+          Launching soon / waitlist open
         </motion.p>
         <motion.h1 id="tn-hero-title" variants={reveal} custom={0.14} initial="hidden" animate="visible">
           <span>TradeNet</span>
@@ -53,8 +53,8 @@ export default function HeroSection() {
           Multi-venue heatmaps, footprint charts, DOM, Tape, OI, CVD, Lua indicators, backtesting, and paper-first execution for BTC, ETH, and SOL.
         </motion.p>
         <motion.div className="tn-hero-actions" variants={reveal} custom={0.3} initial="hidden" animate="visible">
-          <button className="tn-button-primary" onClick={() => navigate('/pricing')}>
-            View beta pricing
+          <button className="tn-button-primary" onClick={() => navigate('/terminal')}>
+            Join the waitlist
             <ArrowRight size={16} />
           </button>
           <button className="tn-button-secondary" onClick={showTerminal}>

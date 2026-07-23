@@ -8,7 +8,6 @@ const navLinks = [
   { label: 'Home',      to: '/'              },
   { label: 'Terminal',  to: '/terminal'      },
   { label: 'Indicator', to: '/indicator'     },
-  { label: 'Pricing',   to: '/pricing'       },
   { label: 'Docs',      to: '/docs',  external: true },
   { label: 'Blog',      to: '/blog', external: true },
   { label: 'About',     to: '/about'         },
@@ -47,6 +46,11 @@ export default function Header() {
     } else {
       navigate(to)
     }
+  }
+
+  function handleWaitlist() {
+    navigate('/terminal')
+    setTimeout(() => document.getElementById('terminal-waitlist')?.scrollIntoView({ behavior: 'smooth' }), 350)
   }
 
   const isActive = (to) => {
@@ -106,12 +110,6 @@ export default function Header() {
                   </button>
                 )}
                 <button
-                  onClick={() => navigate('/pricing')}
-                  className="site-header-cta flex items-center gap-2 bg-[#c9a84c] hover:bg-[#f0c040] text-black font-semibold text-sm px-5 py-2 rounded-md transition-colors"
-                >
-                  Plans
-                </button>
-                <button
                   onClick={() => navigate('/account')}
                   className="flex items-center gap-2 text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors"
                 >
@@ -135,10 +133,10 @@ export default function Header() {
                   Sign In
                 </button>
                 <button
-                  onClick={() => navigate('/pricing')}
+                  onClick={handleWaitlist}
                   className="site-header-cta flex items-center gap-2 bg-[#c9a84c] hover:bg-[#f0c040] text-black font-semibold text-sm px-5 py-2 rounded-md transition-colors"
                 >
-                  Get Pro
+                  Join Waitlist
                 </button>
               </>
             )}
@@ -194,12 +192,6 @@ export default function Header() {
                       </button>
                     )}
                     <button
-                      onClick={() => navigate('/pricing')}
-                      className="w-full bg-[#c9a84c] hover:bg-[#f0c040] text-black font-semibold text-sm px-5 py-2.5 rounded-md transition-colors"
-                    >
-                      View Plans
-                    </button>
-                    <button
                       onClick={() => navigate('/account')}
                       className="w-full flex items-center justify-center gap-2 text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors px-5 py-2.5"
                     >
@@ -221,10 +213,10 @@ export default function Header() {
                       Sign In
                     </button>
                     <button
-                      onClick={() => navigate('/pricing')}
+                      onClick={handleWaitlist}
                       className="w-full bg-[#c9a84c] hover:bg-[#f0c040] text-black font-semibold text-sm px-5 py-2.5 rounded-md transition-colors"
                     >
-                      Get Pro
+                      Join Waitlist
                     </button>
                   </>
                 )}

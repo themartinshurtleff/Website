@@ -1,186 +1,153 @@
-import { useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion, useInView } from 'framer-motion'
-import { ArrowRight, Check, LockKeyhole, ShieldCheck } from 'lucide-react'
-import { useAuth } from '@/contexts/AuthContext'
-import { PLANS, startCheckout } from '@/lib/checkout'
+import { ArrowRight, Bell, CheckCircle2, Clock, ShieldCheck, UserPlus } from 'lucide-react'
+import WaitlistForm from '@/components/common/WaitlistForm'
 
-const planFeatures = [
-  'Live BTC, ETH, and SOL market data',
-  'Footprint, DOM, Tape, and multi-venue charts',
-  'Liquidation and orderbook heatmaps',
-  'OI, CVD, VAP, and bar statistics',
-  'Lua indicators and terminal data taps',
-  'Backtesting and paper-first execution',
-  'Saved desktop workspaces and beta updates',
-]
-
-function checkoutMessage(error) {
-  if (error?.message === 'existing_subscription') {
-    return 'This account already has a Stripe subscription. Manage it from your account page.'
-  }
-  if (error?.message === 'waitlist_discount_not_configured') {
-    return 'Your founding offer was recognized, but checkout is not ready yet. Please contact support so we do not charge you the wrong amount.'
-  }
-  if (error?.message === 'stripe_price_mismatch') {
-    return 'Checkout is paused because the configured Stripe price does not match the price shown here. Please contact support.'
-  }
-  return 'Checkout is unavailable right now. Please try again in a moment.'
+const fadeUp = {
+  hidden:  { opacity: 0, y: 24 },
+  visible: (i = 0) => ({
+    opacity: 1, y: 0,
+    transition: { delay: i * 0.1, duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+  }),
 }
 
-export default function PricingSection({ standalone = false }) {
+const launchSteps = [
+  {
+    icon: Bell,
+    title: 'Join the waitlist',
+    body: 'We are collecting launch interest before opening public paid plans.',
+  },
+  {
+    icon: UserPlus,
+    title: 'Create an account',
+    body: 'Accounts stay open, so beta access can be attached to the same login used in the terminal.',
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Access is gated',
+    body: 'Supabase entitlements remain server-side; the terminal checks access before protected requests run.',
+  },
+]
+
+const included = [
+  'Launch notifications before public purchase links return',
+  'Priority beta onboarding for selected traders',
+  'Account-based terminal access when your invite is approved',
+  'No early checkout or surprise charge while launch access is paused',
+]
+
+export default function PricingSection() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
   const navigate = useNavigate()
-  const { user, profile, loading } = useAuth()
-  const [buyingPlan, setBuyingPlan] = useState(null)
-  const [checkoutError, setCheckoutError] = useState('')
-
-  const tier = profile?.access_tier || 'waitlist'
-  const hasAccess = tier !== 'free' && tier !== 'waitlist'
-
-  async function handleBuy(plan) {
-    if (loading) return
-    if (!user) {
-      navigate(`/signup?return=${encodeURIComponent('/pricing')}`)
-      return
-    }
-    if (hasAccess) {
-      navigate('/account')
-      return
-    }
-
-    setCheckoutError('')
-    setBuyingPlan(plan)
-    try {
-      const url = await startCheckout(plan)
-      window.location.assign(url)
-    } catch (error) {
-      console.error('checkout failed', error)
-      setCheckoutError(checkoutMessage(error))
-      setBuyingPlan(null)
-    }
-  }
-
-  const buttonLabel = (plan) => {
-    if (buyingPlan === plan) return 'Opening secure checkout...'
-    if (hasAccess) return 'View active access'
-    if (!user) return 'Create account to continue'
-    return plan === 'annual' ? 'Choose annual' : 'Choose monthly'
-  }
 
   return (
-    <section
-      id="pricing"
-      ref={ref}
-      className={`tn-pricing${standalone ? ' tn-pricing-standalone' : ''}`}
-      aria-labelledby="pricing-title"
-    >
-      <div className="tn-container">
-        <motion.header
-          className="tn-pricing-heading"
-          initial={{ opacity: 0, y: 24 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.65 }}
-        >
-          <p className="tn-kicker">Beta launch pricing</p>
-          <h2 id="pricing-title">Direct access to the full TradeNet terminal.</h2>
-          <p>
-            One Pro plan, billed monthly or annually. Both options unlock the same terminal and server-backed market data.
-          </p>
-        </motion.header>
+    <section id="pricing" className="py-28 bg-black relative overflow-hidden" ref={ref}>
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            'radial-gradient(ellipse 70% 55% at 50% 42%, rgba(201,168,76,0.06), transparent 70%)',
+        }}
+      />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#c9a84c]/20 to-transparent" />
 
+      <div className="section-container relative">
         <motion.div
-          className="tn-price-grid"
-          initial={{ opacity: 0, y: 28 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.1 }}
+          className="grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-10 lg:gap-14 items-center"
+          initial="hidden"
+          animate={inView ? 'visible' : 'hidden'}
         >
-          <article className="tn-price-card">
-            <div className="tn-plan-heading">
-              <div>
-                <p className="tn-plan-name">Pro Monthly</p>
-                <p className="tn-plan-caption">Full access with monthly billing</p>
+          <motion.div className="space-y-7" variants={fadeUp} custom={0}>
+            <span className="eyebrow-gold">
+              <Clock size={13} />
+              Launching Soon
+            </span>
+
+            <div className="space-y-4">
+              <h2 className="text-[clamp(34px,4.6vw,58px)] font-black tracking-[-0.035em] leading-[1.04]">
+                <span className="text-[#FAFAFA]">Pricing is paused.</span><br />
+                <span className="gradient-text-gold">Launch access opens next.</span>
+              </h2>
+              <p className="text-[16px] text-[#A1A1AA] leading-[1.75] max-w-xl">
+                We are holding checkout while the terminal moves into beta launch readiness.
+                Join the waitlist now and we will notify you when controlled access opens.
+              </p>
+            </div>
+
+            <div className="max-w-xl">
+              <WaitlistForm source="launch_waitlist" />
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+              <button
+                onClick={() => navigate('/signup')}
+                className="btn-outline inline-flex items-center gap-2 px-5 py-3 rounded-xl text-[14px]"
+              >
+                Create Account
+                <ArrowRight size={15} />
+              </button>
+              <button
+                onClick={() => navigate('/terminal')}
+                className="inline-flex items-center gap-2 text-[#c9a84c] hover:text-[#f0c040] font-semibold text-[14px] transition-colors"
+              >
+                View terminal details
+                <ArrowRight size={15} />
+              </button>
+            </div>
+          </motion.div>
+
+          <motion.div variants={fadeUp} custom={1}>
+            <div
+              className="rounded-[20px] border border-[#c9a84c]/25 bg-[#09090B] overflow-hidden"
+              style={{ boxShadow: '0 0 44px rgba(201,168,76,0.08)' }}
+            >
+              <div className="p-6 sm:p-8 border-b border-white/[0.06]">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-widest text-[#c9a84c] mb-2">
+                      Beta Launch Status
+                    </p>
+                    <h3 className="text-2xl font-black text-[#FAFAFA] tracking-[-0.02em]">
+                      Waitlist-first rollout
+                    </h3>
+                  </div>
+                  <span className="w-fit rounded-full bg-[#c9a84c] text-black text-[11px] font-black uppercase tracking-widest px-3 py-1.5">
+                    Checkout closed
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 border-b border-white/[0.06]">
+                {launchSteps.map(({ icon: Icon, title, body }, i) => (
+                  <div key={title} className="p-6 border-white/[0.06] sm:border-r last:border-r-0">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#c9a84c]/10 border border-[#c9a84c]/20 mb-4">
+                      <Icon size={17} className="text-[#c9a84c]" />
+                    </div>
+                    <p className="text-sm font-bold text-[#FAFAFA] mb-2">{title}</p>
+                    <p className="text-xs text-[#71717A] leading-relaxed">{body}</p>
+                    <p className="text-[10px] text-[#3F3F46] mt-4 font-semibold uppercase tracking-wider">
+                      Step {i + 1}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="p-6 sm:p-8">
+                <p className="text-sm font-bold text-[#FAFAFA] mb-4">What joining gets you</p>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {included.map((item) => (
+                    <li key={item} className="flex items-start gap-2.5 text-sm text-[#A1A1AA] leading-relaxed">
+                      <CheckCircle2 size={15} className="text-[#c9a84c] flex-shrink-0 mt-0.5" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
-            <div className="tn-price-line">
-              <span className="tn-price-value">${PLANS.monthly.priceUsd}</span>
-              <span className="tn-price-cadence">/ month</span>
-            </div>
-            <p className="tn-renewal-copy">Renews monthly until cancelled.</p>
-            <ul className="tn-plan-features">
-              {planFeatures.map((feature) => (
-                <li key={feature}><Check size={15} />{feature}</li>
-              ))}
-            </ul>
-            <button
-              type="button"
-              className="tn-plan-button tn-plan-button-secondary"
-              onClick={() => handleBuy('monthly')}
-              disabled={Boolean(buyingPlan) || loading}
-            >
-              {buttonLabel('monthly')}
-              {!buyingPlan && <ArrowRight size={16} />}
-            </button>
-          </article>
-
-          <article className="tn-price-card tn-price-card-featured">
-            <div className="tn-plan-heading">
-              <div>
-                <p className="tn-plan-name">Pro Annual</p>
-                <p className="tn-plan-caption">Twelve months of full access</p>
-              </div>
-              <span className="tn-plan-badge">Best value</span>
-            </div>
-            <div className="tn-price-line">
-              <span className="tn-price-value">${PLANS.annual.priceUsd}</span>
-              <span className="tn-price-cadence">/ year</span>
-            </div>
-            <p className="tn-renewal-copy">
-              ${PLANS.annual.monthlyEquivalentUsd}/month equivalent. Renews annually until cancelled.
-            </p>
-            <ul className="tn-plan-features">
-              {planFeatures.map((feature) => (
-                <li key={feature}><Check size={15} />{feature}</li>
-              ))}
-            </ul>
-            <button
-              type="button"
-              className="tn-plan-button tn-plan-button-primary"
-              onClick={() => handleBuy('annual')}
-              disabled={Boolean(buyingPlan) || loading}
-            >
-              {buttonLabel('annual')}
-              {!buyingPlan && <ArrowRight size={16} />}
-            </button>
-          </article>
+          </motion.div>
         </motion.div>
-
-        {checkoutError && <p className="tn-checkout-error" role="alert">{checkoutError}</p>}
-
-        <motion.div
-          className="tn-founding-offer"
-          initial={{ opacity: 0, y: 18 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.22 }}
-        >
-          <ShieldCheck size={22} />
-          <div>
-            <h3>Founding waitlist pricing is recognized automatically.</h3>
-            <p>
-              Sign in with the same email used on the original TradeNet waitlist. The server checks that email against the protected waitlist and applies the eligible launch offer in Stripe Checkout.
-            </p>
-          </div>
-          <div className="tn-secure-checkout">
-            <LockKeyhole size={14} />
-            Secure checkout by Stripe
-          </div>
-        </motion.div>
-
-        <div className="tn-pricing-footnote">
-          <p>TradeNet is software for market analysis and execution tooling. It is not a broker or custodian.</p>
-          <Link to="/terms-of-service">Billing terms <ArrowRight size={13} /></Link>
-        </div>
       </div>
     </section>
   )
