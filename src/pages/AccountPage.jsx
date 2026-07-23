@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, Link, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { User, Mail, Shield, LogOut, RefreshCw, Download, ExternalLink } from 'lucide-react'
+import { User, Mail, Shield, LogOut, RefreshCw, Download, ExternalLink, Activity } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { openBillingPortal, TERMINAL_DOWNLOAD_URL } from '@/lib/checkout'
 
 // access_tier (derived security tier) -> display. NOT subscription_tier.
 const tierLabels = {
-  waitlist:          'Waitlist',
+  waitlist:          'No active plan',
   free:              'Free',
   referral_verified: 'Referral (Bitunix)',
   beta:              'Beta',
@@ -16,7 +16,7 @@ const tierLabels = {
 }
 
 const statusLabels = {
-  waitlist: 'On the waitlist',
+  waitlist: 'Inactive',
   active:   'Active',
   comped:   'Comped',
   past_due: 'Payment past due',
@@ -39,6 +39,9 @@ export default function AccountPage() {
 
   const tier = profile?.access_tier || 'waitlist'
   const isElevated = tier !== 'free' && tier !== 'waitlist'
+  const canManageBilling = profile?.billing_provider === 'stripe' && Boolean(
+    profile?.stripe_customer_id || profile?.billing_customer_id,
+  )
 
   // Activation-race poll: after returning from checkout (?activating=1), refresh
   // the session (re-mints claims) immediately, then every ~3s until the plan
@@ -175,7 +178,7 @@ export default function AccountPage() {
                 <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
                 Refresh access
               </button>
-              {isElevated && (
+              {canManageBilling && (
                 <button
                   type="button"
                   onClick={handleManageSubscription}
@@ -208,16 +211,29 @@ export default function AccountPage() {
             </a>
           )}
 
-          {/* Launch prompt for free/waitlist */}
+          {tier === 'admin' && (
+            <Link
+              to="/admin/dashboard"
+              className="bento-card p-5 flex items-center gap-3 hover:border-[#c9a84c]/30 transition-colors"
+            >
+              <Activity size={18} className="text-[#42d9d0]" />
+              <div>
+                <p className="text-sm font-bold text-[#FAFAFA]">System Monitoring</p>
+                <p className="text-xs text-[#71717A]">Backend, aggr, streams, storage, and security</p>
+              </div>
+            </Link>
+          )}
+
+          {/* Upgrade prompt for accounts without terminal access */}
           {!isElevated && (
             <div
               className="rounded-xl p-4"
               style={{ background: 'rgba(201,168,76,0.04)', border: '1px solid rgba(201,168,76,0.12)' }}
             >
               <p className="text-sm text-[#A1A1AA]">
-                You're on the {tierLabels[tier] || tier} plan. Public checkout is paused while beta launch access is staged.{' '}
-                <Link to="/terminal" className="text-[#c9a84c] hover:text-[#f0c040] font-semibold transition-colors">
-                  Join the launch waitlist -&gt;
+                This account does not have active terminal access.{' '}
+                <Link to="/pricing" className="text-[#c9a84c] hover:text-[#f0c040] font-semibold transition-colors">
+                  Choose a Pro plan -&gt;
                 </Link>
               </p>
             </div>

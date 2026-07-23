@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, MailCheck } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 
 export default function SignUpPage() {
@@ -10,8 +10,14 @@ export default function SignUpPage() {
   const [confirm, setConfirm]   = useState('')
   const [error, setError]       = useState('')
   const [loading, setLoading]   = useState(false)
+  const [confirmationEmail, setConfirmationEmail] = useState('')
   const { signUp } = useAuth()
   const navigate = useNavigate()
+  const [params] = useSearchParams()
+
+  const rawReturn = params.get('return') || '/account'
+  const isSafeReturn = rawReturn.startsWith('/') && !rawReturn.startsWith('//')
+  const returnTo = isSafeReturn ? rawReturn : '/account'
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -28,13 +34,43 @@ export default function SignUpPage() {
 
     setLoading(true)
     try {
-      await signUp(email.trim().toLowerCase(), password)
-      navigate('/account')
+      const normalizedEmail = email.trim().toLowerCase()
+      const redirectTo = new URL(returnTo, window.location.origin).toString()
+      const data = await signUp(normalizedEmail, password, redirectTo)
+      if (data.session) navigate(returnTo)
+      else setConfirmationEmail(normalizedEmail)
     } catch (err) {
       setError(err.message || 'Something went wrong.')
     } finally {
       setLoading(false)
     }
+  }
+
+  if (confirmationEmail) {
+    return (
+      <main className="bg-black min-h-screen pt-24 flex items-center justify-center px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-sm text-center"
+        >
+          <div className="mx-auto mb-5 w-12 h-12 rounded-md bg-[#c9a84c]/10 border border-[#c9a84c]/20 flex items-center justify-center">
+            <MailCheck size={20} className="text-[#c9a84c]" />
+          </div>
+          <h1 className="text-3xl font-black text-[#FAFAFA] mb-3">Check Your Email</h1>
+          <p className="text-sm text-[#71717A] leading-relaxed">
+            We sent a verification link to <span className="text-[#D4D4D8]">{confirmationEmail}</span>. Confirm it to finish creating your TradeNet account.
+          </p>
+          <Link
+            to={`/login?return=${encodeURIComponent(returnTo)}`}
+            className="mt-7 inline-flex items-center gap-2 text-sm text-[#c9a84c] hover:text-[#f0c040] transition-colors"
+          >
+            Continue to sign in <ArrowRight size={14} />
+          </Link>
+        </motion.div>
+      </main>
+    )
   }
 
   return (
@@ -47,8 +83,8 @@ export default function SignUpPage() {
       >
         <h1 className="text-3xl font-black text-[#FAFAFA] mb-2">Create Account</h1>
         <p className="text-sm text-[#71717A] mb-8">
-          Save your login for beta launch access. Already have an account?{' '}
-          <Link to="/login" className="text-[#c9a84c] hover:text-[#f0c040] transition-colors">Sign in</Link>
+          Use the same email across the website and desktop terminal. Already have an account?{' '}
+          <Link to={`/login?return=${encodeURIComponent(returnTo)}`} className="text-[#c9a84c] hover:text-[#f0c040] transition-colors">Sign in</Link>
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">

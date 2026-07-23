@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Analytics } from '@vercel/analytics/react'
@@ -24,14 +24,17 @@ import ThankYouPage       from '@/pages/ThankYouPage'
 import SignUpPage         from '@/pages/SignUpPage'
 import LoginPage          from '@/pages/LoginPage'
 import AccountPage        from '@/pages/AccountPage'
+import PricingPage        from '@/pages/PricingPage'
 import ForgotPasswordPage from '@/pages/ForgotPasswordPage'
 import ResetPasswordPage  from '@/pages/ResetPasswordPage'
 import AuthConfirmPage    from '@/pages/AuthConfirmPage'
 
+const AdminDashboardPage = lazy(() => import('@/pages/AdminDashboardPage'))
+
 const BLOG_URL = 'https://www.tradenet.org/docs/blog'
 
-const noHeaderRoutes = ['/indicator', '/terms-of-service', '/contact', '/thankyou']
-const noFooterRoutes = ['/thankyou']
+const noHeaderRoutes = ['/indicator', '/terms-of-service', '/contact', '/thankyou', '/admin/dashboard']
+const noFooterRoutes = ['/thankyou', '/admin/dashboard']
 // const noPopupRoutes  = ['/thankyou']
 
 function PageWrapper({ children }) {
@@ -121,6 +124,16 @@ export default function App() {
           <Route path="/reset-password"  element={<PageWrapper><ResetPasswordPage  /></PageWrapper>} />
           <Route path="/auth/confirm"    element={<PageWrapper><AuthConfirmPage    /></PageWrapper>} />
           <Route path="/account"         element={<PageWrapper><AccountPage        /></PageWrapper>} />
+          <Route path="/pricing"         element={<PageWrapper><PricingPage        /></PageWrapper>} />
+          <Route path="/buy"             element={<PageWrapper><PricingPage        /></PageWrapper>} />
+          <Route
+            path="/admin/dashboard"
+            element={(
+              <Suspense fallback={<main className="min-h-screen bg-[#08090a]" />}>
+                <AdminDashboardPage />
+              </Suspense>
+            )}
+          />
         </Routes>
       </AnimatePresence>
       {showFooter && <Footer />}

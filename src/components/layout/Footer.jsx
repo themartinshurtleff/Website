@@ -9,13 +9,13 @@ export default function Footer() {
           <div className="md:col-span-1">
             <Link to="/" className="inline-block mb-4">
               <img
-                src="https://storage.googleapis.com/hostinger-horizons-assets-prod/3d810307-bbc4-4f21-91d6-f292df1a885d/6725a03a8625d8a52b24236d4aa8163e.png"
+                src="/assets/text-logo.png"
                 alt="TradeNet"
                 className="h-7 w-auto opacity-70 hover:opacity-100 transition-opacity"
               />
             </Link>
             <p className="text-sm text-[#71717A] leading-relaxed">
-              Institutional-grade tools and education for serious traders.
+              Crypto orderflow, research, and paper-first execution in one desktop terminal.
             </p>
           </div>
 
@@ -29,18 +29,18 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/indicator" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
-                  Fusion Indicator
+                <a href="/docs" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
+                  Documentation
+                </a>
+              </li>
+              <li>
+                <Link to="/signup" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
+                  Create Account
                 </Link>
               </li>
               <li>
-                <Link to="/#features" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
-                  Features
-                </Link>
-              </li>
-              <li>
-                <Link to="/terminal" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
-                  Launch Waitlist
+                <Link to="/pricing" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
+                  Pricing
                 </Link>
               </li>
             </ul>
@@ -61,6 +61,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <a href="/blog" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
+                  Blog
+                </a>
+              </li>
+              <li>
                 <Link to="/terms-of-service" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
                   Terms of Service
                 </Link>
@@ -78,13 +83,8 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="/blog" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
-                  Blog
-                </a>
-              </li>
-              <li>
                 <Link to="/contact" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
-                  Contact
+                  Support and Contact
                 </Link>
               </li>
               <li>
@@ -97,7 +97,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-10 pt-6 border-t border-white/[0.04] flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-[#71717A]">© 2026 TradeNet L.L.C.. All rights reserved.</p>
+          <p className="text-xs text-[#71717A]">Copyright 2026 TradeNet L.L.C. All rights reserved.</p>
           <p className="text-xs text-[#71717A] text-center sm:text-right max-w-sm">
             Trading involves substantial risk. Past performance is not indicative of future results.
           </p>

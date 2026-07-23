@@ -26,8 +26,8 @@ const included = [
 ]
 
 const trustBadges = [
-  { icon: Zap, label: 'Launch Waitlist' },
-  { icon: ShieldCheck, label: 'Account Ready' },
+  { icon: Zap, label: 'Included with Pro' },
+  { icon: ShieldCheck, label: 'Account Access' },
   { icon: RefreshCw, label: 'Lifetime Updates' },
 ]
 
@@ -58,10 +58,10 @@ export default function IndicatorPage() {
             className="h-7 w-auto"
           />
           <Link
-            to="/terminal"
+            to="/pricing"
             className="btn-gold px-5 py-2 text-sm rounded-lg"
           >
-            Join Waitlist
+            View Pricing
           </Link>
         </div>
       </nav>
@@ -169,21 +169,20 @@ export default function IndicatorPage() {
                 <FeatureList items={included} />
               </div>
 
-              {/* Launch waitlist */}
+              {/* Pro access */}
               <div className="gradient-border p-8 space-y-4">
-                <span className="eyebrow text-xs">Launching Soon</span>
+                <span className="eyebrow text-xs">TradeNet Pro</span>
                 <h3 className="text-3xl font-black text-[#FAFAFA] tracking-[-0.03em] leading-tight">
-                  Indicator access opens with the beta launch.
+                  Indicator tools are included with terminal access.
                 </h3>
                 <p className="text-[15px] text-[#A1A1AA] leading-relaxed">
-                  Public checkout is paused while TradeNet stages controlled beta access.
-                  Join the waitlist and create an account now, then we will attach access as launch seats open.
+                  Create one TradeNet account, choose a monthly or annual Pro plan, and use the same login in the desktop terminal.
                 </p>
                 <Link
-                  to="/terminal"
+                  to="/pricing"
                   className="btn-gold block text-center px-6 py-3 rounded-xl text-[15px] font-bold"
                 >
-                  Join Launch Waitlist
+                  View Pro Pricing
                 </Link>
                 <div className="grid grid-cols-3 gap-2 pt-2">
                   {trustBadges.map(({ icon: Icon, label }) => (
@@ -206,13 +205,13 @@ export default function IndicatorPage() {
           />
           <div className="section-container text-center relative space-y-6">
             <h2 className="text-[clamp(28px,4vw,48px)] font-black tracking-[-0.03em]">
-              <span className="gradient-text-gold">Ready to Trade with Confidence?</span>
+              <span className="gradient-text-gold">Build and test your own market logic.</span>
             </h2>
             <Link
-              to="/terminal"
+              to="/pricing"
               className="btn-gold inline-flex items-center gap-2 px-7 py-3.5 rounded-xl text-[15px]"
             >
-              Join Launch Waitlist <ArrowRight size={16} />
+              View Pro Pricing <ArrowRight size={16} />
             </Link>
             <div className="flex flex-wrap justify-center gap-4">
               {trustBadges.map(({ icon: Icon, label }) => (

@@ -39,7 +39,7 @@ export default {
         violet: '#8B5CF6',
       },
       fontFamily: {
-        sans: ['Neue Haas Grotesk', 'Inter', 'system-ui', 'sans-serif'],
+        sans: ['Manrope Variable', 'Inter', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         lg: 'var(--radius)',

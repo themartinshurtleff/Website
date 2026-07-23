@@ -29,21 +29,20 @@ export default function CtaSection() {
         >
           {/* Community CTA */}
           <div className="bento-card p-8 space-y-5" style={{ background: '#000' }}>
-            <span className="eyebrow">Launching Soon</span>
+            <span className="eyebrow">Beta Access</span>
             <h2 className="text-[clamp(24px,3vw,36px)] font-black tracking-[-0.03em] leading-[1.1]">
-              <span className="text-[#FAFAFA]">TradeNet access is</span><br />
-              <span className="gradient-text-gold">opening soon.</span>
+              <span className="text-[#FAFAFA]">TradeNet Pro is</span><br />
+              <span className="gradient-text-gold">available monthly or annually.</span>
             </h2>
             <p className="text-[15px] text-[#A1A1AA]">
-              We are pausing checkout while beta access is staged. Join the waitlist now
-              so we can notify you when terminal onboarding opens.
+              Create one TradeNet account, choose a plan, and use the same verified login in the desktop terminal.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
-                to="/terminal"
+                to="/pricing"
                 className="btn-gold inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-[14px]"
               >
-                Join Waitlist
+                View Pricing
                 <ArrowRight size={15} />
               </Link>
               <button
@@ -79,10 +78,10 @@ export default function CtaSection() {
             </p>
             <div className="relative">
               <button
-                onClick={() => navigate('/terminal')}
+                onClick={() => navigate('/pricing')}
                 className="inline-flex items-center gap-2 bg-[#c9a84c] hover:bg-[#f0c040] text-black font-semibold text-[14px] px-6 py-3 rounded-xl transition-colors"
               >
-                Join Launch Waitlist
+                Get Pro
                 <ArrowRight size={15} />
               </button>
             </div>

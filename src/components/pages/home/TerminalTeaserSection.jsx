@@ -1,165 +1,129 @@
-import { useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { motion, useInView } from 'framer-motion'
-import { ArrowRight, Layers, Target, Zap, LayoutGrid } from 'lucide-react'
+import { useRef, useState } from 'react'
+import { AnimatePresence, motion, useInView } from 'framer-motion'
 
-const fadeUp = {
-  hidden:  { opacity: 0, y: 24 },
-  visible: (i = 0) => ({
-    opacity: 1, y: 0,
-    transition: { delay: i * 0.08, duration: 0.55, ease: [0.22, 1, 0.36, 1] },
-  }),
-}
-
-const showcasePanels = [
+const productViews = [
   {
-    icon:   Layers,
-    title:  'Trading + Risk Controls',
-    body:   'Bitunix execution controls sit beside the chart, with position monitoring, order history, TP/SL, and reduce-only controls in the same workspace.',
-    image:  '/tradinghero.png',
-    alt:    'TradeNet trading workspace with order controls',
-    accent: '#c9a84c',
-    bg:     'rgba(201,168,76,0.08)',
-    border: 'rgba(201,168,76,0.15)',
+    id: 'workspace',
+    image: '/hero.png',
+    alt: 'TradeNet multi-pane workspace with charts, depth, tape, and indicators',
+    label: 'Workspace',
+    title: 'The full desk stays visible.',
+    body: 'Split panes, tab them, pop them out, or move into a freeform canvas. Save the layout and return to the same market context.',
+    details: ['Saved layouts', 'Split and canvas panes', 'Pop-out windows'],
   },
   {
-    icon:   Target,
-    title:  'Liquidations + Footprint',
-    body:   'Server-owned liquidation heatmap levels and live liquidation bubbles pair with footprint volume, delta, CVD, and OI context.',
-    image:  '/liqheatmap & footprint.png',
-    alt:    'TradeNet liquidation heatmap and footprint workspace',
-    accent: '#c9a84c',
-    bg:     'rgba(201,168,76,0.08)',
-    border: 'rgba(201,168,76,0.15)',
+    id: 'depth',
+    image: '/obheatmap & dom.png',
+    alt: 'TradeNet orderbook heatmap and multi-venue depth ladder',
+    label: 'Liquidity',
+    title: 'Historical depth and the live book.',
+    body: 'Orderbook heatmaps show where liquidity developed while the DOM keeps current depth and venue context beside price.',
+    details: ['Orderbook heatmap', 'Multi-venue DOM', 'Aggregated depth'],
   },
   {
-    icon:   Zap,
-    title:  'OB Heatmap + Depth',
-    body:   'Orderbook heatmaps show resting liquidity over time while the depth panel keeps per-exchange, aggregate, and proxy data modes explicit.',
-    image:  '/obheatmap & dom.png',
-    alt:    'TradeNet orderbook heatmap and aggregated depth workspace',
-    accent: '#22C55E',
-    bg:     'rgba(34,197,94,0.08)',
-    border: 'rgba(34,197,94,0.15)',
+    id: 'liquidations',
+    image: '/liqheatmap & footprint.png',
+    alt: 'TradeNet liquidation heatmap beside a footprint chart',
+    label: 'Orderflow',
+    title: 'Leverage, volume, and Delta on price.',
+    body: 'Liquidation structure, observed events, footprint volume, Delta, CVD, and OI remain attached to the chart where they matter.',
+    details: ['Liquidation structure', 'Footprint and Delta', 'OI and CVD'],
   },
   {
-    icon:   LayoutGrid,
-    title:  'Tauri Workspace',
-    body:   'A Rust-owned desktop shell handles trusted native state while the web UI owns the charting, DOM, tape, panels, and interaction layer.',
-    image:  '/hero.png',
-    alt:    'TradeNet multi-panel terminal workspace',
-    accent: '#A78BFA',
-    bg:     'rgba(167,139,250,0.08)',
-    border: 'rgba(167,139,250,0.15)',
+    id: 'execution',
+    image: '/tradinghero.png',
+    alt: 'TradeNet trading workspace with chart orders and risk controls',
+    label: 'Execution',
+    title: 'The position stays beside the thesis.',
+    body: 'Paper-first orders, chart overlays, TP and SL controls, advanced strategies, and the Order Center complete the workflow.',
+    details: ['Paper-first trading', 'Chart orders', 'TP and SL controls'],
   },
 ]
 
 export default function TerminalTeaserSection() {
   const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
-  const navigate = useNavigate()
+  const [activeId, setActiveId] = useState(productViews[0].id)
+  const inView = useInView(ref, { once: true, margin: '-90px' })
+  const activeView = productViews.find((view) => view.id === activeId) ?? productViews[0]
 
   return (
-    <section
-      ref={ref}
-      className="py-28 bg-black border-y border-white/[0.04] relative overflow-hidden"
-    >
-      <div
-        className="absolute top-0 right-0 w-[500px] h-[400px] opacity-[0.04] pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle, #c9a84c, transparent 70%)',
-          filter: 'blur(80px)',
-        }}
-      />
-
-      <div className="section-container relative">
-        <motion.div
-          className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12"
-          variants={fadeUp}
-          custom={0}
-          initial="hidden"
-          animate={inView ? 'visible' : 'hidden'}
+    <section id="terminal-showcase" ref={ref} className="tn-products">
+      <div className="tn-container">
+        <motion.header
+          className="tn-section-heading"
+          initial={{ opacity: 0, y: 28 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7 }}
         >
           <div>
-            <span className="eyebrow-gold mb-4 block w-fit">Launching soon - TradeNet Terminal</span>
-            <h2 className="text-[clamp(28px,3.8vw,48px)] font-black tracking-[-0.03em] text-[#FAFAFA] leading-[1.08]">
-              A trading terminal built<br />
-              <span className="gradient-text-gold">from the ground up.</span>
-            </h2>
+            <p className="tn-kicker">Current desktop build</p>
+            <h2>Explore the terminal as it exists today.</h2>
           </div>
-          <button
-            onClick={() => navigate('/terminal')}
-            className="flex-shrink-0 inline-flex items-center gap-2 text-sm font-semibold text-[#c9a84c] hover:text-[#f0c040] transition-colors group"
-          >
-            See full details
-            <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
-          </button>
-        </motion.div>
-
-        <motion.figure
-          variants={fadeUp}
-          custom={1}
-          initial="hidden"
-          animate={inView ? 'visible' : 'hidden'}
-          className="rounded-[22px] border border-white/[0.08] bg-[#050506] p-2 shadow-[0_24px_80px_rgba(0,0,0,0.45)]"
-        >
-          <img
-            src="/hero.png"
-            alt="TradeNet Terminal multi-panel workspace"
-            className="w-full aspect-[1920/1030] object-contain rounded-[16px]"
-            loading="lazy"
-          />
-        </motion.figure>
-
-        <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {showcasePanels.map(({ icon: Icon, title, body, image, alt, accent, bg, border }, i) => (
-            <motion.article
-              key={title}
-              className="grid grid-cols-1 xl:grid-cols-[1.18fr_0.82fr] gap-4 items-stretch rounded-[22px] border border-white/[0.07] bg-[#050506] p-2"
-              variants={fadeUp}
-              custom={i + 2}
-              initial="hidden"
-              animate={inView ? 'visible' : 'hidden'}
-            >
-              <img
-                src={image}
-                alt={alt}
-                className="w-full h-full min-h-[210px] object-contain rounded-[16px] bg-black"
-                loading="lazy"
-              />
-              <div className="flex flex-col justify-center gap-3 p-4 sm:p-5">
-                <div
-                  className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
-                  style={{ background: bg, border: `1px solid ${border}` }}
-                >
-                  <Icon size={16} style={{ color: accent }} />
-                </div>
-                <div>
-                  <p className="text-[14px] font-bold text-[#FAFAFA] mb-1">{title}</p>
-                  <p className="text-xs text-[#71717A] leading-relaxed">{body}</p>
-                </div>
-              </div>
-            </motion.article>
-          ))}
-        </div>
+          <p>Every view below is from the current TradeNet desktop terminal. Select a workspace to inspect it at full size.</p>
+        </motion.header>
 
         <motion.div
-          className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-6 border-t border-white/[0.04]"
-          variants={fadeUp}
-          custom={7}
-          initial="hidden"
-          animate={inView ? 'visible' : 'hidden'}
+          className="tn-product-explorer"
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.75, delay: 0.08 }}
         >
-          <button
-            onClick={() => navigate('/terminal')}
-            className="inline-flex items-center gap-2 bg-[#c9a84c] hover:bg-[#f0c040] text-black font-semibold text-sm px-5 py-2.5 rounded-xl transition-colors"
+          <div className="tn-product-tabs" role="tablist" aria-label="Terminal views">
+            {productViews.map((view, index) => {
+              const selected = activeView.id === view.id
+              return (
+                <button
+                  key={view.id}
+                  id={`terminal-tab-${view.id}`}
+                  type="button"
+                  role="tab"
+                  aria-selected={selected}
+                  aria-controls="terminal-view-panel"
+                  className={selected ? 'is-active' : ''}
+                  onClick={() => setActiveId(view.id)}
+                >
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  <strong>{view.label}</strong>
+                  <small>{view.title}</small>
+                </button>
+              )
+            })}
+          </div>
+
+          <div
+            id="terminal-view-panel"
+            className="tn-product-screen"
+            role="tabpanel"
+            aria-labelledby={`terminal-tab-${activeView.id}`}
           >
-            Join Launch Waitlist
-            <ArrowRight size={14} />
-          </button>
-          <p className="text-sm text-[#52525B]">
-            Pricing is paused while beta launch access is staged.
-          </p>
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={activeView.id}
+                src={activeView.image}
+                alt={activeView.alt}
+                loading={activeView.id === 'workspace' ? 'eager' : 'lazy'}
+                initial={{ opacity: 0, scale: 1.01 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+              />
+            </AnimatePresence>
+            <div className="tn-product-screen-meta" aria-hidden="true">
+              <span>TradeNet Terminal</span>
+              <span>Desktop beta</span>
+            </div>
+          </div>
+
+          <div className="tn-product-detail">
+            <div>
+              <p className="tn-kicker">{activeView.label}</p>
+              <h3>{activeView.title}</h3>
+            </div>
+            <p>{activeView.body}</p>
+            <ul>
+              {activeView.details.map((detail) => <li key={detail}>{detail}</li>)}
+            </ul>
+          </div>
         </motion.div>
       </div>
     </section>
