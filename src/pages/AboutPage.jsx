@@ -1,167 +1,326 @@
 import { motion } from 'framer-motion'
-import { Linkedin, Mail } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import {
+  ArrowRight,
+  Gauge,
+  Github,
+  Layers,
+  Linkedin,
+  Mail,
+  Users,
+} from 'lucide-react'
+import '@/styles/about-page.css'
 
-const fadeUp = {
+const reveal = {
   hidden: { opacity: 0, y: 20 },
-  visible: (i = 0) => ({ opacity: 1, y: 0, transition: { delay: i * 0.1, duration: 0.55 } }),
+  visible: (delay = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] },
+  }),
 }
 
-const team = [
+const founders = [
   {
-    name: 'Martin Shurtleff',
-    role: 'CEO & Founder',
-    bio: 'With over 6 years in the trading space and a background in Computer Science and Quantitative Trading, Martin built TradeNet from the ground up with a singular mission: to give independent traders access to the same institutional-grade tools and education that professional desks use every day.',
-    linkedin: 'https://www.linkedin.com/in/martinshurtleff/',
-    email: 'martin@tradenet.org',
+    number: '01',
     initials: 'MS',
-    color: '#c9a84c',
+    name: 'Martin Shurtleff',
+    role: 'Co-founder, CEO & Lead Developer',
+    accent: 'gold',
+    bio: 'Martin leads the engineering behind TradeNet. He works across the desktop terminal, market-data behavior, access systems, and launch reliability, turning trading problems into software and staying close to the details until the result is actually usable.',
+    focus: [
+      'Terminal architecture and engineering',
+      'Market data and access systems',
+      'Product direction and launch reliability',
+    ],
+    links: [
+      { label: 'LinkedIn', href: 'https://www.linkedin.com/in/martinshurtleff/', icon: Linkedin },
+      { label: 'Email', href: 'mailto:martin@tradenet.org', icon: Mail },
+    ],
   },
   {
-    name: 'Constantine Beseris',
-    role: 'COO & Chief Technical Analyst',
-    bio: 'With five years immersed in the charts, Constantine brings deep technical expertise to TradeNet. Specializing in smart-money concepts and multi-timeframe analysis, he leads the team\'s market research and signal generation — and is the analytical force behind many of the community\'s highest-probability setups.',
-    linkedin: 'https://www.linkedin.com/in/constantine-beseris-b624a0291/',
-    email: 'constantine@tradenet.org',
-    initials: 'CB',
-    color: '#c9a84c',
+    number: '02',
+    initials: 'SB',
+    name: 'Constantine "Steen" Beseris',
+    role: 'Co-founder, COO & Product Lead',
+    accent: 'teal',
+    bio: 'Steen has shaped TradeNet from the first feature interviews onward. He reviews implementations, stress tests workflows, co-designs the interface, and keeps the product honest about what traders can actually use when the market is moving.',
+    focus: [
+      'Trader workflows and feature review',
+      'Interface design and product testing',
+      'Market research and beta feedback',
+    ],
+    links: [
+      { label: 'LinkedIn', href: 'https://www.linkedin.com/in/constantine-beseris-b624a0291/', icon: Linkedin },
+      { label: 'GitHub', href: 'https://github.com/Steen0x', icon: Github },
+      { label: 'Email', href: 'mailto:constantine@tradenet.org', icon: Mail },
+    ],
   },
 ]
 
-const pillars = [
+const buildPhases = [
   {
-    title: 'Who We Are',
-    body: 'We are a collective of veteran traders, quantitative analysts, and engineers who have spent years in the markets. We\'ve felt the frustration of poor tools, vague signals, and communities that take your money without delivering real value. TradeNet is the answer we built for ourselves — and opened to everyone.',
+    number: '01',
+    label: 'The beginning',
+    title: 'Ask traders what they would actually keep open.',
+    body: 'We started with interviews, rough layouts, and blunt conversations about what existing platforms got wrong. The useful answers were specific, so the product stayed specific.',
   },
   {
-    title: 'What We Do',
-    body: 'We build proprietary indicators and systematic frameworks that give traders a genuine statistical edge. Our tools are built on real backtested data, not theory. Combined with in-depth education and live trading access, we give members the complete package.',
+    number: '02',
+    label: 'The rebuild',
+    title: 'Turn the workflow into a real desktop terminal.',
+    body: 'TradeNet grew into a native Tauri application with multi-pane workspaces, server-backed market data, custom indicators, backtesting, and paper-first execution.',
   },
   {
-    title: 'Why We Do It',
-    body: 'The trading industry is saturated with noise, fake gurus, and overhyped systems. We exist to cut through all of that and empower traders with confidence, clarity, and tools that actually work. Our members\' results are our measure of success.',
+    number: '03',
+    label: 'Right now',
+    title: 'Prove it under real use before opening the doors.',
+    body: 'The current work is controlled beta testing, stress testing, and reliability. Access is opening in stages because the terminal needs to hold up on a trader\'s desk, not only in a demo.',
   },
 ]
+
+const principles = [
+  {
+    icon: Users,
+    title: 'Built with traders in the room',
+    body: 'Feature decisions start with the workflow. We care about what stays visible, what takes too many clicks, and what becomes useless once the market speeds up.',
+  },
+  {
+    icon: Layers,
+    title: 'One connected workspace',
+    body: 'Heatmaps, Footprint, DOM, Tape, OI, CVD, scripting, testing, and execution belong in the same market context instead of scattered across subscriptions.',
+  },
+  {
+    icon: Gauge,
+    title: 'Data should stay honest',
+    body: 'Source labels, explicit loading states, and exact calculations matter. We do not want approximations presented as certainty or a polished screen hiding missing data.',
+  },
+]
+
+function FounderProfile({ founder, index }) {
+  return (
+    <motion.article
+      className={`about-founder about-founder-${founder.accent}`}
+      variants={reveal}
+      custom={index * 0.08}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-80px' }}
+    >
+      <div className="about-founder-topline">
+        <span>{founder.number}</span>
+        <span>TradeNet founder</span>
+      </div>
+
+      <div className="about-founder-identity">
+        <div className="about-founder-monogram" aria-hidden="true">{founder.initials}</div>
+        <div>
+          <h3>{founder.name}</h3>
+          <p>{founder.role}</p>
+        </div>
+      </div>
+
+      <p className="about-founder-bio">{founder.bio}</p>
+
+      <ul className="about-founder-focus">
+        {founder.focus.map((item) => <li key={item}>{item}</li>)}
+      </ul>
+
+      <div className="about-founder-links">
+        {founder.links.map(({ label, href, icon: Icon }) => (
+          <a
+            key={label}
+            href={href}
+            target={href.startsWith('http') ? '_blank' : undefined}
+            rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+          >
+            <Icon size={14} />
+            {label}
+          </a>
+        ))}
+      </div>
+    </motion.article>
+  )
+}
 
 export default function AboutPage() {
   return (
-    <main className="bg-black pt-24 min-h-screen">
-      {/* Header */}
-      <section className="py-20 border-b border-white/[0.04] relative overflow-hidden">
-        <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] opacity-[0.06] pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse, #c9a84c, transparent)', filter: 'blur(60px)' }}
+    <main className="about-page">
+      <section className="about-hero" aria-labelledby="about-title">
+        <img
+          src="/hero.png"
+          alt="TradeNet Terminal running a multi-pane orderflow workspace"
+          className="about-hero-media"
         />
-        <div className="section-container relative text-center max-w-2xl mx-auto">
-          <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}>
-            <span className="eyebrow mb-5 inline-block">About Us</span>
-          </motion.div>
-          <motion.h1
-            variants={fadeUp}
-            custom={1}
-            initial="hidden"
-            animate="visible"
-            className="text-[clamp(32px,4.5vw,56px)] font-black tracking-[-0.03em] leading-[1.06] mb-5"
-          >
-            Meet the Minds Behind<br />
-            <span className="gradient-text-gold">the Market Edge</span>
-          </motion.h1>
-          <motion.p
-            variants={fadeUp}
-            custom={2}
-            initial="hidden"
-            animate="visible"
-            className="text-[17px] text-[#A1A1AA] leading-[1.75]"
-          >
-            We're a collective of seasoned traders, quants, and engineers dedicated to one thing: building systems that win.
+        <div className="about-hero-overlay" />
+
+        <div className="about-shell about-hero-content">
+          <motion.p className="about-kicker" variants={reveal} custom={0.06} initial="hidden" animate="visible">
+            About TradeNet
           </motion.p>
+          <motion.h1 id="about-title" variants={reveal} custom={0.12} initial="hidden" animate="visible">
+            <span>TradeNet.</span>
+            Built by two traders who needed better tools.
+          </motion.h1>
+          <motion.p className="about-hero-copy" variants={reveal} custom={0.2} initial="hidden" animate="visible">
+            We are building the crypto orderflow terminal we wanted on our own desks. One place for market structure, research, testing, and execution, without losing the context of the trade.
+          </motion.p>
+          <motion.dl className="about-hero-facts" variants={reveal} custom={0.28} initial="hidden" animate="visible">
+            <div>
+              <dt>Founders</dt>
+              <dd>Martin + Steen</dd>
+            </div>
+            <div>
+              <dt>Product</dt>
+              <dd>Native desktop terminal</dd>
+            </div>
+            <div>
+              <dt>Current stage</dt>
+              <dd>Controlled beta</dd>
+            </div>
+          </motion.dl>
         </div>
       </section>
 
-      {/* Team */}
-      <section className="py-20">
-        <div className="section-container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 max-w-3xl mx-auto">
-            {team.map((member, i) => (
-              <motion.div
-                key={member.name}
-                className="bento-card p-7 flex flex-col gap-5"
-                variants={fadeUp}
-                custom={i}
+      <section className="about-origin">
+        <div className="about-shell about-origin-grid">
+          <motion.div
+            className="about-section-heading"
+            variants={reveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+          >
+            <p className="about-kicker">How it started</p>
+            <h2>It began with a list of things traders actually wanted.</h2>
+          </motion.div>
+
+          <motion.div
+            className="about-origin-copy"
+            variants={reveal}
+            custom={0.08}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+          >
+            <p>
+              Before there was a terminal, we asked friends and other traders what they wished they could keep in one workspace. Better heatmaps. A Footprint they could trust. DOM and Tape without jumping between apps. Layouts that came back exactly where they left them.
+            </p>
+            <p>
+              That list kept growing. OI, CVD, volume profiles, scripting, backtesting, and eventually execution all became part of the same problem. TradeNet grew out of solving that problem one piece at a time.
+            </p>
+            <p className="about-origin-emphasis">
+              The terminal has been rebuilt, broken, stress tested, and rebuilt again. That is the work. The goal is still simple: ship the tool we wanted ourselves and make it dependable enough to put on someone else&apos;s desk.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="about-founders">
+        <div className="about-shell">
+          <div className="about-founders-heading">
+            <div>
+              <p className="about-kicker">The founders</p>
+              <h2>Two sides of the same product.</h2>
+            </div>
+            <p>
+              Engineering and trading stay in the same conversation. That has been the operating model from the first interview through the current beta build.
+            </p>
+          </div>
+
+          <div className="about-founder-grid">
+            {founders.map((founder, index) => (
+              <FounderProfile key={founder.name} founder={founder} index={index} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="about-build">
+        <div className="about-shell">
+          <div className="about-build-heading">
+            <p className="about-kicker">The build</p>
+            <h2>From conversations to a terminal people can test.</h2>
+          </div>
+
+          <div className="about-build-phases">
+            {buildPhases.map((phase, index) => (
+              <motion.article
+                key={phase.number}
+                variants={reveal}
+                custom={index * 0.08}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: '-60px' }}
               >
-                {/* Avatar */}
-                <div
-                  className="w-14 h-14 rounded-2xl flex items-center justify-center text-xl font-black text-[#09090B]"
-                  style={{ background: member.color }}
-                >
-                  {member.initials}
-                </div>
+                <div className="about-phase-number">{phase.number}</div>
+                <p className="about-phase-label">{phase.label}</p>
+                <h3>{phase.title}</h3>
+                <p className="about-phase-copy">{phase.body}</p>
+              </motion.article>
+            ))}
+          </div>
+
+          <motion.figure
+            className="about-product-figure"
+            variants={reveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+          >
+            <img src="/tradinghero.png" alt="TradeNet terminal charting and paper execution workspace" loading="lazy" />
+            <figcaption>
+              <span>Current terminal build</span>
+              <span>Orderflow / research / paper-first execution</span>
+            </figcaption>
+          </motion.figure>
+        </div>
+      </section>
+
+      <section className="about-principles">
+        <div className="about-shell about-principles-grid">
+          <div className="about-principles-heading">
+            <p className="about-kicker">What stays true</p>
+            <h2>The product has changed a lot. These parts have not.</h2>
+          </div>
+
+          <div className="about-principle-list">
+            {principles.map(({ icon: Icon, title, body }, index) => (
+              <motion.article
+                key={title}
+                variants={reveal}
+                custom={index * 0.06}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: '-60px' }}
+              >
+                <Icon size={19} />
                 <div>
-                  <h3 className="text-lg font-bold text-[#FAFAFA]">{member.name}</h3>
-                  <p className="text-sm font-medium text-[#c9a84c] mt-0.5">{member.role}</p>
+                  <h3>{title}</h3>
+                  <p>{body}</p>
                 </div>
-                <p className="text-sm text-[#A1A1AA] leading-[1.75] flex-1">{member.bio}</p>
-                <div className="flex gap-3 pt-3 border-t border-white/[0.05]">
-                  {member.linkedin && (
-                    <a
-                      href={member.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-xs text-[#71717A] hover:text-[#c9a84c] transition-colors"
-                    >
-                      <Linkedin size={13} /> LinkedIn
-                    </a>
-                  )}
-                  {member.email && (
-                    <a
-                      href={`mailto:${member.email}`}
-                      className="flex items-center gap-1.5 text-xs text-[#71717A] hover:text-[#c9a84c] transition-colors"
-                    >
-                      <Mail size={13} /> Email
-                    </a>
-                  )}
-                </div>
-              </motion.div>
+              </motion.article>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Pillars */}
-      <section className="py-20 border-t border-white/[0.04]">
-        <div className="section-container">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {pillars.map((p, i) => (
-              <motion.div
-                key={p.title}
-                className="bento-card p-7 space-y-3"
-                variants={fadeUp}
-                custom={i}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: '-60px' }}
-              >
-                <h3 className="text-lg font-bold text-[#FAFAFA]">{p.title}</h3>
-                <p className="text-sm text-[#A1A1AA] leading-[1.75]">{p.body}</p>
-              </motion.div>
-            ))}
+      <section className="about-cta">
+        <div className="about-shell about-cta-inner">
+          <div>
+            <p className="about-kicker">Launching in stages</p>
+            <h2>TradeNet is getting close.</h2>
+            <p>Accounts and the beta waitlist are open while we finish proving the current build.</p>
           </div>
-        </div>
-      </section>
-
-      {/* Bottom */}
-      <section className="py-20 border-t border-white/[0.04] text-center relative overflow-hidden">
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 40% at 50% 50%, rgba(201,168,76,0.04), transparent)' }}
-        />
-        <div className="section-container relative">
-          <h2 className="text-[clamp(24px,3.5vw,40px)] font-black tracking-[-0.025em] text-[#FAFAFA]">
-            Built on a Foundation of{' '}
-            <span className="gradient-text-gold">Real Results</span>
-          </h2>
+          <div className="about-cta-actions">
+            <Link to="/terminal" className="about-primary-action">
+              Join the beta waitlist
+              <ArrowRight size={16} />
+            </Link>
+            <a href="mailto:contact@tradenet.org" className="about-secondary-action">
+              Contact the founders
+            </a>
+          </div>
         </div>
       </section>
     </main>
