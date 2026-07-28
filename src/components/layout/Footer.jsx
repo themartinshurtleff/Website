@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { BETA_CHECKOUT_VISIBLE } from '@/lib/launchConfig'
 
 export default function Footer() {
   return (
@@ -39,8 +40,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/terminal" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
-                  Launch Waitlist
+                <Link
+                  to={BETA_CHECKOUT_VISIBLE ? '/pricing' : '/terminal'}
+                  className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors"
+                >
+                  {BETA_CHECKOUT_VISIBLE ? 'Beta Pricing' : 'Launch Waitlist'}
                 </Link>
               </li>
             </ul>

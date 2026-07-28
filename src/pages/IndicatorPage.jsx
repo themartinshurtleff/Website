@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowLeft, ArrowRight, CheckCircle2, ShieldCheck, Zap, RefreshCw } from 'lucide-react'
 import FeatureList from '@/components/pages/indicator/FeatureList'
+import { BETA_CHECKOUT_VISIBLE, PRIMARY_LAUNCH_PATH } from '@/lib/launchConfig'
 // import Footer from '@/components/layout/Footer'
 
 const images = [
@@ -26,7 +27,7 @@ const included = [
 ]
 
 const trustBadges = [
-  { icon: Zap, label: 'Launch Waitlist' },
+  { icon: Zap, label: BETA_CHECKOUT_VISIBLE ? 'Beta Access' : 'Launch Waitlist' },
   { icon: ShieldCheck, label: 'Account Ready' },
   { icon: RefreshCw, label: 'Lifetime Updates' },
 ]
@@ -58,10 +59,10 @@ export default function IndicatorPage() {
             className="h-7 w-auto"
           />
           <Link
-            to="/terminal"
+            to={PRIMARY_LAUNCH_PATH}
             className="btn-gold px-5 py-2 text-sm rounded-lg"
           >
-            Join Waitlist
+            {BETA_CHECKOUT_VISIBLE ? 'View Pricing' : 'Join Waitlist'}
           </Link>
         </div>
       </nav>
@@ -171,19 +172,22 @@ export default function IndicatorPage() {
 
               {/* Launch waitlist */}
               <div className="gradient-border p-8 space-y-4">
-                <span className="eyebrow text-xs">Launching Soon</span>
+                <span className="eyebrow text-xs">
+                  {BETA_CHECKOUT_VISIBLE ? 'Included with Pro' : 'Launching Soon'}
+                </span>
                 <h3 className="text-3xl font-black text-[#FAFAFA] tracking-[-0.03em] leading-tight">
                   Indicator access opens with the beta launch.
                 </h3>
                 <p className="text-[15px] text-[#A1A1AA] leading-relaxed">
-                  Public checkout is paused while TradeNet stages controlled beta access.
-                  Join the waitlist and create an account now, then we will attach access as launch seats open.
+                  {BETA_CHECKOUT_VISIBLE
+                    ? 'Indicator tooling is included with TradeNet Pro. Sign in to check founding eligibility or choose standard beta access.'
+                    : 'Public checkout is paused while TradeNet stages controlled beta access. Join the waitlist and create an account now, then we will attach access as launch seats open.'}
                 </p>
                 <Link
-                  to="/terminal"
+                  to={PRIMARY_LAUNCH_PATH}
                   className="btn-gold block text-center px-6 py-3 rounded-xl text-[15px] font-bold"
                 >
-                  Join Launch Waitlist
+                  {BETA_CHECKOUT_VISIBLE ? 'View Beta Pricing' : 'Join Launch Waitlist'}
                 </Link>
                 <div className="grid grid-cols-3 gap-2 pt-2">
                   {trustBadges.map(({ icon: Icon, label }) => (
@@ -209,10 +213,10 @@ export default function IndicatorPage() {
               <span className="gradient-text-gold">Ready to Trade with Confidence?</span>
             </h2>
             <Link
-              to="/terminal"
+              to={PRIMARY_LAUNCH_PATH}
               className="btn-gold inline-flex items-center gap-2 px-7 py-3.5 rounded-xl text-[15px]"
             >
-              Join Launch Waitlist <ArrowRight size={16} />
+              {BETA_CHECKOUT_VISIBLE ? 'View Beta Pricing' : 'Join Launch Waitlist'} <ArrowRight size={16} />
             </Link>
             <div className="flex flex-wrap justify-center gap-4">
               {trustBadges.map(({ icon: Icon, label }) => (

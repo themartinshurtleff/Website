@@ -11,6 +11,7 @@ import {
   LayoutDashboard,
   LockKeyhole,
   LogOut,
+  Megaphone,
   Radio,
   RefreshCw,
   ShieldAlert,
@@ -37,6 +38,8 @@ import {
   toneForStatus,
 } from '@/lib/adminMonitoringData'
 import { useAdminMonitoring } from '@/hooks/useAdminMonitoring'
+import AdminMfaGate from '@/components/admin/AdminMfaGate'
+import AnnouncementsPanel from '@/components/admin/AnnouncementsPanel'
 import TelemetryChart from '@/components/admin/TelemetryChart'
 import '@/styles/admin-dashboard.css'
 
@@ -50,6 +53,7 @@ const SECTIONS = [
   { id: 'storage', label: 'Storage', icon: Database },
   { id: 'heatmaps', label: 'Heatmaps', icon: Waves },
   { id: 'security', label: 'Security', icon: ShieldAlert },
+  { id: 'announcements', label: 'Announcements', icon: Megaphone },
 ]
 
 const ERROR_LABELS = {
@@ -865,7 +869,7 @@ export default function AdminDashboardPage() {
   const [rangeKey, setRangeKey] = useState('6h')
   const isAdmin = profile?.access_tier === 'admin'
   const monitoring = useAdminMonitoring({
-    enabled: Boolean(user && isAdmin),
+    enabled: Boolean(user && isAdmin && section !== 'announcements'),
     rangeKey,
     securityVisible: section === 'security',
   })
@@ -906,10 +910,16 @@ export default function AdminDashboardPage() {
 
         <div className="monitor-topbar-status">
           {monitoring.isDemo && <span className="monitor-demo-badge">PREVIEW DATA</span>}
-          <StatusPill status={fleetStatus}>{fleetStatus === 'ok' ? 'Systems operational' : titleFromKey(fleetStatus)}</StatusPill>
-          <span className="monitor-last-updated">
-            Updated {monitoring.lastUpdatedAt ? formatRelativeTime(monitoring.lastUpdatedAt) : 'waiting'}
-          </span>
+          {section === 'announcements' ? (
+            <StatusPill status="ok">MFA protected</StatusPill>
+          ) : (
+            <>
+              <StatusPill status={fleetStatus}>{fleetStatus === 'ok' ? 'Systems operational' : titleFromKey(fleetStatus)}</StatusPill>
+              <span className="monitor-last-updated">
+                Updated {monitoring.lastUpdatedAt ? formatRelativeTime(monitoring.lastUpdatedAt) : 'waiting'}
+              </span>
+            </>
+          )}
         </div>
 
         <div className="monitor-topbar-actions">
@@ -958,20 +968,28 @@ export default function AdminDashboardPage() {
         </div>
 
         <section className="monitor-content">
-          <div className="monitor-content-toolbar">
-            <div className="monitor-range-control" aria-label="Monitoring range">
-              {Object.entries(MONITORING_RANGES).map(([key, range]) => (
-                <button key={key} type="button" className={rangeKey === key ? 'active' : ''} onClick={() => setRangeKey(key)}>{range.label}</button>
-              ))}
-            </div>
-            <div className="monitor-source-freshness">
-              <span><i className={freshnessClass(monitoring.aggrSnapshot?.generated_at_ms, 45000)} />Aggr {monitoring.aggrSnapshot ? formatRelativeTime(monitoring.aggrSnapshot.generated_at_ms) : 'waiting'}</span>
-              <span><i className={freshnessClass(monitoring.backendSummary?.generated_at_ms, 20000)} />Backend {monitoring.backendSummary ? formatRelativeTime(monitoring.backendSummary.generated_at_ms) : 'waiting'}</span>
-            </div>
-          </div>
+          {section === 'announcements' ? (
+            <AdminMfaGate onVerified={refreshAccessAndData}>
+              <AnnouncementsPanel />
+            </AdminMfaGate>
+          ) : (
+            <>
+              <div className="monitor-content-toolbar">
+                <div className="monitor-range-control" aria-label="Monitoring range">
+                  {Object.entries(MONITORING_RANGES).map(([key, range]) => (
+                    <button key={key} type="button" className={rangeKey === key ? 'active' : ''} onClick={() => setRangeKey(key)}>{range.label}</button>
+                  ))}
+                </div>
+                <div className="monitor-source-freshness">
+                  <span><i className={freshnessClass(monitoring.aggrSnapshot?.generated_at_ms, 45000)} />Aggr {monitoring.aggrSnapshot ? formatRelativeTime(monitoring.aggrSnapshot.generated_at_ms) : 'waiting'}</span>
+                  <span><i className={freshnessClass(monitoring.backendSummary?.generated_at_ms, 20000)} />Backend {monitoring.backendSummary ? formatRelativeTime(monitoring.backendSummary.generated_at_ms) : 'waiting'}</span>
+                </div>
+              </div>
 
-          <SourceErrors errors={monitoring.errors} aggrSnapshot={monitoring.aggrSnapshot} aggrRange={monitoring.aggrRange} />
-          {monitoring.loading ? <LoadingDashboard /> : sectionContent(section, monitoring)}
+              <SourceErrors errors={monitoring.errors} aggrSnapshot={monitoring.aggrSnapshot} aggrRange={monitoring.aggrRange} />
+              {monitoring.loading ? <LoadingDashboard /> : sectionContent(section, monitoring)}
+            </>
+          )}
         </section>
       </div>
     </main>

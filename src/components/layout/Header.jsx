@@ -3,10 +3,16 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Menu, X, User, LogOut, Activity } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '@/contexts/AuthContext'
+import {
+  BETA_CHECKOUT_VISIBLE,
+  PRIMARY_LAUNCH_LABEL,
+  PRIMARY_LAUNCH_PATH,
+} from '@/lib/launchConfig'
 
 const navLinks = [
   { label: 'Home',      to: '/'              },
   { label: 'Terminal',  to: '/terminal'      },
+  ...(BETA_CHECKOUT_VISIBLE ? [{ label: 'Pricing', to: '/pricing' }] : []),
   { label: 'Indicator', to: '/indicator'     },
   { label: 'Docs',      to: '/docs',  external: true },
   { label: 'Blog',      to: '/blog', external: true },
@@ -48,9 +54,11 @@ export default function Header() {
     }
   }
 
-  function handleWaitlist() {
-    navigate('/terminal')
-    setTimeout(() => document.getElementById('terminal-waitlist')?.scrollIntoView({ behavior: 'smooth' }), 350)
+  function handlePrimaryLaunchAction() {
+    navigate(PRIMARY_LAUNCH_PATH)
+    if (!BETA_CHECKOUT_VISIBLE) {
+      setTimeout(() => document.getElementById('terminal-waitlist')?.scrollIntoView({ behavior: 'smooth' }), 350)
+    }
   }
 
   const isActive = (to) => {
@@ -133,10 +141,10 @@ export default function Header() {
                   Sign In
                 </button>
                 <button
-                  onClick={handleWaitlist}
+                  onClick={handlePrimaryLaunchAction}
                   className="site-header-cta flex items-center gap-2 bg-[#c9a84c] hover:bg-[#f0c040] text-black font-semibold text-sm px-5 py-2 rounded-md transition-colors"
                 >
-                  Join Waitlist
+                  {PRIMARY_LAUNCH_LABEL}
                 </button>
               </>
             )}
@@ -213,10 +221,10 @@ export default function Header() {
                       Sign In
                     </button>
                     <button
-                      onClick={handleWaitlist}
+                      onClick={handlePrimaryLaunchAction}
                       className="w-full bg-[#c9a84c] hover:bg-[#f0c040] text-black font-semibold text-sm px-5 py-2.5 rounded-md transition-colors"
                     >
-                      Join Waitlist
+                      {PRIMARY_LAUNCH_LABEL}
                     </button>
                   </>
                 )}

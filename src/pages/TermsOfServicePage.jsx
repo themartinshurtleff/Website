@@ -28,7 +28,11 @@ const sections = [
   },
   {
     title: '7. Payment Processing and Refund Policy',
-    body: `Paid subscriptions are processed through Stripe or another payment processor we designate. By purchasing a subscription, you authorize recurring charges for the selected plan until cancellation. All sales are final unless otherwise required by law. We do not offer refunds on digital products, terminal access, indicator access, or educational content once access has been granted. Monthly and annual subscribers may cancel at any time; cancellation will take effect at the end of the current billing period. We reserve the right to modify our pricing at any time with reasonable notice.`,
+    body: `Paid subscriptions are processed through Stripe or another payment processor we designate. By purchasing a subscription, you authorize recurring charges for the selected plan until cancellation. The checkout page will show the amount due immediately, the billing interval, and the applicable renewal price before you submit payment.
+
+The limited founding offer is available only to invited accounts from the original TradeNet waitlist. Invitations open an individual seven-day claim window, subject to the first 100 completed founding purchases. A temporary checkout reservation does not complete a purchase or guarantee a founding slot. Founding monthly access is billed at $19 per month for the first three monthly billing periods and then renews at $29 per month. Founding annual access is billed at $199 for the first annual billing period and then renews at $284 per year. Eligibility is tied to the invited account and cannot be transferred, shared, or redeemed through a public discount code.
+
+All sales are final unless otherwise required by law. We do not offer refunds on digital products, terminal access, indicator access, or educational content once access has been granted. Monthly and annual subscribers may cancel at any time; cancellation will take effect at the end of the current billing period. Cancellation does not restore or transfer a redeemed founding offer. We reserve the right to modify standard pricing at any time with reasonable notice. Changes to standard pricing do not alter a founding subscriber's disclosed renewal price while that founding subscription remains continuously active, unless required by law or accepted by the subscriber.`,
   },
   {
     title: '8. Disclaimer of Warranties',
@@ -91,7 +95,7 @@ export default function TermsOfServicePage() {
             <h1 className="text-[clamp(28px,4vw,44px)] font-black tracking-[-0.03em] text-[#FAFAFA] mb-3">
               Terms of Service
             </h1>
-            <p className="text-sm text-[#71717A]">Last updated: June 22, 2026</p>
+            <p className="text-sm text-[#71717A]">Last updated: July 26, 2026</p>
           </div>
 
           <div className="space-y-8">

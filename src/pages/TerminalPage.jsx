@@ -1,10 +1,12 @@
 import { useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { motion, useInView } from 'framer-motion'
 import {
   Layers, Target, Zap, LayoutGrid, CheckCircle2, Check, X as XIcon,
 } from 'lucide-react'
 import AuroraBackground from '@/components/common/AuroraBackground'
 import WaitlistForm from '@/components/common/WaitlistForm'
+import { BETA_CHECKOUT_VISIBLE } from '@/lib/launchConfig'
 
 // Animation helpers
 const fadeUp = {
@@ -143,7 +145,7 @@ const compareRows = [
   { feature: 'In-terminal Lua IDE',       tn: true,  bm: false, atas: false,  tv: false  },
   { feature: 'Footprint charts',          tn: true,  bm: true,  atas: true,   tv: false  },
   { feature: 'DOM ladder',               tn: true,  bm: true,  atas: true,   tv: false  },
-  { feature: 'Launch waitlist open',      tn: true,  bm: false, atas: false,  tv: false },
+  { feature: BETA_CHECKOUT_VISIBLE ? 'Account-based beta access' : 'Launch waitlist open', tn: true, bm: false, atas: false, tv: false },
 ]
 
 function Cell({ val }) {
@@ -384,7 +386,9 @@ export default function TerminalPage() {
                 initial="hidden"
                 animate={heroInView ? 'visible' : 'hidden'}
               >
-                <span className="eyebrow-gold">Launching Soon - Beta Access</span>
+                <span className="eyebrow-gold">
+                  {BETA_CHECKOUT_VISIBLE ? 'Controlled Beta Access' : 'Launching Soon - Beta Access'}
+                </span>
               </motion.div>
 
               <motion.div
@@ -419,7 +423,16 @@ export default function TerminalPage() {
                 initial="hidden"
                 animate={heroInView ? 'visible' : 'hidden'}
               >
-                <WaitlistForm />
+                {BETA_CHECKOUT_VISIBLE ? (
+                  <Link
+                    to="/pricing"
+                    className="btn-gold inline-flex items-center justify-center px-7 py-3.5 rounded-xl text-[15px] font-bold"
+                  >
+                    View beta pricing
+                  </Link>
+                ) : (
+                  <WaitlistForm />
+                )}
               </motion.div>
 
               {/* Stats row */}
@@ -476,7 +489,7 @@ export default function TerminalPage() {
       {/* Comparison table */}
       <ComparisonTable />
 
-      {/* Bottom waitlist CTA */}
+      {/* Bottom launch CTA */}
       <section
         id="terminal-waitlist"
         className="py-32 bg-black border-t border-white/[0.04] relative overflow-hidden"
@@ -493,23 +506,35 @@ export default function TerminalPage() {
 
         <div className="section-container relative">
           <div className="max-w-xl">
-            <span className="eyebrow-gold mb-6 inline-block">Launching Soon</span>
+            <span className="eyebrow-gold mb-6 inline-block">
+              {BETA_CHECKOUT_VISIBLE ? 'Beta Access' : 'Launching Soon'}
+            </span>
             <h2 className="text-[clamp(32px,4.5vw,56px)] font-black tracking-[-0.035em] leading-[1.06] mb-5">
-              <span className="text-[#FAFAFA]">Join the launch waitlist for</span><br />
-              <span className="gradient-text-gold">Quantum Terminal</span>
+              <span className="text-[#FAFAFA]">
+                {BETA_CHECKOUT_VISIBLE ? 'Get access to the' : 'Join the launch waitlist for'}
+              </span><br />
+              <span className="gradient-text-gold">TradeNet Terminal</span>
             </h2>
             <p className="text-[16px] text-[#A1A1AA] leading-[1.75] mb-8 max-w-md">
-              We are staging controlled beta access before reopening public checkout.
-              Join the waitlist and we will reach out as launch seats open.
+              {BETA_CHECKOUT_VISIBLE
+                ? 'Choose monthly or annual Pro access. Original waitlist accounts receive their private founding terms automatically after sign in.'
+                : 'We are staging controlled beta access before reopening public checkout. Join the waitlist and we will reach out as launch seats open.'}
             </p>
 
             <ul className="space-y-2.5 mb-8">
-              {[
-                'Launch notification before checkout reopens',
-                'Direct feedback channel with the team',
-                'Early access to new features',
-                'Windows, macOS, and Linux builds',
-              ].map((perk) => (
+              {(BETA_CHECKOUT_VISIBLE
+                ? [
+                    'Full terminal and protected market data access',
+                    'Private founding terms for invited waitlist accounts',
+                    'Direct feedback channel with the team',
+                    'Beta builds and ongoing updates',
+                  ]
+                : [
+                    'Launch notification before checkout reopens',
+                    'Direct feedback channel with the team',
+                    'Early access to new features',
+                    'Windows, macOS, and Linux builds',
+                  ]).map((perk) => (
                 <li key={perk} className="flex items-center gap-2.5 text-sm text-[#A1A1AA]">
                   <CheckCircle2 size={14} className="text-[#c9a84c] flex-shrink-0" />
                   {perk}
@@ -517,11 +542,22 @@ export default function TerminalPage() {
               ))}
             </ul>
 
-            <WaitlistForm />
+            {BETA_CHECKOUT_VISIBLE ? (
+              <Link
+                to="/pricing"
+                className="btn-gold inline-flex items-center justify-center px-7 py-3.5 rounded-xl text-[15px] font-bold"
+              >
+                View beta pricing
+              </Link>
+            ) : (
+              <WaitlistForm />
+            )}
 
             {/* Social proof */}
             <p className="text-xs text-[#3F3F46] mt-8 pt-6 border-t border-white/[0.04]">
-              Joining 1,000+ traders already in the TradeNet community
+              {BETA_CHECKOUT_VISIBLE
+                ? 'Checkout and eligibility are verified server-side'
+                : 'Joining 1,000+ traders already in the TradeNet community'}
             </p>
           </div>
         </div>

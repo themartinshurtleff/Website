@@ -23,10 +23,10 @@ declare
   beta_emails  text[] := array[
     -- 'tester1@example.com',
     -- 'tester2@example.com'
-  ];
+  ]::text[];
   admin_emails text[] := array[
     -- 'martin@tradenet.org'
-  ];
+  ]::text[];
   r record;
 begin
   -- Admins first (admin beats beta in recalc anyway, but set the commercial

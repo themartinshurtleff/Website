@@ -10,6 +10,7 @@ import {
   Users,
 } from 'lucide-react'
 import '@/styles/about-page.css'
+import { BETA_CHECKOUT_VISIBLE, PRIMARY_LAUNCH_PATH } from '@/lib/launchConfig'
 
 const reveal = {
   hidden: { opacity: 0, y: 20 },
@@ -308,13 +309,19 @@ export default function AboutPage() {
       <section className="about-cta">
         <div className="about-shell about-cta-inner">
           <div>
-            <p className="about-kicker">Launching in stages</p>
+            <p className="about-kicker">
+              {BETA_CHECKOUT_VISIBLE ? 'Controlled beta' : 'Launching in stages'}
+            </p>
             <h2>TradeNet is getting close.</h2>
-            <p>Accounts and the beta waitlist are open while we finish proving the current build.</p>
+            <p>
+              {BETA_CHECKOUT_VISIBLE
+                ? 'Beta access is opening in controlled waves while we keep proving the current build.'
+                : 'Accounts and the beta waitlist are open while we finish proving the current build.'}
+            </p>
           </div>
           <div className="about-cta-actions">
-            <Link to="/terminal" className="about-primary-action">
-              Join the beta waitlist
+            <Link to={PRIMARY_LAUNCH_PATH} className="about-primary-action">
+              {BETA_CHECKOUT_VISIBLE ? 'View beta pricing' : 'Join the beta waitlist'}
               <ArrowRight size={16} />
             </Link>
             <a href="mailto:contact@tradenet.org" className="about-secondary-action">

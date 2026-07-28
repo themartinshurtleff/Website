@@ -24,9 +24,11 @@ import ThankYouPage       from '@/pages/ThankYouPage'
 import SignUpPage         from '@/pages/SignUpPage'
 import LoginPage          from '@/pages/LoginPage'
 import AccountPage        from '@/pages/AccountPage'
+import PricingPage        from '@/pages/PricingPage'
 import ForgotPasswordPage from '@/pages/ForgotPasswordPage'
 import ResetPasswordPage  from '@/pages/ResetPasswordPage'
 import AuthConfirmPage    from '@/pages/AuthConfirmPage'
+import { BETA_CHECKOUT_VISIBLE } from '@/lib/launchConfig'
 
 const AdminDashboardPage = lazy(() => import('@/pages/AdminDashboardPage'))
 
@@ -123,8 +125,18 @@ export default function App() {
           <Route path="/reset-password"  element={<PageWrapper><ResetPasswordPage  /></PageWrapper>} />
           <Route path="/auth/confirm"    element={<PageWrapper><AuthConfirmPage    /></PageWrapper>} />
           <Route path="/account"         element={<PageWrapper><AccountPage        /></PageWrapper>} />
-          <Route path="/pricing"         element={<Navigate to="/terminal" replace />} />
-          <Route path="/buy"             element={<Navigate to="/terminal" replace />} />
+          <Route
+            path="/pricing"
+            element={BETA_CHECKOUT_VISIBLE
+              ? <PageWrapper><PricingPage /></PageWrapper>
+              : <Navigate to="/terminal" replace />}
+          />
+          <Route
+            path="/buy"
+            element={BETA_CHECKOUT_VISIBLE
+              ? <PageWrapper><PricingPage /></PageWrapper>
+              : <Navigate to="/terminal" replace />}
+          />
           <Route
             path="/admin/dashboard"
             element={(

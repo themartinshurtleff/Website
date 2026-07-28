@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { User, Mail, Shield, LogOut, RefreshCw, Download, ExternalLink, Activity } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { openBillingPortal, TERMINAL_DOWNLOAD_URL } from '@/lib/checkout'
+import { BETA_CHECKOUT_VISIBLE } from '@/lib/launchConfig'
 
 // access_tier (derived security tier) -> display. NOT subscription_tier.
 const tierLabels = {
@@ -231,9 +232,14 @@ export default function AccountPage() {
               style={{ background: 'rgba(201,168,76,0.04)', border: '1px solid rgba(201,168,76,0.12)' }}
             >
               <p className="text-sm text-[#A1A1AA]">
-                Public checkout is paused while beta access is staged.{' '}
-                <Link to="/terminal" className="text-[#c9a84c] hover:text-[#f0c040] font-semibold transition-colors">
-                  Join the launch waitlist -&gt;
+                {BETA_CHECKOUT_VISIBLE
+                  ? 'Check your account-specific beta pricing and invitation status. '
+                  : 'Public checkout is paused while beta access is staged. '}
+                <Link
+                  to={BETA_CHECKOUT_VISIBLE ? '/pricing' : '/terminal'}
+                  className="text-[#c9a84c] hover:text-[#f0c040] font-semibold transition-colors"
+                >
+                  {BETA_CHECKOUT_VISIBLE ? 'View beta pricing ->' : 'Join the launch waitlist ->'}
                 </Link>
               </p>
             </div>
