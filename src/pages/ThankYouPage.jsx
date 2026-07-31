@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { CheckCircle2, BookOpen, Mic, Users } from 'lucide-react'
+import { CheckCircle2, BookOpen, Mic, UserPlus, Users } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 const fadeUp = {
@@ -55,7 +55,7 @@ export default function ThankYouPage() {
           You're one step closer to trading with tools nobody else has.
         </motion.p>
 
-        {/* Discord CTA */}
+        {/* Account and Discord CTAs */}
         <motion.div
           variants={fadeUp}
           custom={3}
@@ -63,21 +63,29 @@ export default function ThankYouPage() {
           animate="visible"
           className="rounded-2xl border border-[#c9a84c]/20 bg-[#c9a84c]/[0.03] p-7 mb-8"
         >
-          <p className="text-sm font-bold text-[#c9a84c] uppercase tracking-wider mb-3">Next Step</p>
+          <p className="text-sm font-bold text-[#c9a84c] uppercase tracking-wider mb-3">Next Steps</p>
           <p className="text-[15px] text-[#A1A1AA] leading-[1.7] mb-5">
-            Join the Discord to activate your beta access. Once you're inside, head to the
-            <span className="text-[#FAFAFA] font-medium"> role selection channel </span>
-            and grab the <span className="text-[#FAFAFA] font-medium">Beta Tester</span> role — this unlocks
-            the full beta testing section of the server.
+            Create your TradeNet account with the same email you used for the waitlist.
+            This is how we match your account to its launch access and founding offer.
+            You can also join the Discord for updates and direct access to the team.
           </p>
-          <a
-            href="https://discord.gg/tradenet"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-gold flex items-center justify-center gap-3 w-full px-6 py-3.5 rounded-xl text-[15px]"
-          >
-            Join the Discord
-          </a>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Link
+              to="/signup"
+              className="btn-gold flex items-center justify-center gap-2 w-full px-6 py-3.5 rounded-lg text-[15px]"
+            >
+              <UserPlus size={17} />
+              Create an Account
+            </Link>
+            <a
+              href="https://discord.gg/tradenet"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center w-full px-6 py-3.5 rounded-lg border border-white/15 text-[15px] font-semibold text-[#D4D4D8] hover:border-[#c9a84c]/50 hover:text-[#FAFAFA] transition-colors"
+            >
+              Join the Discord
+            </a>
+          </div>
         </motion.div>
 
         {/* What you get */}

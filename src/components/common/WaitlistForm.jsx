@@ -23,11 +23,11 @@ export default function WaitlistForm({ className = '', source = 'website' }) {
 
     const { error: dbError } = await supabase
       .from('waitlist')
-      .upsert({ email: trimmed, source }, { onConflict: 'email' })
+      .insert({ email: trimmed, source })
 
     setLoading(false)
 
-    if (dbError) {
+    if (dbError && dbError.code !== '23505') {
       setError('Something went wrong. Please try again.')
       return
     }

@@ -20,6 +20,7 @@ import AboutPage          from '@/pages/AboutPage'
 import ContactPage        from '@/pages/ContactPage'
 import CaseStudiesPage    from '@/pages/CaseStudiesPage'
 import TermsOfServicePage from '@/pages/TermsOfServicePage'
+import PrivacyPolicyPage  from '@/pages/PrivacyPolicyPage'
 import ThankYouPage       from '@/pages/ThankYouPage'
 import SignUpPage         from '@/pages/SignUpPage'
 import LoginPage          from '@/pages/LoginPage'
@@ -34,7 +35,7 @@ const AdminDashboardPage = lazy(() => import('@/pages/AdminDashboardPage'))
 
 const BLOG_URL = 'https://www.tradenet.org/docs/blog'
 
-const noHeaderRoutes = ['/indicator', '/terms-of-service', '/contact', '/thankyou', '/admin/dashboard']
+const noHeaderRoutes = ['/indicator', '/terms-of-service', '/privacy-policy', '/contact', '/thankyou', '/admin/dashboard']
 const noFooterRoutes = ['/thankyou', '/admin/dashboard']
 // const noPopupRoutes  = ['/thankyou']
 
@@ -116,6 +117,7 @@ export default function App() {
           <Route path="/contact"         element={<PageWrapper><ContactPage        /></PageWrapper>} />
           <Route path="/case-studies"    element={<PageWrapper><CaseStudiesPage    /></PageWrapper>} />
           <Route path="/terms-of-service"element={<PageWrapper><TermsOfServicePage /></PageWrapper>} />
+          <Route path="/privacy-policy" element={<PageWrapper><PrivacyPolicyPage  /></PageWrapper>} />
           <Route path="/blog/*"          element={<ExternalRedirect basePath="/blog"  destination={BLOG_URL} />} />
           <Route path="/blogs/*"         element={<ExternalRedirect basePath="/blogs" destination={BLOG_URL} />} />
           <Route path="/thankyou"        element={<PageWrapper><ThankYouPage       /></PageWrapper>} />

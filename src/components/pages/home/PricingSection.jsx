@@ -68,6 +68,9 @@ function checkoutMessage(error) {
   if (code === 'payment_recovery_unavailable') {
     return 'Your earlier payment is still pending but cannot be reopened safely. Manage billing from the account page or contact support.'
   }
+  if (code === 'checkout_in_progress') {
+    return 'Checkout is being prepared. Wait a few seconds, then try again.'
+  }
   if (code === 'founding_offer_not_invited') {
     return 'Your founding rate is reserved, but your invitation wave has not opened yet.'
   }

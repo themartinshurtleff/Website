@@ -89,6 +89,28 @@ STRIPE_PRICE_ANNUAL=price_1TxysJ2M901mWzyan0kDZVnF
 
 All six sandbox Prices are configured in staging.
 
+## Production Live Price IDs
+
+These Prices belong to the active live `TradeNet Pro` Stripe product. They were
+created and read back from Stripe on 2026-07-28.
+
+| Plan phase | Stripe Price ID |
+| --- | --- |
+| Monthly intro | `price_1TyI222Mf7jnmNRisCA03JIh` |
+| Monthly renewal | `price_1TyI222Mf7jnmNRivRclUfcG` |
+| Annual intro | `price_1TyI222Mf7jnmNRiVk2NszH2` |
+| Annual renewal | `price_1TyI222Mf7jnmNRicUNUVRMQ` |
+| Standard monthly | `price_1TyI222Mf7jnmNRiqfCSHI6y` |
+| Standard annual | `price_1TyI222Mf7jnmNRiW7bYdn6f` |
+
+Production Supabase has all six values configured and
+`STRIPE_EXPECT_LIVE_MODE=true`. The four billing Edge Functions were redeployed
+after the configuration update. Both checkout environment gates and the
+founding database gate remain closed.
+
+The production webhook is live and enabled for all required Checkout,
+subscription, invoice, refund, and dispute events listed below.
+
 ## Stripe Sandbox Webhook
 
 Create a sandbox webhook destination in Stripe:

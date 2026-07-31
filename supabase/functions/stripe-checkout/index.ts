@@ -88,6 +88,36 @@ class CheckoutError extends Error {
   }
 }
 
+const IDEMPOTENCY_RETRY_DELAYS_MS = [150, 300, 600, 1_200, 1_800, 2_500];
+
+async function stripePostWithConcurrentRetry(
+  path: string,
+  params: Record<string, string>,
+  idempotencyKey: string,
+): Promise<any> {
+  for (let attempt = 0;; attempt += 1) {
+    try {
+      return await stripeRequest(
+        STRIPE_SECRET_KEY,
+        "POST",
+        path,
+        params,
+        idempotencyKey,
+      );
+    } catch (error) {
+      const concurrentRequest = error instanceof StripeRequestError &&
+        error.code === "idempotency_key_in_use";
+      if (!concurrentRequest) throw error;
+      if (attempt >= IDEMPOTENCY_RETRY_DELAYS_MS.length) {
+        throw new CheckoutError("checkout_in_progress", 409);
+      }
+      await new Promise((resolve) =>
+        setTimeout(resolve, IDEMPOTENCY_RETRY_DELAYS_MS[attempt])
+      );
+    }
+  }
+}
+
 function planFrom(value: unknown): PlanKey | null {
   return value === "monthly" || value === "annual" ? value : null;
 }
@@ -173,6 +203,27 @@ async function releaseReservation(
   }
 }
 
+async function checkoutSessionAlreadyBound(
+  userId: string,
+  reservationToken: string,
+  sessionId: string,
+  sessionUrl: string,
+): Promise<boolean> {
+  const { data, error } = await svc
+    .from("founding_offer_eligibility")
+    .select("checkout_session_id,checkout_session_url")
+    .eq("user_id", userId)
+    .eq("reservation_token", reservationToken)
+    .eq("state", "reserved")
+    .maybeSingle();
+  if (error) {
+    console.error("reservation bind verification failed:", error.message);
+    return false;
+  }
+  return data?.checkout_session_id === sessionId &&
+    data?.checkout_session_url === sessionUrl;
+}
+
 async function validatePlanPrices(plan: PlanDefinition, founding: boolean): Promise<void> {
   if (founding) {
     await validateRecurringPrice(STRIPE_SECRET_KEY, plan.founding.introPrice, {
@@ -228,11 +279,15 @@ async function ensureCustomer(
     (profile.billing_provider === "stripe" ? profile.billing_customer_id : null);
   if (existing) return existing;
 
-  const customer = await stripeRequest(STRIPE_SECRET_KEY, "POST", "/v1/customers", {
-    email: String(user.email),
-    "metadata[profile_id]": user.id,
-    "metadata[supabase_user_id]": user.id,
-  }, `tradenet-customer-${user.id}`);
+  const customer = await stripePostWithConcurrentRetry(
+    "/v1/customers",
+    {
+      email: String(user.email),
+      "metadata[profile_id]": user.id,
+      "metadata[supabase_user_id]": user.id,
+    },
+    `tradenet-customer-${user.id}`,
+  );
 
   const { error } = await svc.from("profiles").update({
     stripe_customer_id: customer.id,
@@ -409,6 +464,7 @@ Deno.serve(async (req) => {
 
   let reservationToken: string | null = null;
   let reservationUserId: string | null = null;
+  let reservationOwned = false;
 
   try {
     if (!CHECKOUT_ENABLED) throw new CheckoutError("checkout_disabled", 503);
@@ -450,6 +506,7 @@ Deno.serve(async (req) => {
       reservation = await reserveFounding(user.id, planKey);
       reservationToken = String(reservation?.reservation_token || "");
       reservationUserId = user.id;
+      reservationOwned = reservation?.reused !== true;
       if (!asUuid(reservationToken)) {
         throw new CheckoutError("reservation_failed", 500);
       }
@@ -497,9 +554,7 @@ Deno.serve(async (req) => {
         String(plan.founding.iterations);
     }
 
-    const session = await stripeRequest(
-      STRIPE_SECRET_KEY,
-      "POST",
+    const session = await stripePostWithConcurrentRetry(
       "/v1/checkout/sessions",
       {
         mode: "subscription",
@@ -522,7 +577,14 @@ Deno.serve(async (req) => {
         p_session_id: session.id,
         p_session_url: session.url,
       });
-      if (error || bound !== true) {
+      const alreadyBound = (error || bound !== true) &&
+        await checkoutSessionAlreadyBound(
+          user.id,
+          reservationToken!,
+          session.id,
+          session.url,
+        );
+      if ((error || bound !== true) && !alreadyBound) {
         try {
           await stripeRequest(
             STRIPE_SECRET_KEY,
@@ -544,7 +606,14 @@ Deno.serve(async (req) => {
   } catch (error) {
     const message = error instanceof Error ? error.message : "unknown_error";
 
-    if (reservationToken && reservationUserId) {
+    const preserveActiveReservation = error instanceof CheckoutError &&
+      error.code === "checkout_in_progress";
+    if (
+      reservationToken &&
+      reservationUserId &&
+      reservationOwned &&
+      !preserveActiveReservation
+    ) {
       await releaseReservation(reservationUserId, reservationToken, message);
     }
 
