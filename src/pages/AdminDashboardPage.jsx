@@ -4,6 +4,7 @@ import {
   Activity,
   AlertTriangle,
   ArrowLeft,
+  BadgeDollarSign,
   ChevronRight,
   CircleOff,
   Cpu,
@@ -40,6 +41,7 @@ import {
 import { useAdminMonitoring } from '@/hooks/useAdminMonitoring'
 import AdminMfaGate from '@/components/admin/AdminMfaGate'
 import AnnouncementsPanel from '@/components/admin/AnnouncementsPanel'
+import AffiliatesPanel from '@/components/admin/AffiliatesPanel'
 import TelemetryChart from '@/components/admin/TelemetryChart'
 import '@/styles/admin-dashboard.css'
 
@@ -54,6 +56,7 @@ const SECTIONS = [
   { id: 'heatmaps', label: 'Heatmaps', icon: Waves },
   { id: 'security', label: 'Security', icon: ShieldAlert },
   { id: 'announcements', label: 'Announcements', icon: Megaphone },
+  { id: 'affiliates', label: 'Affiliates', icon: BadgeDollarSign },
 ]
 
 const ERROR_LABELS = {
@@ -869,7 +872,7 @@ export default function AdminDashboardPage() {
   const [rangeKey, setRangeKey] = useState('6h')
   const isAdmin = profile?.access_tier === 'admin'
   const monitoring = useAdminMonitoring({
-    enabled: Boolean(user && isAdmin && section !== 'announcements'),
+    enabled: Boolean(user && isAdmin && !['announcements', 'affiliates'].includes(section)),
     rangeKey,
     securityVisible: section === 'security',
   })
@@ -910,7 +913,7 @@ export default function AdminDashboardPage() {
 
         <div className="monitor-topbar-status">
           {monitoring.isDemo && <span className="monitor-demo-badge">PREVIEW DATA</span>}
-          {section === 'announcements' ? (
+          {['announcements', 'affiliates'].includes(section) ? (
             <StatusPill status="ok">MFA protected</StatusPill>
           ) : (
             <>
@@ -972,6 +975,12 @@ export default function AdminDashboardPage() {
             <AdminMfaGate onVerified={refreshAccessAndData}>
               <AnnouncementsPanel />
             </AdminMfaGate>
+          ) : section === 'affiliates' ? (
+            LOCAL_DEMO ? <AffiliatesPanel demo /> : (
+              <AdminMfaGate onVerified={refreshAccessAndData}>
+                <AffiliatesPanel />
+              </AdminMfaGate>
+            )
           ) : (
             <>
               <div className="monitor-content-toolbar">

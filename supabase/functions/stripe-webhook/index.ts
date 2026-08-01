@@ -115,6 +115,11 @@ function fromUnix(seconds: unknown): string | null {
   return new Date(value * 1000).toISOString();
 }
 
+function cents(value: unknown): number {
+  const amount = Number(value);
+  return Number.isFinite(amount) && amount >= 0 ? Math.trunc(amount) : 0;
+}
+
 function subscriptionPriceId(subscription: any): string | null {
   return subscription?.items?.data?.[0]?.price?.id || null;
 }
@@ -157,6 +162,137 @@ async function fetchSubscription(subscriptionId: string): Promise<any> {
     `/v1/subscriptions/${encodeURIComponent(subscriptionId)}`,
     { "expand[]": "schedule" },
   );
+}
+
+function invoicePaymentIntentId(invoice: any): string | null {
+  return stringId(invoice?.payment_intent) ||
+    stringId(invoice?.payments?.data?.[0]?.payment?.payment_intent) ||
+    stringId(invoice?.payments?.data?.[0]?.payment_intent) ||
+    null;
+}
+
+async function paymentDetailsForInvoice(invoice: any): Promise<{
+  chargeId: string | null;
+  paymentIntentId: string | null;
+  charge: any | null;
+}> {
+  let chargeId = stringId(invoice?.charge);
+  const paymentIntentId = invoicePaymentIntentId(invoice);
+
+  if (!chargeId && paymentIntentId) {
+    const paymentIntent = await stripeRequest(
+      STRIPE_SECRET_KEY,
+      "GET",
+      `/v1/payment_intents/${encodeURIComponent(paymentIntentId)}`,
+    );
+    chargeId = stringId(paymentIntent?.latest_charge);
+  }
+
+  const charge = chargeId
+    ? await stripeRequest(
+      STRIPE_SECRET_KEY,
+      "GET",
+      `/v1/charges/${encodeURIComponent(chargeId)}`,
+    )
+    : null;
+  return { chargeId, paymentIntentId, charge };
+}
+
+function invoiceTaxCents(invoice: any): number {
+  const totals = Array.isArray(invoice?.total_tax_amounts)
+    ? invoice.total_tax_amounts
+    : [];
+  return totals.reduce(
+    (total: number, row: any) => total + cents(row?.amount),
+    0,
+  );
+}
+
+async function recordAffiliateInvoice(
+  invoice: any,
+  subscription: any,
+): Promise<string> {
+  const attributionId = String(
+    subscription?.metadata?.affiliate_attribution_id || "",
+  );
+  const profileId = String(subscription?.metadata?.profile_id || "");
+  const invoiceId = String(invoice?.id || "");
+  const subscriptionId = String(subscription?.id || "");
+  if (!attributionId || !profileId) return "affiliate_unattributed";
+  if (!invoiceId || !subscriptionId) return "affiliate_invoice_unresolved";
+
+  const collected = cents(invoice?.amount_paid);
+  if (collected <= 0) return "affiliate_zero_amount";
+  const tax = Math.min(collected, invoiceTaxCents(invoice));
+  let commissionable = Math.max(0, collected - tax);
+  const excludingTax = Number(invoice?.total_excluding_tax);
+  if (Number.isFinite(excludingTax) && excludingTax >= 0) {
+    commissionable = Math.min(commissionable, Math.trunc(excludingTax));
+  }
+
+  const payment = await paymentDetailsForInvoice(invoice);
+  const paidAt = fromUnix(invoice?.status_transitions?.paid_at) ||
+    fromUnix(invoice?.created) || new Date().toISOString();
+  const { data, error } = await svc.rpc("record_affiliate_commission", {
+    p_user: profileId,
+    p_attribution: attributionId,
+    p_invoice_id: invoiceId,
+    p_subscription_id: subscriptionId,
+    p_charge_id: payment.chargeId,
+    p_payment_intent_id: payment.paymentIntentId,
+    p_currency: String(invoice?.currency || "usd").toLowerCase(),
+    p_collected_cents: collected,
+    p_tax_cents: tax,
+    p_commissionable_cents: commissionable,
+    p_paid_at: paidAt,
+  });
+  if (error) throw new Error(`affiliate_commission_failed: ${error.message}`);
+
+  const refunded = cents(payment.charge?.amount_refunded);
+  if (refunded > 0) {
+    const reversal = await svc.rpc("reconcile_affiliate_reversal", {
+      p_invoice_id: invoiceId,
+      p_charge_id: payment.chargeId,
+      p_payment_intent_id: payment.paymentIntentId,
+      p_refunded_cents: refunded,
+      p_full_reversal: false,
+    });
+    if (reversal.error) {
+      throw new Error(`affiliate_refund_reconcile_failed: ${reversal.error.message}`);
+    }
+  }
+
+  return `affiliate_${String(data?.status || "recorded")}`;
+}
+
+async function reconcileAffiliateAdjustment(
+  chargeOrDispute: any,
+  fullReversal: boolean,
+): Promise<string> {
+  const directCharge = chargeOrDispute?.object === "charge"
+    ? chargeOrDispute
+    : null;
+  const chargeId = directCharge?.id || stringId(chargeOrDispute?.charge);
+  const charge = directCharge || (chargeId
+    ? await stripeRequest(
+      STRIPE_SECRET_KEY,
+      "GET",
+      `/v1/charges/${encodeURIComponent(chargeId)}`,
+    )
+    : null);
+  if (!charge) return "affiliate_adjustment_unresolved";
+
+  const { data, error } = await svc.rpc("reconcile_affiliate_reversal", {
+    p_invoice_id: stringId(charge?.invoice),
+    p_charge_id: stringId(charge?.id),
+    p_payment_intent_id: stringId(charge?.payment_intent),
+    p_refunded_cents: fullReversal
+      ? cents(charge?.amount)
+      : cents(charge?.amount_refunded),
+    p_full_reversal: fullReversal,
+  });
+  if (error) throw new Error(`affiliate_adjustment_failed: ${error.message}`);
+  return String(data?.status || "affiliate_adjustment_recorded");
 }
 
 async function fetchSchedule(scheduleId: string): Promise<any> {
@@ -227,6 +363,22 @@ async function ensureFoundingSchedule(subscription: any): Promise<string> {
   const reservationToken = String(
     subscription?.metadata?.founding_reservation_token || "",
   );
+  const affiliateId = String(subscription?.metadata?.affiliate_id || "");
+  const affiliateAttributionId = String(
+    subscription?.metadata?.affiliate_attribution_id || "",
+  );
+  const affiliateMetadata: Record<string, string> = {};
+  if (affiliateId && affiliateAttributionId) {
+    affiliateMetadata["metadata[affiliate_id]"] = affiliateId;
+    affiliateMetadata["metadata[affiliate_attribution_id]"] =
+      affiliateAttributionId;
+    affiliateMetadata["phases[0][metadata][affiliate_id]"] = affiliateId;
+    affiliateMetadata["phases[0][metadata][affiliate_attribution_id]"] =
+      affiliateAttributionId;
+    affiliateMetadata["phases[1][metadata][affiliate_id]"] = affiliateId;
+    affiliateMetadata["phases[1][metadata][affiliate_attribution_id]"] =
+      affiliateAttributionId;
+  }
 
   const configured = await stripeRequest(
     STRIPE_SECRET_KEY,
@@ -256,6 +408,7 @@ async function ensureFoundingSchedule(subscription: any): Promise<string> {
       "phases[1][metadata][plan]": planKey,
       "phases[1][metadata][founding_offer]": "true",
       "phases[1][metadata][founding_phase]": "renewal",
+      ...affiliateMetadata,
     },
     `tradenet-configure-founding-${subscriptionId}-v1`,
   );
@@ -501,10 +654,12 @@ async function handleInvoicePaid(invoice: any): Promise<string> {
   if (isFoundingSubscription(subscription)) {
     await reconcileFoundingPurchase(subscription);
   }
-  return await upsertSubscription(
+  const billingStatus = await upsertSubscription(
     subscription,
     subscription?.metadata?.profile_id || null,
   );
+  const affiliateStatus = await recordAffiliateInvoice(invoice, subscription);
+  return `${billingStatus}_${affiliateStatus}`;
 }
 
 async function handleInvoiceFailed(invoice: any): Promise<string> {
@@ -525,6 +680,10 @@ async function handleHardRevocation(
   billingStatus: "refunded" | "disputed",
   reason: "stripe_refund" | "stripe_dispute",
 ): Promise<string> {
+  const affiliateStatus = await reconcileAffiliateAdjustment(
+    chargeOrDispute,
+    billingStatus === "disputed",
+  );
   let customerId = stringId(chargeOrDispute?.customer);
   const chargeId = stringId(chargeOrDispute?.charge);
   if (!customerId && chargeId) {
@@ -552,7 +711,7 @@ async function handleHardRevocation(
   } catch (error) {
     console.error("sign-out-everywhere failed after hard revoke:", error);
   }
-  return reason;
+  return `${reason}_${affiliateStatus}`;
 }
 
 Deno.serve(async (req) => {

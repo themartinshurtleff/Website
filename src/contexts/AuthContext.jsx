@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { markPasswordRecoveryPending } from '@/lib/authRecovery'
+import { claimPendingAffiliate } from '@/lib/affiliateAttribution'
 
 const AuthContext = createContext(null)
 
@@ -25,6 +26,10 @@ export function AuthProvider({ children }) {
     return data
   }
 
+  function claimAffiliateForSession(s) {
+    if (s?.user) claimPendingAffiliate().catch(() => null)
+  }
+
   // Force a fresh JWT (re-runs the access-token hook -> fresh tradenet_* claims)
   // and re-read the profile. Used after a purchase to pick up the new plan
   // without a re-login. Returns the refreshed profile row (or null).
@@ -41,6 +46,7 @@ export function AuthProvider({ children }) {
       setSession(s)
       setUser(s?.user ?? null)
       if (s?.user) fetchProfile(s.user.id)
+      claimAffiliateForSession(s)
       setLoading(false)
     })
 
@@ -53,6 +59,7 @@ export function AuthProvider({ children }) {
       setUser(s?.user ?? null)
       if (s?.user) fetchProfile(s.user.id)
       else setProfile(null)
+      claimAffiliateForSession(s)
     })
 
     return () => subscription.unsubscribe()

@@ -30,6 +30,7 @@ import ForgotPasswordPage from '@/pages/ForgotPasswordPage'
 import ResetPasswordPage  from '@/pages/ResetPasswordPage'
 import AuthConfirmPage    from '@/pages/AuthConfirmPage'
 import DownloadPage       from '@/pages/DownloadPage'
+import ReferralPage       from '@/pages/ReferralPage'
 import { BETA_CHECKOUT_VISIBLE } from '@/lib/launchConfig'
 
 const AdminDashboardPage = lazy(() => import('@/pages/AdminDashboardPage'))
@@ -102,8 +103,9 @@ function ExternalRedirect({ basePath, destination }) {
 
 export default function App() {
   const location    = useLocation()
-  const showHeader  = !noHeaderRoutes.includes(location.pathname)
-  const showFooter  = !noFooterRoutes.includes(location.pathname)
+  const referralRoute = location.pathname.startsWith('/r/')
+  const showHeader  = !referralRoute && !noHeaderRoutes.includes(location.pathname)
+  const showFooter  = !referralRoute && !noFooterRoutes.includes(location.pathname)
   return (
     <>
       <PasswordRecoveryRedirect />
@@ -129,6 +131,7 @@ export default function App() {
           <Route path="/auth/confirm"    element={<PageWrapper><AuthConfirmPage    /></PageWrapper>} />
           <Route path="/account"         element={<PageWrapper><AccountPage        /></PageWrapper>} />
           <Route path="/download"        element={<PageWrapper><DownloadPage       /></PageWrapper>} />
+          <Route path="/r/:slug"         element={<ReferralPage />} />
           <Route
             path="/pricing"
             element={BETA_CHECKOUT_VISIBLE

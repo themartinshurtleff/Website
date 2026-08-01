@@ -271,6 +271,16 @@ async function loadProfile(user: { id: string; email?: string | null }) {
   return profile;
 }
 
+async function loadAffiliateAttribution(userId: string): Promise<any | null> {
+  const { data, error } = await svc
+    .from("affiliate_attributions")
+    .select("id,affiliate_id,commission_bps,commission_months")
+    .eq("user_id", userId)
+    .maybeSingle();
+  if (error) throw new CheckoutError("affiliate_attribution_lookup_failed", 500);
+  return data || null;
+}
+
 async function ensureCustomer(
   user: { id: string; email?: string | null },
   profile: any,
@@ -524,6 +534,7 @@ Deno.serve(async (req) => {
     const selectedPrice = founding
       ? plan.founding.introPrice
       : plan.standard.price;
+    const affiliateAttribution = await loadAffiliateAttribution(user.id);
     const attemptId = founding
       ? reservationToken!
       : asUuid(body?.request_id) || crypto.randomUUID();
@@ -538,6 +549,15 @@ Deno.serve(async (req) => {
       "subscription_data[metadata][subscription_tier]": plan.tier,
       "subscription_data[metadata][founding_offer]": founding ? "true" : "false",
     };
+
+    if (affiliateAttribution) {
+      metadata["metadata[affiliate_id]"] = affiliateAttribution.affiliate_id;
+      metadata["metadata[affiliate_attribution_id]"] = affiliateAttribution.id;
+      metadata["subscription_data[metadata][affiliate_id]"] =
+        affiliateAttribution.affiliate_id;
+      metadata["subscription_data[metadata][affiliate_attribution_id]"] =
+        affiliateAttribution.id;
+    }
 
     if (founding) {
       metadata["metadata[founding_reservation_token]"] = reservationToken!;

@@ -27,8 +27,9 @@ cohort_total as (
 update public.founding_offer_config c
    set cohort_size = t.cohort_size,
        updated_at = now()
-  from cohort_total t
- where c.id = 1;
+ from cohort_total t
+ where c.id = 1
+   and t.cohort_size > 0;
 
 -- Free the final ranking range before the upsert. Existing rows can move when
 -- older waitlist entries are added or corrected, and the unique position
@@ -37,6 +38,13 @@ update public.founding_offer_config c
 update public.founding_offer_eligibility
    set cohort_position = cohort_position + 1000000,
        updated_at = now();
+
+delete from public.founding_offer_eligibility e
+ where not exists (
+   select 1
+     from public.waitlist w
+    where lower(btrim(w.email)) = e.email_norm
+ );
 
 with earliest_per_email as (
   select distinct on (lower(btrim(w.email)))
@@ -84,6 +92,10 @@ begin
   select count(*), max(cohort_position)
     into v_eligibility_count, v_max_position
     from public.founding_offer_eligibility;
+
+  if v_eligibility_count = 0 then
+    return;
+  end if;
 
   if v_eligibility_count <> v_configured_size
      or v_max_position <> v_configured_size then
