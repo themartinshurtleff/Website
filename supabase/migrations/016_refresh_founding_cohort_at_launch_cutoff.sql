@@ -4,6 +4,8 @@
 -- It includes every unique normalized waitlist email present at execution
 -- time. Later waitlist inserts are intentionally not enrolled automatically.
 
+begin;
+
 lock table public.waitlist in share mode;
 lock table public.founding_offer_config in row exclusive mode;
 lock table public.founding_offer_eligibility in share row exclusive mode;
@@ -27,6 +29,14 @@ update public.founding_offer_config c
        updated_at = now()
   from cohort_total t
  where c.id = 1;
+
+-- Free the final ranking range before the upsert. Existing rows can move when
+-- older waitlist entries are added or corrected, and the unique position
+-- constraint is immediate rather than deferred. This temporary offset is
+-- rolled back with the transaction if any later assertion fails.
+update public.founding_offer_eligibility
+   set cohort_position = cohort_position + 1000000,
+       updated_at = now();
 
 with earliest_per_email as (
   select distinct on (lower(btrim(w.email)))
@@ -85,3 +95,5 @@ begin
   end if;
 end;
 $$;
+
+commit;
