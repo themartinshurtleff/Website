@@ -3,7 +3,7 @@ import { useNavigate, Link, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { User, Mail, Shield, LogOut, RefreshCw, Download, ExternalLink, Activity } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
-import { openBillingPortal, TERMINAL_DOWNLOAD_URL } from '@/lib/checkout'
+import { openBillingPortal } from '@/lib/checkout'
 import { BETA_CHECKOUT_VISIBLE } from '@/lib/launchConfig'
 
 // access_tier (derived security tier) -> display. NOT subscription_tier.
@@ -196,20 +196,19 @@ export default function AccountPage() {
             )}
           </div>
 
-          {/* Terminal download — desktop-eligible tiers only (the desktop app
-              refuses free; terminal_access is true for free too, so gate on
-              isElevated, not terminal_access). */}
-          {isElevated && TERMINAL_DOWNLOAD_URL && (
-            <a
-              href={TERMINAL_DOWNLOAD_URL}
+          {/* Desktop eligibility is stricter than terminal_access because the
+              free preview remains web-only. */}
+          {isElevated && (
+            <Link
+              to="/download"
               className="bento-card p-5 flex items-center gap-3 hover:border-[#c9a84c]/30 transition-colors"
             >
               <Download size={18} className="text-[#c9a84c]" />
               <div>
                 <p className="text-sm font-bold text-[#FAFAFA]">Download TradeNet Terminal</p>
-                <p className="text-xs text-[#71717A]">Windows & macOS · log in with this account</p>
+                <p className="text-xs text-[#71717A]">Signed Windows beta build</p>
               </div>
-            </a>
+            </Link>
           )}
 
           {tier === 'admin' && (

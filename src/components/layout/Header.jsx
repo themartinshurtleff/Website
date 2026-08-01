@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Menu, X, User, LogOut, Activity } from 'lucide-react'
+import { Menu, X, User, LogOut, Activity, Download } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '@/contexts/AuthContext'
 import {
@@ -26,6 +26,7 @@ export default function Header() {
   const navigate  = useNavigate()
   const { user, profile, signOut } = useAuth()
   const isAdmin = profile?.access_tier === 'admin'
+  const hasDesktopAccess = ['referral_verified', 'beta', 'pro', 'admin'].includes(profile?.access_tier)
   const isHomePage = location.pathname === '/'
 
   useEffect(() => {
@@ -106,6 +107,16 @@ export default function Header() {
           <div className="hidden md:flex items-center gap-3">
             {user ? (
               <>
+                {hasDesktopAccess && (
+                  <button
+                    onClick={() => navigate('/download')}
+                    title="Download terminal"
+                    className="flex items-center gap-2 text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors"
+                  >
+                    <Download size={15} />
+                    <span className="hidden xl:inline">Download</span>
+                  </button>
+                )}
                 {isAdmin && (
                   <button
                     onClick={() => navigate('/admin/dashboard')}
@@ -191,6 +202,14 @@ export default function Header() {
               <div className="pt-2 border-t border-white/[0.06] mt-2 space-y-2">
                 {user ? (
                   <>
+                    {hasDesktopAccess && (
+                      <button
+                        onClick={() => navigate('/download')}
+                        className="w-full flex items-center justify-center gap-2 text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors px-5 py-2.5"
+                      >
+                        <Download size={15} /> Download Terminal
+                      </button>
+                    )}
                     {isAdmin && (
                       <button
                         onClick={() => navigate('/admin/dashboard')}

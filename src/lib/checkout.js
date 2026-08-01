@@ -67,6 +67,3 @@ export async function openBillingPortal() {
   if (!data?.url) throw new Error('missing_redirect_url')
   return data.url
 }
-
-// Terminal download (filled when the desktop build ships a public URL).
-export const TERMINAL_DOWNLOAD_URL = null
