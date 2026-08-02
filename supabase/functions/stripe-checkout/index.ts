@@ -580,6 +580,7 @@ Deno.serve(async (req) => {
         mode: "subscription",
         customer: customerId,
         client_reference_id: user.id,
+        allow_promotion_codes: "true",
         success_url: `${SITE_URL}/account?activating=1&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${SITE_URL}/pricing`,
         expires_at: String(Math.floor(Date.now() / 1000) + 31 * 60),
