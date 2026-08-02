@@ -25,7 +25,7 @@ export default function Footer() {
             <p className="text-xs font-semibold uppercase tracking-widest text-[#71717A] mb-4">Product</p>
             <ul className="space-y-2.5">
               <li>
-                <Link to="/terminal" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
+                <Link to="/#terminal-showcase" className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors">
                   TradeNet Terminal
                 </Link>
               </li>
@@ -41,7 +41,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  to={BETA_CHECKOUT_VISIBLE ? '/pricing' : '/terminal'}
+                  to="/#pricing"
                   className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors"
                 >
                   {BETA_CHECKOUT_VISIBLE ? 'Beta Pricing' : 'Launch Waitlist'}

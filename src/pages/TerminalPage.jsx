@@ -412,7 +412,7 @@ export default function TerminalPage() {
                 animate={heroInView ? 'visible' : 'hidden'}
                 className="text-[17px] text-[#A1A1AA] leading-[1.75] max-w-[500px]"
               >
-                TradeNet Quantum aggregates live orderflow from Binance, Bybit, OKX, and Hyperliquid
+                TradeNet Terminal aggregates live orderflow from Binance, Bybit, OKX, and Hyperliquid
                 into a single terminal. The new Tauri architecture keeps credentials and trusted
                 actions in Rust while the UI focuses on fast charts, panes, Lua tools, DOM, and tape.
               </motion.p>
@@ -465,7 +465,7 @@ export default function TerminalPage() {
             >
               <img
                 src="/herogif.gif"
-                alt="TradeNet Quantum Terminal live orderflow workspace"
+                alt="TradeNet Terminal live orderflow workspace"
                 className="w-full rounded-[22px] border border-white/[0.08] shadow-2xl object-contain object-center bg-[#050506]"
                 loading="eager"
                 style={{ aspectRatio: '16/9' }}

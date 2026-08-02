@@ -14,7 +14,6 @@ import Footer             from '@/components/layout/Footer'
 // import FreeGuidePopup     from '@/components/common/FreeGuidePopup'
 import ScrollToTop        from '@/components/common/ScrollToTop'
 import HomePage           from '@/pages/HomePage'
-import TerminalPage       from '@/pages/TerminalPage'
 import IndicatorPage      from '@/pages/IndicatorPage'
 import AboutPage          from '@/pages/AboutPage'
 import ContactPage        from '@/pages/ContactPage'
@@ -25,13 +24,11 @@ import ThankYouPage       from '@/pages/ThankYouPage'
 import SignUpPage         from '@/pages/SignUpPage'
 import LoginPage          from '@/pages/LoginPage'
 import AccountPage        from '@/pages/AccountPage'
-import PricingPage        from '@/pages/PricingPage'
 import ForgotPasswordPage from '@/pages/ForgotPasswordPage'
 import ResetPasswordPage  from '@/pages/ResetPasswordPage'
 import AuthConfirmPage    from '@/pages/AuthConfirmPage'
 import DownloadPage       from '@/pages/DownloadPage'
 import ReferralPage       from '@/pages/ReferralPage'
-import { BETA_CHECKOUT_VISIBLE } from '@/lib/launchConfig'
 
 const AdminDashboardPage = lazy(() => import('@/pages/AdminDashboardPage'))
 
@@ -114,7 +111,7 @@ export default function App() {
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/"                element={<PageWrapper><HomePage           /></PageWrapper>} />
-          <Route path="/terminal"        element={<PageWrapper><TerminalPage       /></PageWrapper>} />
+          <Route path="/terminal"        element={<Navigate to="/#terminal-showcase" replace />} />
           <Route path="/indicator"       element={<PageWrapper><IndicatorPage      /></PageWrapper>} />
           <Route path="/about"           element={<PageWrapper><AboutPage          /></PageWrapper>} />
           <Route path="/contact"         element={<PageWrapper><ContactPage        /></PageWrapper>} />
@@ -132,18 +129,8 @@ export default function App() {
           <Route path="/account"         element={<PageWrapper><AccountPage        /></PageWrapper>} />
           <Route path="/download"        element={<PageWrapper><DownloadPage       /></PageWrapper>} />
           <Route path="/r/:slug"         element={<ReferralPage />} />
-          <Route
-            path="/pricing"
-            element={BETA_CHECKOUT_VISIBLE
-              ? <PageWrapper><PricingPage /></PageWrapper>
-              : <Navigate to="/terminal" replace />}
-          />
-          <Route
-            path="/buy"
-            element={BETA_CHECKOUT_VISIBLE
-              ? <PageWrapper><PricingPage /></PageWrapper>
-              : <Navigate to="/terminal" replace />}
-          />
+          <Route path="/pricing" element={<Navigate to="/#pricing" replace />} />
+          <Route path="/buy"     element={<Navigate to="/#pricing" replace />} />
           <Route
             path="/admin/dashboard"
             element={(

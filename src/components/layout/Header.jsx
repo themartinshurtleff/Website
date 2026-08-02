@@ -1,19 +1,17 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Menu, X, User, LogOut, Activity, Download } from 'lucide-react'
+import { Menu, X, User, LogOut, Activity, Download, ExternalLink } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '@/contexts/AuthContext'
 import {
-  BETA_CHECKOUT_VISIBLE,
   PRIMARY_LAUNCH_LABEL,
   PRIMARY_LAUNCH_PATH,
 } from '@/lib/launchConfig'
 
 const navLinks = [
-  { label: 'Home',      to: '/'              },
-  { label: 'Terminal',  to: '/terminal'      },
-  ...(BETA_CHECKOUT_VISIBLE ? [{ label: 'Pricing', to: '/pricing' }] : []),
-  { label: 'Indicator', to: '/indicator'     },
+  { label: 'Terminal',  to: '/#terminal-showcase' },
+  { label: 'Features',  to: '/#features'          },
+  { label: 'Pricing',   to: '/#pricing'           },
   { label: 'Docs',      to: '/docs',  external: true },
   { label: 'Blog',      to: '/blog', external: true },
   { label: 'About',     to: '/about'         },
@@ -44,25 +42,25 @@ export default function Header() {
     }
     if (to.includes('#')) {
       const [path, hash] = to.split('#')
-      if (location.pathname !== path && path !== '') {
-        navigate(path)
-        setTimeout(() => document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth' }), 350)
-      } else {
-        document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth' })
-      }
+      navigate(to)
+      setTimeout(
+        () => document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth' }),
+        location.pathname === path ? 20 : 350,
+      )
     } else {
       navigate(to)
     }
   }
 
   function handlePrimaryLaunchAction() {
-    navigate(PRIMARY_LAUNCH_PATH)
-    if (!BETA_CHECKOUT_VISIBLE) {
-      setTimeout(() => document.getElementById('terminal-waitlist')?.scrollIntoView({ behavior: 'smooth' }), 350)
-    }
+    handleNav(PRIMARY_LAUNCH_PATH, false)
   }
 
   const isActive = (to) => {
+    if (to.includes('#')) {
+      const [path, hash] = to.split('#')
+      return location.pathname === path && location.hash === `#${hash}`
+    }
     if (to === '/') return location.pathname === '/'
     return location.pathname.startsWith(to)
   }
@@ -87,7 +85,7 @@ export default function Header() {
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-0.5">
+          <nav className="hidden lg:flex items-center gap-0.5">
             {navLinks.map((link) => (
               <button
                 key={link.label}
@@ -104,9 +102,18 @@ export default function Header() {
           </nav>
 
           {/* CTA — auth-aware */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-3">
             {user ? (
               <>
+                <a
+                  href="https://app.tradenet.org/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="site-header-cta flex items-center gap-2 bg-[#c9a84c] hover:bg-[#f0c040] text-black font-semibold text-sm px-4 py-2 rounded-md transition-colors"
+                >
+                  Open Terminal
+                  <ExternalLink size={14} />
+                </a>
                 {hasDesktopAccess && (
                   <button
                     onClick={() => navigate('/download')}
@@ -163,7 +170,7 @@ export default function Header() {
 
           {/* Mobile toggle */}
           <button
-            className="md:hidden p-2 text-[#A1A1AA] hover:text-white transition-colors"
+            className="lg:hidden p-2 text-[#A1A1AA] hover:text-white transition-colors"
             onClick={() => setOpen(!open)}
             aria-label="Toggle menu"
             aria-expanded={open}
@@ -183,7 +190,7 @@ export default function Header() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden border-t border-white/[0.06] bg-black/95 backdrop-blur-xl overflow-hidden"
+            className="lg:hidden border-t border-white/[0.06] bg-black/95 backdrop-blur-xl overflow-hidden"
           >
             <div className="section-container py-4 flex flex-col gap-1">
               {navLinks.map((link) => (
@@ -202,6 +209,15 @@ export default function Header() {
               <div className="pt-2 border-t border-white/[0.06] mt-2 space-y-2">
                 {user ? (
                   <>
+                    <a
+                      href="https://app.tradenet.org/"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="w-full flex items-center justify-center gap-2 bg-[#c9a84c] hover:bg-[#f0c040] text-black font-semibold text-sm px-5 py-2.5 rounded-md transition-colors"
+                    >
+                      Open Terminal
+                      <ExternalLink size={15} />
+                    </a>
                     {hasDesktopAccess && (
                       <button
                         onClick={() => navigate('/download')}

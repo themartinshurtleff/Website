@@ -68,7 +68,7 @@ export default function CtaSection() {
                 filter: 'blur(40px)',
               }}
             />
-            <span className="eyebrow-gold relative">Quantum Terminal</span>
+            <span className="eyebrow-gold relative">TradeNet Terminal</span>
             <h2 className="text-[clamp(24px,3vw,36px)] font-black tracking-[-0.03em] leading-[1.1] relative">
               <span className="text-[#FAFAFA]">Professional Orderflow.</span><br />
               <span className="gradient-text-gold">Core Futures Markets.</span>

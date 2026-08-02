@@ -3,7 +3,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowLeft, ArrowRight, CheckCircle2, ShieldCheck, Zap, RefreshCw } from 'lucide-react'
 import FeatureList from '@/components/pages/indicator/FeatureList'
-import { BETA_CHECKOUT_VISIBLE, PRIMARY_LAUNCH_PATH } from '@/lib/launchConfig'
+import {
+  BETA_CHECKOUT_VISIBLE,
+  PRIMARY_LAUNCH_LABEL,
+  PRIMARY_LAUNCH_PATH,
+} from '@/lib/launchConfig'
 // import Footer from '@/components/layout/Footer'
 
 const images = [
@@ -62,7 +66,7 @@ export default function IndicatorPage() {
             to={PRIMARY_LAUNCH_PATH}
             className="btn-gold px-5 py-2 text-sm rounded-lg"
           >
-            {BETA_CHECKOUT_VISIBLE ? 'View Pricing' : 'Join Waitlist'}
+            {PRIMARY_LAUNCH_LABEL}
           </Link>
         </div>
       </nav>
@@ -187,7 +191,7 @@ export default function IndicatorPage() {
                   to={PRIMARY_LAUNCH_PATH}
                   className="btn-gold block text-center px-6 py-3 rounded-xl text-[15px] font-bold"
                 >
-                  {BETA_CHECKOUT_VISIBLE ? 'View Beta Pricing' : 'Join Launch Waitlist'}
+                  {PRIMARY_LAUNCH_LABEL}
                 </Link>
                 <div className="grid grid-cols-3 gap-2 pt-2">
                   {trustBadges.map(({ icon: Icon, label }) => (
@@ -216,7 +220,7 @@ export default function IndicatorPage() {
               to={PRIMARY_LAUNCH_PATH}
               className="btn-gold inline-flex items-center gap-2 px-7 py-3.5 rounded-xl text-[15px]"
             >
-              {BETA_CHECKOUT_VISIBLE ? 'View Beta Pricing' : 'Join Launch Waitlist'} <ArrowRight size={16} />
+              {PRIMARY_LAUNCH_LABEL} <ArrowRight size={16} />
             </Link>
             <div className="flex flex-wrap justify-center gap-4">
               {trustBadges.map(({ icon: Icon, label }) => (

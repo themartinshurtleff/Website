@@ -60,6 +60,14 @@ const planFeatures = [
   'Saved desktop workspaces and beta updates',
 ]
 
+const freePlanFeatures = [
+  'Free TradeNet account',
+  'BTC market preview',
+  '5 minute and higher timeframes',
+  'Basic candles and volume',
+  'No credit card required',
+]
+
 function checkoutMessage(error) {
   const code = error?.message
   if (code === 'existing_subscription' || code === 'founding_offer_already_redeemed') {
@@ -306,7 +314,7 @@ function CheckoutPricingSection({ standalone = false }) {
   async function handleBuy(plan) {
     if (loading) return
     if (!user) {
-      navigate(`/signup?return=${encodeURIComponent('/pricing')}`)
+      navigate(`/signup?return=${encodeURIComponent('/#pricing')}`)
       return
     }
     if (hasAccess) {
@@ -325,6 +333,10 @@ function CheckoutPricingSection({ standalone = false }) {
       setCheckoutError(checkoutMessage(error))
       setBuyingPlan(null)
     }
+  }
+
+  function handleFree() {
+    navigate(user ? '/account' : '/signup')
   }
 
   function buttonLabel(plan) {
@@ -361,11 +373,10 @@ function CheckoutPricingSection({ standalone = false }) {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.65 }}
         >
-          <p className="tn-kicker">TradeNet Beta Access</p>
-          <h2 id="pricing-title">The full terminal. One Pro plan.</h2>
+          <h2 id="pricing-title">Free preview or the full terminal.</h2>
           <p>
-            Choose monthly or annual billing. Original waitlist accounts receive their
-            private founding terms automatically when their invitation wave opens.
+            Start with a free account, or unlock every desktop terminal feature with
+            monthly or annual Pro. Founding terms are selected automatically after sign in.
           </p>
         </motion.header>
 
@@ -375,6 +386,36 @@ function CheckoutPricingSection({ standalone = false }) {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, delay: 0.1 }}
         >
+          <article className="tn-price-card tn-price-card-free">
+            <div className="tn-plan-heading">
+              <div>
+                <p className="tn-plan-name">Free</p>
+                <p className="tn-plan-caption">A limited BTC market preview</p>
+              </div>
+              <span className="tn-plan-badge tn-plan-badge-neutral">No card</span>
+            </div>
+            <div className="tn-price-line">
+              <span className="tn-price-value">$0</span>
+              <span className="tn-price-cadence">/ forever</span>
+            </div>
+            <p className="tn-renewal-copy">
+              Web preview only. Desktop access and protected orderflow tools require Pro.
+            </p>
+            <ul className="tn-plan-features">
+              {freePlanFeatures.map((feature) => (
+                <li key={feature}><Check size={15} />{feature}</li>
+              ))}
+            </ul>
+            <button
+              type="button"
+              className="tn-plan-button tn-plan-button-secondary"
+              onClick={handleFree}
+            >
+              {user ? 'View your account' : 'Start free'}
+              <ArrowRight size={16} />
+            </button>
+          </article>
+
           <article className="tn-price-card">
             <div className="tn-plan-heading">
               <div>
