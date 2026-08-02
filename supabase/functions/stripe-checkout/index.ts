@@ -332,6 +332,83 @@ function checkoutBelongsToUser(session: any, userId: string): boolean {
   return owner === userId;
 }
 
+async function loadActiveFoundingReservation(userId: string): Promise<any | null> {
+  const { data, error } = await svc
+    .from("founding_offer_eligibility")
+    .select(
+      "state,reservation_token,reservation_plan,reservation_expires_at,checkout_session_id,checkout_session_url",
+    )
+    .eq("user_id", userId)
+    .maybeSingle();
+  if (error) throw new CheckoutError("reservation_lookup_failed", 500);
+  return data?.state === "reserved" ? data : null;
+}
+
+async function replaceActiveFoundingReservation(
+  userId: string,
+  reason: string,
+): Promise<void> {
+  const active = await loadActiveFoundingReservation(userId);
+  const reservationToken = asUuid(active?.reservation_token);
+  const sessionId = stringId(active?.checkout_session_id);
+  if (!active || !reservationToken) {
+    throw new CheckoutError("founding_offer_reservation_active", 409);
+  }
+
+  if (!sessionId) {
+    if (active.checkout_session_url) {
+      throw new CheckoutError("payment_recovery_unavailable", 409);
+    }
+    // A concurrent request may still be creating and binding the Stripe session.
+    throw new CheckoutError("checkout_in_progress", 409);
+  }
+
+  let session: any = null;
+  try {
+    session = await stripeRequest(
+      STRIPE_SECRET_KEY,
+      "GET",
+      `/v1/checkout/sessions/${encodeURIComponent(sessionId)}`,
+    );
+  } catch (error) {
+    if (!isMissingStripeResource(error)) throw error;
+  }
+
+  if (session) {
+    if (!checkoutBelongsToUser(session, userId)) {
+      throw new CheckoutError("subscription_ownership_mismatch", 409);
+    }
+    const status = String(session.status || "");
+    if (status === "complete") {
+      throw new CheckoutError("existing_subscription", 409);
+    }
+    if (status === "open") {
+      await stripeRequest(
+        STRIPE_SECRET_KEY,
+        "POST",
+        `/v1/checkout/sessions/${encodeURIComponent(sessionId)}/expire`,
+        undefined,
+        `tradenet-expire-checkout-${sessionId}`,
+      );
+    } else if (status !== "expired") {
+      throw new CheckoutError("checkout_in_progress", 409);
+    }
+  }
+
+  const { data: released, error } = await svc.rpc(
+    "release_founding_offer_reservation",
+    {
+      p_user: userId,
+      p_reservation_token: reservationToken,
+      p_session_id: sessionId,
+      p_reason: reason.slice(0, 500),
+    },
+  );
+  if (error || released !== true) {
+    throw new CheckoutError("reservation_release_failed", 500);
+  }
+}
+
 async function recoverIncompleteSubscription(
   userId: string,
   subscription: any,
@@ -513,7 +590,18 @@ Deno.serve(async (req) => {
 
     let reservation: any = null;
     if (founding) {
-      reservation = await reserveFounding(user.id, planKey);
+      try {
+        reservation = await reserveFounding(user.id, planKey);
+      } catch (error) {
+        if (
+          !(error instanceof CheckoutError) ||
+          error.code !== "founding_offer_reservation_active"
+        ) {
+          throw error;
+        }
+        await replaceActiveFoundingReservation(user.id, "founding_plan_changed");
+        reservation = await reserveFounding(user.id, planKey);
+      }
       reservationToken = String(reservation?.reservation_token || "");
       reservationUserId = user.id;
       reservationOwned = reservation?.reused !== true;
@@ -521,11 +609,47 @@ Deno.serve(async (req) => {
         throw new CheckoutError("reservation_failed", 500);
       }
       if (reservation?.checkout_session_url) {
-        return json({
-          url: reservation.checkout_session_url,
-          offer: "founding",
-          reused: true,
-        });
+        const sessionId = stringId(reservation.checkout_session_id);
+        if (!sessionId) {
+          throw new CheckoutError("payment_recovery_unavailable", 409);
+        }
+
+        let existingSession: any = null;
+        try {
+          existingSession = await stripeRequest(
+            STRIPE_SECRET_KEY,
+            "GET",
+            `/v1/checkout/sessions/${encodeURIComponent(sessionId)}`,
+          );
+        } catch (error) {
+          if (!isMissingStripeResource(error)) throw error;
+        }
+
+        const reusable = existingSession &&
+          checkoutBelongsToUser(existingSession, user.id) &&
+          existingSession.status === "open" &&
+          existingSession.allow_promotion_codes === true &&
+          typeof existingSession.url === "string" &&
+          Number(existingSession.expires_at || 0) > Math.floor(Date.now() / 1000);
+
+        if (reusable) {
+          return json({
+            url: existingSession.url,
+            offer: "founding",
+            reused: true,
+          });
+        }
+
+        await replaceActiveFoundingReservation(
+          user.id,
+          "founding_checkout_session_replaced",
+        );
+        reservation = await reserveFounding(user.id, planKey);
+        reservationToken = String(reservation?.reservation_token || "");
+        reservationOwned = true;
+        if (!asUuid(reservationToken)) {
+          throw new CheckoutError("reservation_failed", 500);
+        }
       }
     }
 

@@ -79,6 +79,9 @@ function checkoutMessage(error) {
   if (code === 'checkout_in_progress') {
     return 'Checkout is being prepared. Wait a few seconds, then try again.'
   }
+  if (code === 'founding_offer_reservation_active') {
+    return 'Another founding checkout is still open. Close it, wait a few seconds, then choose your plan again.'
+  }
   if (code === 'founding_offer_not_invited') {
     return 'Your founding rate is reserved, but your invitation wave has not opened yet.'
   }
