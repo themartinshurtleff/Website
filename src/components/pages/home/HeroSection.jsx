@@ -1,10 +1,12 @@
 import { lazy, Suspense } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowDown, ArrowRight } from 'lucide-react'
+import { ArrowDown, ArrowRight, ExternalLink } from 'lucide-react'
+import { useAuth } from '@/contexts/AuthContext'
 import {
   PRIMARY_LAUNCH_LABEL,
   PRIMARY_LAUNCH_PATH,
+  WEB_TERMINAL_URL,
 } from '@/lib/launchConfig'
 
 const OrderflowTopology = lazy(() => import('./OrderflowTopology'))
@@ -20,6 +22,15 @@ const reveal = {
 
 export default function HeroSection() {
   const navigate = useNavigate()
+  const { user } = useAuth()
+
+  const handlePrimaryAction = () => {
+    if (user) {
+      window.open(WEB_TERMINAL_URL, '_blank', 'noopener,noreferrer')
+      return
+    }
+    navigate(PRIMARY_LAUNCH_PATH)
+  }
 
   const showTerminal = () => {
     document.getElementById('terminal-showcase')?.scrollIntoView({ behavior: 'smooth' })
@@ -60,9 +71,9 @@ export default function HeroSection() {
           Multi-venue heatmaps, footprint charts, DOM, Tape, OI, CVD, Lua indicators, backtesting, and paper-first execution for BTC, ETH, and SOL.
         </motion.p>
         <motion.div className="tn-hero-actions" variants={reveal} custom={0.27} initial="hidden" animate="visible">
-          <button className="tn-button-primary" onClick={() => navigate(PRIMARY_LAUNCH_PATH)}>
-            {PRIMARY_LAUNCH_LABEL}
-            <ArrowRight size={16} />
+          <button className="tn-button-primary" onClick={handlePrimaryAction}>
+            {user ? 'Launch Terminal' : PRIMARY_LAUNCH_LABEL}
+            {user ? <ExternalLink size={16} /> : <ArrowRight size={16} />}
           </button>
           <button className="tn-button-secondary" onClick={showTerminal}>
             Explore the terminal

@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import {
   PRIMARY_LAUNCH_LABEL,
   PRIMARY_LAUNCH_PATH,
+  WEB_TERMINAL_URL,
 } from '@/lib/launchConfig'
 
 const navLinks = [
@@ -106,7 +107,7 @@ export default function Header() {
             {user ? (
               <>
                 <a
-                  href="https://app.tradenet.org/"
+                  href={WEB_TERMINAL_URL}
                   target="_blank"
                   rel="noreferrer"
                   className="site-header-cta flex items-center gap-2 bg-[#c9a84c] hover:bg-[#f0c040] text-black font-semibold text-sm px-4 py-2 rounded-md transition-colors"
@@ -210,7 +211,7 @@ export default function Header() {
                 {user ? (
                   <>
                     <a
-                      href="https://app.tradenet.org/"
+                      href={WEB_TERMINAL_URL}
                       target="_blank"
                       rel="noreferrer"
                       className="w-full flex items-center justify-center gap-2 bg-[#c9a84c] hover:bg-[#f0c040] text-black font-semibold text-sm px-5 py-2.5 rounded-md transition-colors"
