@@ -65,22 +65,26 @@ export function AuthProvider({ children }) {
     return () => subscription.unsubscribe()
   }, [])
 
-  async function signUp(email, password, emailRedirectTo) {
-    const options = emailRedirectTo ? { emailRedirectTo } : undefined
+  async function signUp(email, password, emailRedirectTo, captchaToken) {
+    const options = {}
+    if (emailRedirectTo) options.emailRedirectTo = emailRedirectTo
+    if (captchaToken) options.captchaToken = captchaToken
     const { data, error } = await supabase.auth.signUp({ email, password, options })
     if (error) throw error
     return data
   }
 
-  async function signIn(email, password) {
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+  async function signIn(email, password, captchaToken) {
+    const options = captchaToken ? { captchaToken } : undefined
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password, options })
     if (error) throw error
     return data
   }
 
-  async function requestPasswordReset(email, redirectTo) {
+  async function requestPasswordReset(email, redirectTo, captchaToken) {
     const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo,
+      ...(captchaToken ? { captchaToken } : {}),
     })
     if (error) throw error
     return data

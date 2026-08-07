@@ -1,14 +1,17 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
+import AuthCaptcha, { AUTH_CAPTCHA_ENABLED } from '@/components/common/AuthCaptcha'
 
 export default function LoginPage() {
   const [email, setEmail]       = useState('')
   const [password, setPassword] = useState('')
   const [error, setError]       = useState('')
   const [loading, setLoading]   = useState(false)
+  const [captchaToken, setCaptchaToken] = useState('')
+  const captchaRef = useRef(null)
   const { signIn } = useAuth()
   const navigate = useNavigate()
   const [params] = useSearchParams()
@@ -25,14 +28,21 @@ export default function LoginPage() {
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
+
+    if (AUTH_CAPTCHA_ENABLED && !captchaToken) {
+      setError('Complete the security check before signing in.')
+      return
+    }
+
     setLoading(true)
 
     try {
-      await signIn(email.trim().toLowerCase(), password)
+      await signIn(email.trim().toLowerCase(), password, captchaToken)
       navigate(returnTo)
     } catch (err) {
       setError(err.message || 'Invalid email or password.')
     } finally {
+      captchaRef.current?.reset()
       setLoading(false)
     }
   }
@@ -91,11 +101,18 @@ export default function LoginPage() {
             />
           </div>
 
+          <AuthCaptcha
+            ref={captchaRef}
+            action="signin"
+            onTokenChange={setCaptchaToken}
+            onError={() => setError('Security check failed to load. Refresh and try again.')}
+          />
+
           {error && <p className="text-xs text-red-400">{error}</p>}
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || (AUTH_CAPTCHA_ENABLED && !captchaToken)}
             className="w-full flex items-center justify-center gap-2 bg-[#c9a84c] hover:bg-[#f0c040] text-black font-bold text-sm px-5 py-3 rounded-xl transition-colors disabled:opacity-50"
           >
             {loading ? 'Signing in...' : 'Sign In'}

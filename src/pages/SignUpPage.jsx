@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight, MailCheck } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
+import AuthCaptcha, { AUTH_CAPTCHA_ENABLED } from '@/components/common/AuthCaptcha'
 
 export default function SignUpPage() {
   const [email, setEmail]       = useState('')
@@ -10,7 +11,9 @@ export default function SignUpPage() {
   const [confirm, setConfirm]   = useState('')
   const [error, setError]       = useState('')
   const [loading, setLoading]   = useState(false)
+  const [captchaToken, setCaptchaToken] = useState('')
   const [confirmationEmail, setConfirmationEmail] = useState('')
+  const captchaRef = useRef(null)
   const { signUp } = useAuth()
   const navigate = useNavigate()
   const [params] = useSearchParams()
@@ -31,17 +34,22 @@ export default function SignUpPage() {
       setError('Passwords do not match.')
       return
     }
+    if (AUTH_CAPTCHA_ENABLED && !captchaToken) {
+      setError('Complete the security check before creating an account.')
+      return
+    }
 
     setLoading(true)
     try {
       const normalizedEmail = email.trim().toLowerCase()
       const redirectTo = new URL(returnTo, window.location.origin).toString()
-      const data = await signUp(normalizedEmail, password, redirectTo)
+      const data = await signUp(normalizedEmail, password, redirectTo, captchaToken)
       if (data.session) navigate(returnTo)
       else setConfirmationEmail(normalizedEmail)
     } catch (err) {
       setError(err.message || 'Something went wrong.')
     } finally {
+      captchaRef.current?.reset()
       setLoading(false)
     }
   }
@@ -125,11 +133,18 @@ export default function SignUpPage() {
             />
           </div>
 
+          <AuthCaptcha
+            ref={captchaRef}
+            action="signup"
+            onTokenChange={setCaptchaToken}
+            onError={() => setError('Security check failed to load. Refresh and try again.')}
+          />
+
           {error && <p className="text-xs text-red-400">{error}</p>}
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || (AUTH_CAPTCHA_ENABLED && !captchaToken)}
             className="w-full flex items-center justify-center gap-2 bg-[#c9a84c] hover:bg-[#f0c040] text-black font-bold text-sm px-5 py-3 rounded-xl transition-colors disabled:opacity-50"
           >
             {loading ? 'Creating account...' : 'Create Account'}
