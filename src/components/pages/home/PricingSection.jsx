@@ -34,7 +34,7 @@ const launchSteps = [
   {
     icon: UserPlus,
     title: 'Create an account',
-    body: 'Accounts stay open, so beta access can be attached to the same login used in the terminal.',
+    body: 'Accounts stay open, so beta access can be attached to the same login used in the crypto terminal.',
   },
   {
     icon: ShieldCheck,
@@ -51,10 +51,10 @@ const included = [
 ]
 
 const planFeatures = [
-  'Live BTC, ETH, and SOL market data',
-  'Footprint, DOM, Tape, and multi-venue charts',
-  'Liquidation and orderbook heatmaps',
-  'OI, CVD, VAP, and bar statistics',
+  'Crypto candles and volume for every available pair across four exchanges',
+  'Full multi-venue aggregation for BTC, ETH, and SOL',
+  'Flagship-market Footprint, DOM, Tape, and heatmaps',
+  'Flagship-market OI, CVD, VAP, bar statistics, and raw trades',
   'Lua indicators and terminal data taps',
   'Backtesting and paper-first execution',
   'Saved desktop workspaces and beta updates',
@@ -145,7 +145,7 @@ function WaitlistPricingSection({ standalone = false }) {
                 <span className="gradient-text-gold">Launch access opens next.</span>
               </h2>
               <p className="text-[16px] text-[#A1A1AA] leading-[1.75] max-w-xl">
-                We are holding checkout while the terminal moves into beta launch readiness.
+                We are holding checkout while the crypto terminal moves into beta launch readiness.
                 Join the waitlist now and we will notify you when controlled access opens.
               </p>
             </div>
@@ -376,10 +376,14 @@ function CheckoutPricingSection({ standalone = false }) {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.65 }}
         >
-          <h2 id="pricing-title">Free preview or the full terminal.</h2>
+          <h2 id="pricing-title">Free crypto preview or the full terminal.</h2>
           <p>
-            Start with a free account, or unlock every desktop terminal feature with
-            monthly or annual Pro. Founding terms are selected automatically after sign in.
+            TradeNet is built exclusively for crypto. Start with a limited BTC web preview,
+            or use Pro for all-pair candle and volume charting plus the full BTC, ETH, and SOL
+            orderflow stack. Founding terms are selected automatically after sign in.
+          </p>
+          <p className="tn-pricing-market-note">
+            Crypto markets only. CME futures such as NQ and ES are not currently supported.
           </p>
         </motion.header>
 
