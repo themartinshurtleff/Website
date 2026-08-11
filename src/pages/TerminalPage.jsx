@@ -21,8 +21,8 @@ const fadeUp = {
 const valueProps = [
   {
     icon: Layers,
-    title: 'Aggregated Core Markets',
-    body: 'BTC, ETH, and SOL views route across Binance, Bybit, OKX, and Hyperliquid where the terminal supports true aggregate data.',
+    title: 'Broad Market Coverage',
+    body: 'Chart standard candles and volume for every available crypto pair across Binance, Bybit, OKX, and Hyperliquid. BTC, ETH, and SOL add the complete aggregated orderflow stack.',
     accent: '#c9a84c',
     bg: 'rgba(201,168,76,0.08)',
     border: 'rgba(201,168,76,0.18)',
@@ -71,12 +71,12 @@ const features = [
   {
     eyebrow: 'Core Market View',
     title: 'Multi-Exchange Aggregation for BTC, ETH, and SOL',
-    body: "TradeNet's aggregated views focus on the core futures markets first: Binance, Bybit, OKX, and Hyperliquid coverage for BTC, ETH, and SOL where aggregate routes are supported.",
+    body: "Every available pair receives standard candle and volume charting. TradeNet's deepest coverage is built around BTC, ETH, and SOL, with multi-venue aggregation and the full orderflow feature set across the supported exchanges.",
     bullets: [
       'Aggregated candles, trades, volume, and footprint data from aggr-server',
       'Backend-owned OI, OI CVD, liquidation events, and heatmap routes',
       'Per-exchange and aggregate data modes are labeled separately',
-      'Workspace templates pair charts with DOM and Time & Sales panes',
+      'All other available pairs retain standard candle and volume charting',
     ],
     placeholder: 'Aggregated orderflow workspace',
     imageSrc: '/hero.png',
@@ -400,7 +400,7 @@ export default function TerminalPage() {
               >
                 <h1 className="text-[clamp(40px,5.5vw,72px)] font-black leading-[1.01] tracking-[-0.04em] text-[#FAFAFA]">
                   Professional Orderflow.<br />
-                  Core Futures Markets.<br />
+                  Every Available Crypto Pair.<br />
                   <span className="gradient-text-gold">One Terminal.</span>
                 </h1>
               </motion.div>
@@ -412,9 +412,9 @@ export default function TerminalPage() {
                 animate={heroInView ? 'visible' : 'hidden'}
                 className="text-[17px] text-[#A1A1AA] leading-[1.75] max-w-[500px]"
               >
-                TradeNet Terminal aggregates live orderflow from Binance, Bybit, OKX, and Hyperliquid
-                into a single terminal. The new Tauri architecture keeps credentials and trusted
-                actions in Rust while the UI focuses on fast charts, panes, Lua tools, DOM, and tape.
+                TradeNet charts candles and volume across every available Binance, Bybit, OKX,
+                and Hyperliquid pair. BTC, ETH, and SOL add full multi-venue aggregation, heatmaps,
+                Footprint, DOM, Tape, OI, CVD, Lua tools, and deeper market data.
               </motion.p>
 
               <motion.div
@@ -444,9 +444,9 @@ export default function TerminalPage() {
                 className="grid grid-cols-4 gap-px bg-white/[0.05] rounded-2xl overflow-hidden border border-white/[0.05] max-w-md"
               >
                 {[
-                  { val: 'Multi',     label: 'Exchange' },
-                  { val: 'BTC ETH SOL', label: 'Core' },
-                  { val: 'Real-Time', label: 'Heatmaps' },
+                  { val: '4',           label: 'Exchanges' },
+                  { val: 'All',         label: 'Available pairs' },
+                  { val: 'BTC ETH SOL', label: 'Full stack' },
                   { val: 'Tauri',     label: 'Desktop' },
                 ].map(({ val, label }) => (
                   <div key={label} className="flex flex-col items-center justify-center gap-1 py-4 px-2 bg-[#0e0e10]">
@@ -524,7 +524,7 @@ export default function TerminalPage() {
             <ul className="space-y-2.5 mb-8">
               {(BETA_CHECKOUT_VISIBLE
                 ? [
-                    'Full terminal and protected market data access',
+                    'All-pair charting plus flagship orderflow access',
                     'Private founding terms for invited waitlist accounts',
                     'Direct feedback channel with the team',
                     'Beta builds and ongoing updates',
