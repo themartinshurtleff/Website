@@ -53,7 +53,7 @@ export default function HeroSection() {
         <Suspense fallback={null}>
           <OrderflowTopology />
         </Suspense>
-        <figcaption>Current desktop beta / market structure visualization</figcaption>
+        <figcaption>Current desktop beta / crypto market structure</figcaption>
       </motion.figure>
 
       <div className="tn-hero-copy">
@@ -65,10 +65,10 @@ export default function HeroSection() {
           />
         </motion.h1>
         <motion.p className="tn-hero-tagline" variants={reveal} custom={0.14} initial="hidden" animate="visible">
-          Market intelligence and orderflow
+          Crypto market intelligence and orderflow
         </motion.p>
         <motion.p className="tn-hero-intro" variants={reveal} custom={0.19} initial="hidden" animate="visible">
-          Multi-venue heatmaps, footprint charts, DOM, Tape, OI, CVD, Lua indicators, backtesting, and paper-first execution for BTC, ETH, and SOL.
+          Every available crypto pair across Binance, Bybit, OKX, and Hyperliquid, with full multi-venue orderflow for BTC, ETH, and SOL.
         </motion.p>
         <motion.div className="tn-hero-actions" variants={reveal} custom={0.27} initial="hidden" animate="visible">
           <button className="tn-button-primary" onClick={handlePrimaryAction}>

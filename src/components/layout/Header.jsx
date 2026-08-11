@@ -83,6 +83,9 @@ export default function Header() {
               alt="TradeNet"
               className="h-[30px] w-auto"
             />
+            <span className="hidden sm:block lg:hidden xl:block ml-4 pl-4 border-l border-white/[0.14] text-[11px] leading-[1.25] font-semibold uppercase text-[#C2C3BE]">
+              Crypto orderflow
+            </span>
           </Link>
 
           {/* Desktop nav */}

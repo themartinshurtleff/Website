@@ -172,7 +172,7 @@
 }
 
 .tn-hero-intro {
-  max-width: 640px;
+  max-width: 600px;
   margin: 16px 0 0;
   color: #a1a29d;
   font-size: 16px;
@@ -677,6 +677,14 @@
   line-height: 1.7;
 }
 
+.tn-market-copy > .tn-market-boundary {
+  margin-top: 13px;
+  color: #d7c583;
+  font-size: 12px;
+  font-weight: 680;
+  line-height: 1.5;
+}
+
 .tn-market-actions {
   display: flex;
   align-items: center;
@@ -783,12 +791,20 @@
   text-wrap: balance;
 }
 
-.tn-pricing-heading > p:last-child {
+.tn-pricing-heading > p:not(.tn-pricing-market-note) {
   max-width: 660px;
   margin: 22px auto 0;
   color: var(--tn-muted);
   font-size: 16px;
   line-height: 1.65;
+}
+
+.tn-pricing-heading > .tn-pricing-market-note:last-child {
+  margin-top: 12px;
+  color: #b8aa78;
+  font-size: 12px;
+  font-weight: 680;
+  line-height: 1.5;
 }
 
 .tn-price-grid {
@@ -1278,7 +1294,7 @@
 
   .tn-section-heading > p,
   .tn-system-heading > p,
-  .tn-pricing-heading > p:last-child {
+  .tn-pricing-heading > p:not(.tn-pricing-market-note) {
     font-size: 14px;
   }
 

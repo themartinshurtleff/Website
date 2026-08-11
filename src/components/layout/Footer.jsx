@@ -16,7 +16,7 @@ export default function Footer() {
               />
             </Link>
             <p className="text-sm text-[#71717A] leading-relaxed">
-              Crypto orderflow, research, and paper-first execution in one desktop terminal.
+              Crypto-native orderflow, research, and paper-first execution in one desktop terminal.
             </p>
           </div>
 

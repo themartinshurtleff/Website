@@ -45,12 +45,16 @@ export default function MarketCoverageSection() {
         transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
       >
         <h2 id="market-coverage-title">
-          Binance, Bybit, OKX, and Hyperliquid.
-          <span>One terminal built to read them together.</span>
+          Crypto markets across four exchanges.
+          <span>Every available pair, with full orderflow on BTC, ETH, and SOL.</span>
         </h2>
         <p>
-          Keep heatmaps, footprint, depth, Tape, OI, and CVD in the same workspace instead
-          of rebuilding the trade across separate exchange tabs.
+          Chart crypto candles and volume across Binance, Bybit, OKX, and Hyperliquid.
+          BTC, ETH, and SOL unlock the complete multi-venue view with aggregation, heatmaps,
+          Footprint, DOM, Tape, OI, CVD, and raw trade data.
+        </p>
+        <p className="tn-market-boundary">
+          Crypto exchange markets only. CME products such as NQ and ES are not currently supported.
         </p>
         <div className="tn-market-actions">
           <button
@@ -74,7 +78,7 @@ export default function MarketCoverageSection() {
         initial={{ opacity: 0 }}
         animate={inView ? { opacity: 1 } : {}}
         transition={{ duration: 0.6, delay: 0.28 }}
-        aria-label="Supported core futures venues"
+        aria-label="Supported exchanges"
       >
         {venues.map((venue) => <li key={venue}>{venue}</li>)}
       </motion.ul>
