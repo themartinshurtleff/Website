@@ -91,7 +91,7 @@
 .about-hero h1 span {
   margin-bottom: 12px;
   color: var(--about-gold);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: inherit;
   font-size: 14px;
   font-weight: 760;
   letter-spacing: 0;
@@ -181,7 +181,7 @@
 .about-hero-facts dd {
   margin: 5px 0 0;
   color: #e0e1dc;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: inherit;
   font-size: 11px;
 }
 
@@ -198,7 +198,6 @@
 
 .about-section-heading h2,
 .about-founders-heading h2,
-.about-build-heading h2,
 .about-principles-heading h2,
 .about-cta h2 {
   margin: 15px 0 0;
@@ -291,7 +290,7 @@
   align-items: center;
   justify-content: space-between;
   color: var(--about-dim);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: inherit;
   font-size: 9px;
   text-transform: uppercase;
 }
@@ -314,7 +313,7 @@
   border-radius: 4px;
   color: var(--about-text);
   background: #0d0f0f;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: inherit;
   font-size: 22px;
   font-weight: 760;
 }
@@ -364,7 +363,7 @@
   padding: 12px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   color: #8d8f89;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: inherit;
   font-size: 10px;
 }
 
@@ -389,94 +388,10 @@
   color: var(--about-text);
 }
 
-.about-build {
-  padding: 88px 0;
-  border-bottom: 1px solid var(--about-line);
-}
-
-.about-build-heading {
-  max-width: 760px;
-}
-
-.about-build-phases {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin-top: 46px;
-  border-top: 1px solid var(--about-line);
-  border-bottom: 1px solid var(--about-line);
-}
-
-.about-build-phases article {
-  min-height: 300px;
-  padding: 24px 28px 30px;
-  border-right: 1px solid var(--about-line);
-}
-
-.about-build-phases article:last-child {
-  border-right: 0;
-}
-
-.about-phase-number {
-  color: var(--about-dim);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 10px;
-}
-
-.about-phase-label {
-  margin: 46px 0 0;
-  color: var(--about-gold);
-  font-size: 10px;
-  font-weight: 760;
-  text-transform: uppercase;
-}
-
-.about-build-phases h3 {
-  margin: 14px 0 0;
-  color: var(--about-text);
-  font-size: 23px;
-  font-weight: 720;
-  letter-spacing: 0;
-  line-height: 1.2;
-}
-
-.about-phase-copy {
-  margin: 18px 0 0;
-  color: var(--about-muted);
-  font-size: 14px;
-  line-height: 1.72;
-}
-
-.about-product-figure {
-  margin: 48px 0 0;
-  overflow: hidden;
-  border-top: 1px solid var(--about-line);
-  border-bottom: 1px solid var(--about-line);
-  background: #050606;
-}
-
-.about-product-figure img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 1.9 / 1;
-  object-fit: cover;
-  object-position: center top;
-}
-
-.about-product-figure figcaption {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 14px;
-  color: var(--about-dim);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 9px;
-  text-transform: uppercase;
-}
-
 .about-principles {
   padding: 88px 0;
   border-bottom: 1px solid var(--about-line);
-  background: #050606;
+  background: #020303;
 }
 
 .about-principles-grid {
@@ -608,7 +523,6 @@
 
   .about-origin,
   .about-founders,
-  .about-build,
   .about-principles {
     padding: 68px 0;
   }
@@ -622,7 +536,6 @@
 
   .about-section-heading h2,
   .about-founders-heading h2,
-  .about-build-heading h2,
   .about-principles-heading h2 {
     font-size: 38px;
   }
@@ -637,24 +550,6 @@
 
   .about-founder {
     min-height: 560px;
-  }
-
-  .about-build-phases {
-    grid-template-columns: 1fr;
-  }
-
-  .about-build-phases article {
-    min-height: auto;
-    border-right: 0;
-    border-bottom: 1px solid var(--about-line);
-  }
-
-  .about-build-phases article:last-child {
-    border-bottom: 0;
-  }
-
-  .about-phase-label {
-    margin-top: 34px;
   }
 
   .about-cta-inner {
@@ -720,7 +615,6 @@
 
   .about-section-heading h2,
   .about-founders-heading h2,
-  .about-build-heading h2,
   .about-principles-heading h2,
   .about-cta h2 {
     font-size: 32px;
@@ -751,17 +645,4 @@
     margin-top: 24px;
   }
 
-  .about-build-phases article {
-    padding-inline: 18px;
-  }
-
-  .about-product-figure img {
-    aspect-ratio: 1.25 / 1;
-  }
-
-  .about-product-figure figcaption {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 5px;
-  }
 }

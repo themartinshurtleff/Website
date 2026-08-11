@@ -83,9 +83,6 @@ export default function Header() {
               alt="TradeNet"
               className="h-[30px] w-auto"
             />
-            <span className="hidden sm:block lg:hidden xl:block ml-4 pl-4 border-l border-white/[0.14] text-[11px] leading-[1.25] font-semibold uppercase text-[#C2C3BE]">
-              Crypto orderflow
-            </span>
           </Link>
 
           {/* Desktop nav */}
@@ -113,10 +110,10 @@ export default function Header() {
                   href={WEB_TERMINAL_URL}
                   target="_blank"
                   rel="noreferrer"
-                  className="site-header-cta flex items-center gap-2 bg-[#c9a84c] hover:bg-[#f0c040] text-black font-semibold text-sm px-4 py-2 rounded-md transition-colors"
+                  className="site-header-cta flex h-8 items-center gap-1.5 bg-[#c9a84c] hover:bg-[#f0c040] text-black font-semibold text-xs px-3 rounded-md transition-colors"
                 >
                   Open Terminal
-                  <ExternalLink size={14} />
+                  <ExternalLink size={12} />
                 </a>
                 {hasDesktopAccess && (
                   <button

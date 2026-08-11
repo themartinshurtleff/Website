@@ -68,7 +68,7 @@ export default function TerminalTeaserSection() {
     <section id="terminal-showcase" ref={ref} className="tn-products">
       <div className="tn-container">
         <motion.header
-          className="tn-section-heading"
+          className="tn-section-heading tn-section-heading-solo"
           initial={{ opacity: 0, y: 28 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
@@ -76,7 +76,6 @@ export default function TerminalTeaserSection() {
           <div>
             <h2>See the current terminal in full.</h2>
           </div>
-          <p>Start with the six-pane canvas, then open the individual orderflow, profile, and research tools that make up the desk.</p>
         </motion.header>
 
         <motion.div

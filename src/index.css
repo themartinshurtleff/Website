@@ -125,7 +125,7 @@
 .home-product-name {
   margin-bottom: 18px;
   color: #d9b54f;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: inherit;
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -215,7 +215,7 @@
 .home-hero-facts dd {
   margin-top: 4px;
   color: #d8d8d2;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: inherit;
   font-size: 11px;
 }
 
@@ -258,7 +258,7 @@
 .home-market-rail-items span {
   padding: 0 18px;
   color: #8e918c;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: inherit;
   font-size: 10px;
   letter-spacing: 0.04em;
   white-space: nowrap;
@@ -292,7 +292,7 @@
   display: block;
   margin-bottom: 15px;
   color: #d3ae4c;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: inherit;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -385,7 +385,7 @@
 
 .home-product-chrome p {
   color: #636662;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: inherit;
   font-size: 8px;
   letter-spacing: 0.1em;
 }
@@ -417,7 +417,7 @@
 
 .home-product-copy > div > span {
   color: #d7b34f;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: inherit;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -496,7 +496,7 @@
   display: flex;
   align-items: center;
   color: #555954;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: inherit;
   font-size: 10px;
 }
 
@@ -535,7 +535,7 @@
 
 .home-workflow li {
   color: #acafa9;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: inherit;
   font-size: 9px;
   text-transform: uppercase;
 }
@@ -566,7 +566,7 @@
 
 .home-capability-label {
   color: #9b8150;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: inherit;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -727,7 +727,7 @@
 
 .home-launch-path > li > span {
   color: rgba(0, 0, 0, 0.48);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: inherit;
   font-size: 11px;
 }
 

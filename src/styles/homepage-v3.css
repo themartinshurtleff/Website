@@ -135,7 +135,7 @@
   border-radius: 3px;
   color: rgba(255, 255, 255, 0.58);
   background: rgba(0, 0, 0, 0.78);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: inherit;
   font-size: 8px;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -252,6 +252,10 @@
   margin-top: 0;
 }
 
+.tn-section-heading-solo {
+  display: block;
+}
+
 .tn-section-heading > p,
 .tn-system-heading > p {
   color: var(--tn-muted);
@@ -335,7 +339,7 @@
 
 .tn-product-tabs span {
   color: #555752;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: inherit;
   font-size: 9px;
 }
 
@@ -389,7 +393,7 @@
   border-top: 1px solid var(--tn-border);
   color: #656762;
   background: #080909;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: inherit;
   font-size: 8px;
   text-transform: uppercase;
 }
@@ -493,7 +497,7 @@
 
 .tn-stage-number {
   color: rgba(215, 181, 82, 0.48);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: inherit;
   font-size: 42px;
   font-weight: 620;
   line-height: 0.9;
