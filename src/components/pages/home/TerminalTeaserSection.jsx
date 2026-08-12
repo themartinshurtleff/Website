@@ -49,8 +49,8 @@ const productViews = [
   },
   {
     id: 'lua',
-    image: '/newshowcase/luaalgo.png',
-    alt: 'TradeNet Lua editor beneath a chart running a custom market-structure algorithm',
+    image: '/panel-previews/lua-replay-indicator.png',
+    alt: 'TradeNet Lua editor beside a crypto heatmap chart with a custom market-structure algorithm enabled',
     label: 'Lua and algorithms',
     title: 'Build market logic inside the terminal.',
     body: 'Write, validate, and run custom Lua indicators against terminal-owned data. Keep the editor, diagnostics, logs, and chart output in the same workspace.',
@@ -68,28 +68,27 @@ export default function TerminalTeaserSection() {
     <section id="terminal-showcase" ref={ref} className="tn-products">
       <div className="tn-container">
         <motion.header
-          className="tn-section-heading"
-          initial={{ opacity: 0, y: 28 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7 }}
+          className="tn-section-heading tn-section-heading-solo"
+          initial={{ opacity: 0, y: 46, filter: 'blur(10px)' }}
+          animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
+          transition={{ duration: 0.82, ease: [0.22, 1, 0.36, 1] }}
         >
           <div>
             <h2>See the current terminal in full.</h2>
           </div>
-          <p>Start with the six-pane canvas, then open the individual orderflow, profile, and research tools that make up the desk.</p>
         </motion.header>
 
         <motion.div
           className="tn-product-explorer"
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.75, delay: 0.08 }}
+          initial={{ opacity: 0, y: 58, scale: 0.985 }}
+          animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+          transition={{ duration: 0.88, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
         >
           <div id="features" className="tn-product-tabs" role="tablist" aria-label="Terminal features">
             {productViews.map((view, index) => {
               const selected = activeView.id === view.id
               return (
-                <button
+                <motion.button
                   key={view.id}
                   id={`terminal-tab-${view.id}`}
                   type="button"
@@ -98,11 +97,16 @@ export default function TerminalTeaserSection() {
                   aria-controls="terminal-view-panel"
                   className={selected ? 'is-active' : ''}
                   onClick={() => setActiveId(view.id)}
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={inView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.5, delay: 0.16 + index * 0.055, ease: [0.22, 1, 0.36, 1] }}
+                  whileHover={{ y: -3 }}
+                  whileTap={{ scale: 0.985 }}
                 >
                   <span>{String(index + 1).padStart(2, '0')}</span>
                   <strong>{view.label}</strong>
                   <small>{view.title}</small>
-                </button>
+                </motion.button>
               )
             })}
           </div>

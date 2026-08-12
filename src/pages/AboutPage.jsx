@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import {
   ArrowRight,
   Gauge,
-  Github,
   Layers,
   Linkedin,
   Mail,
@@ -57,30 +56,8 @@ const founders = [
     ],
     links: [
       { label: 'LinkedIn', href: 'https://www.linkedin.com/in/constantine-beseris-b624a0291/', icon: Linkedin },
-      { label: 'GitHub', href: 'https://github.com/Steen0x', icon: Github },
       { label: 'Email', href: 'mailto:constantine@tradenet.org', icon: Mail },
     ],
-  },
-]
-
-const buildPhases = [
-  {
-    number: '01',
-    label: 'The beginning',
-    title: 'Ask traders what they would actually keep open.',
-    body: 'We started with interviews, rough layouts, and blunt conversations about what existing platforms got wrong. The useful answers were specific, so the product stayed specific.',
-  },
-  {
-    number: '02',
-    label: 'The rebuild',
-    title: 'Turn the workflow into a real desktop terminal.',
-    body: 'TradeNet grew into a native Tauri application with multi-pane workspaces, server-backed market data, custom indicators, backtesting, and paper-first execution.',
-  },
-  {
-    number: '03',
-    label: 'Right now',
-    title: 'Prove it under real use before opening the doors.',
-    body: 'The current work is controlled beta testing, stress testing, and reliability. Access is opening in stages because the terminal needs to hold up on a trader\'s desk, not only in a demo.',
   },
 ]
 
@@ -238,47 +215,6 @@ export default function AboutPage() {
               <FounderProfile key={founder.name} founder={founder} index={index} />
             ))}
           </div>
-        </div>
-      </section>
-
-      <section className="about-build">
-        <div className="about-shell">
-          <div className="about-build-heading">
-            <p className="about-kicker">The build</p>
-            <h2>From conversations to a terminal people can test.</h2>
-          </div>
-
-          <div className="about-build-phases">
-            {buildPhases.map((phase, index) => (
-              <motion.article
-                key={phase.number}
-                variants={reveal}
-                custom={index * 0.08}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: '-60px' }}
-              >
-                <div className="about-phase-number">{phase.number}</div>
-                <p className="about-phase-label">{phase.label}</p>
-                <h3>{phase.title}</h3>
-                <p className="about-phase-copy">{phase.body}</p>
-              </motion.article>
-            ))}
-          </div>
-
-          <motion.figure
-            className="about-product-figure"
-            variants={reveal}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-80px' }}
-          >
-            <img src="/tradinghero.png" alt="TradeNet terminal charting and paper execution workspace" loading="lazy" />
-            <figcaption>
-              <span>Current terminal build</span>
-              <span>Orderflow / research / paper-first execution</span>
-            </figcaption>
-          </motion.figure>
         </div>
       </section>
 

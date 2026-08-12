@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect } from 'react'
 import { Navigate, Routes, Route, useLocation, useNavigate } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, MotionConfig, motion } from 'framer-motion'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import { supabase } from '@/lib/supabase'
@@ -41,10 +41,10 @@ const noFooterRoutes = ['/thankyou', '/admin/dashboard']
 function PageWrapper({ children }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -8 }}
-      transition={{ duration: 0.3, ease: 'easeInOut' }}
+      initial={{ opacity: 0, y: 12, filter: 'blur(5px)' }}
+      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      exit={{ opacity: 0, y: -10, filter: 'blur(4px)' }}
+      transition={{ duration: 0.46, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
@@ -104,7 +104,7 @@ export default function App() {
   const showHeader  = !referralRoute && !noHeaderRoutes.includes(location.pathname)
   const showFooter  = !referralRoute && !noFooterRoutes.includes(location.pathname)
   return (
-    <>
+    <MotionConfig reducedMotion="user">
       <PasswordRecoveryRedirect />
       <ScrollToTop />
       {showHeader && <Header />}
@@ -144,6 +144,6 @@ export default function App() {
       {showFooter && <Footer />}
       <Analytics />
       <SpeedInsights />
-    </>
+    </MotionConfig>
   )
 }

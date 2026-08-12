@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, useInView } from 'framer-motion'
 import { ArrowDown, ArrowRight } from 'lucide-react'
+import TerminalLoopVideo from '@/components/media/TerminalLoopVideo'
 import { useAuth } from '@/contexts/AuthContext'
 
 const venues = ['Binance', 'Bybit', 'OKX', 'Hyperliquid']
@@ -30,19 +31,35 @@ export default function MarketCoverageSection() {
   return (
     <section ref={ref} className="tn-market-coverage" aria-labelledby="market-coverage-title">
       <div className="tn-market-mosaic" aria-hidden="true">
-        {screens.map((screen) => (
-          <figure key={screen.src}>
+        {screens.map((screen, index) => (
+          <motion.figure
+            key={screen.src}
+            initial={{ opacity: 0, scale: 1.06 }}
+            animate={inView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 1.05, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+          >
             <img src={screen.src} alt="" loading="lazy" style={{ objectPosition: screen.position }} />
-          </figure>
+          </motion.figure>
         ))}
       </div>
+      <motion.figure
+        className="tn-market-live-layer"
+        aria-hidden="true"
+        initial={{ opacity: 0, scale: 1.035 }}
+        animate={inView ? { opacity: 1, scale: 1 } : {}}
+        transition={{ duration: 1.1, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <TerminalLoopVideo
+          alt=""
+        />
+      </motion.figure>
       <div className="tn-market-shade" aria-hidden="true" />
 
       <motion.div
         className="tn-market-copy"
-        initial={{ opacity: 0, y: 26 }}
-        animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
+        initial={{ opacity: 0, y: 52, filter: 'blur(10px)' }}
+        animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
+        transition={{ duration: 0.86, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
       >
         <h2 id="market-coverage-title">
           Crypto markets across four exchanges.
@@ -75,9 +92,9 @@ export default function MarketCoverageSection() {
 
       <motion.ul
         className="tn-venue-rail"
-        initial={{ opacity: 0 }}
-        animate={inView ? { opacity: 1 } : {}}
-        transition={{ duration: 0.6, delay: 0.28 }}
+        initial={{ opacity: 0, y: 24 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.72, delay: 0.34, ease: [0.22, 1, 0.36, 1] }}
         aria-label="Supported exchanges"
       >
         {venues.map((venue) => <li key={venue}>{venue}</li>)}
