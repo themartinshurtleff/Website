@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import AuroraBackground from '@/components/common/AuroraBackground'
 import WaitlistForm from '@/components/common/WaitlistForm'
+import TerminalLoopVideo from '@/components/media/TerminalLoopVideo'
 import { BETA_CHECKOUT_VISIBLE } from '@/lib/launchConfig'
 
 // Animation helpers
@@ -463,11 +464,10 @@ export default function TerminalPage() {
               animate={heroInView ? { opacity: 1, x: 0 } : {}}
               transition={{ delay: 0.3, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
-              <img
-                src="/herogif.gif"
+              <TerminalLoopVideo
                 alt="TradeNet Terminal live orderflow workspace"
                 className="w-full rounded-[22px] border border-white/[0.08] shadow-2xl object-contain object-center bg-[#050506]"
-                loading="eager"
+                priority
                 style={{ aspectRatio: '16/9' }}
               />
             </motion.div>

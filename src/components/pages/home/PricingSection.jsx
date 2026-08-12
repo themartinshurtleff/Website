@@ -17,12 +17,35 @@ import { BETA_CHECKOUT_VISIBLE } from '@/lib/launchConfig'
 import { getPricingContext, PLANS, startCheckout } from '@/lib/checkout'
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 42, filter: 'blur(8px)' },
   visible: (i = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.1, duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+    filter: 'blur(0px)',
+    transition: { delay: i * 0.11, duration: 0.76, ease: [0.22, 1, 0.36, 1] },
   }),
+}
+
+const pricingGrid = {
+  hidden: {},
+  visible: {
+    transition: { delayChildren: 0.08, staggerChildren: 0.1 },
+  },
+}
+
+const pricingCard = {
+  hidden: { opacity: 0, y: 46, scale: 0.985 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.76, ease: [0.22, 1, 0.36, 1] },
+  },
+}
+
+const pricingInteraction = {
+  whileHover: { y: -7, scale: 1.01 },
+  transition: { type: 'spring', stiffness: 260, damping: 24 },
 }
 
 const launchSteps = [
@@ -372,9 +395,9 @@ function CheckoutPricingSection({ standalone = false }) {
       <div className="tn-container">
         <motion.header
           className="tn-pricing-heading"
-          initial={{ opacity: 0, y: 24 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.65 }}
+          initial={{ opacity: 0, y: 46, filter: 'blur(10px)' }}
+          animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
+          transition={{ duration: 0.82, ease: [0.22, 1, 0.36, 1] }}
         >
           <h2 id="pricing-title">Free crypto preview or the full terminal.</h2>
           <p>
@@ -389,11 +412,11 @@ function CheckoutPricingSection({ standalone = false }) {
 
         <motion.div
           className="tn-price-grid"
-          initial={{ opacity: 0, y: 28 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.1 }}
+          variants={pricingGrid}
+          initial="hidden"
+          animate={inView ? 'visible' : 'hidden'}
         >
-          <article className="tn-price-card tn-price-card-free">
+          <motion.article className="tn-price-card tn-price-card-free" variants={pricingCard} {...pricingInteraction}>
             <div className="tn-plan-heading">
               <div>
                 <p className="tn-plan-name">Free</p>
@@ -421,9 +444,9 @@ function CheckoutPricingSection({ standalone = false }) {
               {user ? 'View your account' : 'Start free'}
               <ArrowRight size={16} />
             </button>
-          </article>
+          </motion.article>
 
-          <article className="tn-price-card">
+          <motion.article className="tn-price-card" variants={pricingCard} {...pricingInteraction}>
             <div className="tn-plan-heading">
               <div>
                 <p className="tn-plan-name">Pro Monthly</p>
@@ -454,9 +477,9 @@ function CheckoutPricingSection({ standalone = false }) {
               {buttonLabel('monthly')}
               {!buyingPlan && <ArrowRight size={16} />}
             </button>
-          </article>
+          </motion.article>
 
-          <article className="tn-price-card tn-price-card-featured">
+          <motion.article className="tn-price-card tn-price-card-featured" variants={pricingCard} {...pricingInteraction}>
             <div className="tn-plan-heading">
               <div>
                 <p className="tn-plan-name">Pro Annual</p>
@@ -489,7 +512,7 @@ function CheckoutPricingSection({ standalone = false }) {
               {buttonLabel('annual')}
               {!buyingPlan && <ArrowRight size={16} />}
             </button>
-          </article>
+          </motion.article>
         </motion.div>
 
         {(checkoutError || contextError) && (
@@ -498,9 +521,9 @@ function CheckoutPricingSection({ standalone = false }) {
 
         <motion.div
           className="tn-founding-offer"
-          initial={{ opacity: 0, y: 18 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.22 }}
+          transition={{ duration: 0.72, delay: 0.34, ease: [0.22, 1, 0.36, 1] }}
         >
           <ShieldCheck size={22} />
           <div>
