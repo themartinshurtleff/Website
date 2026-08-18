@@ -65,10 +65,11 @@ export function AuthProvider({ children }) {
     return () => subscription.unsubscribe()
   }, [])
 
-  async function signUp(email, password, emailRedirectTo, captchaToken) {
+  async function signUp(email, password, emailRedirectTo, captchaToken, marketingOptIn = false) {
     const options = {}
     if (emailRedirectTo) options.emailRedirectTo = emailRedirectTo
     if (captchaToken) options.captchaToken = captchaToken
+    options.data = { marketing_opt_in: Boolean(marketingOptIn) }
     const { data, error } = await supabase.auth.signUp({ email, password, options })
     if (error) throw error
     return data

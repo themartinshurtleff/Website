@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase'
 import { WEB_TERMINAL_URL } from '@/lib/launchConfig'
+import { recordLifecycleMilestone } from '@/lib/lifecycle'
 
 const PROTOCOL_VERSION = 1
 const HANDOFF_PARAM = 'tn_handoff'
@@ -117,6 +118,10 @@ async function openTerminalWithHandoff() {
         ready = true
         maybeSend()
       } else if (message.type === ACCEPTED_MESSAGE && sent) {
+        void recordLifecycleMilestone('activated', 'web_terminal_handoff', {
+          platform: 'web',
+          activation_marker: 'session_accepted',
+        }).catch(() => console.warn('Terminal activation milestone could not be recorded.'))
         finish()
       } else if (message.type === REJECTED_MESSAGE) {
         finish(new Error('terminal_session_rejected'))

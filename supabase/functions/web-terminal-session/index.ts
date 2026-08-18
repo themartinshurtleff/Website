@@ -51,7 +51,9 @@ Deno.serve(async (req) => {
         detectSessionInUrl: false,
       },
     });
-    const { data: authData, error: authError } = await service.auth.getUser(token);
+    const { data: authData, error: authError } = await service.auth.getUser(
+      token,
+    );
     const user = authData?.user;
     if (authError || !user?.id || !user.email) {
       return accountJson(req, { error: "invalid_auth" }, 401);
@@ -73,6 +75,25 @@ Deno.serve(async (req) => {
         linkError?.message || "invalid_generate_link_response",
       );
       return accountJson(req, { error: "session_issue_failed" }, 500);
+    }
+
+    const { error: lifecycleError } = await service.rpc(
+      "record_lifecycle_milestone",
+      {
+        p_user_id: user.id,
+        p_milestone: "trial_started",
+        p_source: "web_terminal_handoff",
+        p_properties: {
+          platform: "web",
+          activation_marker: "session_issued",
+        },
+      },
+    );
+    if (lifecycleError) {
+      console.error(
+        "web-terminal-session lifecycle milestone failed",
+        lifecycleError.code,
+      );
     }
 
     return accountJson(req, {
