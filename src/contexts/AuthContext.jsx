@@ -96,10 +96,12 @@ export function AuthProvider({ children }) {
     return data
   }
 
-  async function signOut() {
-    const { error } = await supabase.auth.signOut()
-    if (error) throw error
+  async function signOut(options) {
+    const { error } = await supabase.auth.signOut(options)
+    setSession(null)
+    setUser(null)
     setProfile(null)
+    if (error) throw error
   }
 
   return (
