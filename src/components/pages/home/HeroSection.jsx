@@ -7,8 +7,8 @@ import { useAuth } from '@/contexts/AuthContext'
 import {
   PRIMARY_LAUNCH_LABEL,
   PRIMARY_LAUNCH_PATH,
-  WEB_TERMINAL_URL,
 } from '@/lib/launchConfig'
+import { launchWebTerminal } from '@/lib/webTerminalLaunch'
 
 const OrderflowTopology = lazy(() => import('./OrderflowTopology'))
 
@@ -30,7 +30,7 @@ export default function HeroSection() {
 
   const handlePrimaryAction = () => {
     if (user) {
-      window.open(WEB_TERMINAL_URL, '_blank', 'noopener,noreferrer')
+      void launchWebTerminal().catch(() => null)
       return
     }
     navigate(PRIMARY_LAUNCH_PATH)

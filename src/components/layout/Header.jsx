@@ -6,8 +6,8 @@ import { useAuth } from '@/contexts/AuthContext'
 import {
   PRIMARY_LAUNCH_LABEL,
   PRIMARY_LAUNCH_PATH,
-  WEB_TERMINAL_URL,
 } from '@/lib/launchConfig'
+import { launchWebTerminal } from '@/lib/webTerminalLaunch'
 
 const navLinks = [
   { label: 'Terminal',  to: '/#terminal-showcase' },
@@ -55,6 +55,11 @@ export default function Header() {
 
   function handlePrimaryLaunchAction() {
     handleNav(PRIMARY_LAUNCH_PATH, false)
+  }
+
+  function handleTerminalLaunch() {
+    setOpen(false)
+    void launchWebTerminal().catch(() => null)
   }
 
   const isActive = (to) => {
@@ -106,15 +111,14 @@ export default function Header() {
           <div className="hidden lg:flex items-center gap-3">
             {user ? (
               <>
-                <a
-                  href={WEB_TERMINAL_URL}
-                  target="_blank"
-                  rel="noreferrer"
+                <button
+                  type="button"
+                  onClick={handleTerminalLaunch}
                   className="site-header-cta flex h-8 items-center gap-1.5 bg-[#c9a84c] hover:bg-[#f0c040] text-black font-semibold text-xs px-3 rounded-md transition-colors"
                 >
                   Open Terminal
                   <ExternalLink size={12} />
-                </a>
+                </button>
                 {hasDesktopAccess && (
                   <button
                     onClick={() => navigate('/download')}
@@ -210,15 +214,14 @@ export default function Header() {
               <div className="pt-2 border-t border-white/[0.06] mt-2 space-y-2">
                 {user ? (
                   <>
-                    <a
-                      href={WEB_TERMINAL_URL}
-                      target="_blank"
-                      rel="noreferrer"
+                    <button
+                      type="button"
+                      onClick={handleTerminalLaunch}
                       className="w-full flex items-center justify-center gap-2 bg-[#c9a84c] hover:bg-[#f0c040] text-black font-semibold text-sm px-5 py-2.5 rounded-md transition-colors"
                     >
                       Open Terminal
                       <ExternalLink size={15} />
-                    </a>
+                    </button>
                     {hasDesktopAccess && (
                       <button
                         onClick={() => navigate('/download')}
