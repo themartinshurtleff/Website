@@ -21,7 +21,7 @@ function safeRedirectTarget(rawRedirect, type) {
     }
   }
 
-  if (type === 'email_change') return '/account'
+  if (type === 'email_change') return '/account?email_changed=1'
   return '/account'
 }
 
