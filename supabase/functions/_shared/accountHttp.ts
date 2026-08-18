@@ -2,6 +2,9 @@ const ALLOWED_ORIGINS = new Set([
   "https://tradenet.org",
   "https://www.tradenet.org",
   "https://app.tradenet.org",
+  "tauri://localhost",
+  "http://tauri.localhost",
+  "https://tauri.localhost",
 ]);
 
 function localOrigin(origin: string): boolean {
