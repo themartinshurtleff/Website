@@ -32,6 +32,7 @@ import {
   syncAccountEmail,
 } from '@/lib/accountSettings'
 import { BETA_CHECKOUT_VISIBLE } from '@/lib/launchConfig'
+import { launchWebTerminal } from '@/lib/webTerminalLaunch'
 import '@/styles/account-page.css'
 
 const tierLabels = {
@@ -383,11 +384,15 @@ export default function AccountPage() {
             </div>
 
             <div className="account-action-list">
-              <a href="https://app.tradenet.org/" className="account-action-row account-action-primary">
+              <button
+                type="button"
+                className="account-action-row account-action-primary"
+                onClick={() => void launchWebTerminal().catch(() => null)}
+              >
                 <span><MonitorUp size={17} /></span>
                 <div><strong>Open web terminal</strong><small>Launch TradeNet in your browser</small></div>
                 <ExternalLink size={15} />
-              </a>
+              </button>
 
               {isElevated && (
                 <Link to="/download" className="account-action-row">
