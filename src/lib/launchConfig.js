@@ -5,4 +5,5 @@ export const PRIMARY_LAUNCH_PATH = '/signup'
 
 export const PRIMARY_LAUNCH_LABEL = 'Try for Free'
 
-export const WEB_TERMINAL_URL = 'https://app.tradenet.org/'
+export const WEB_TERMINAL_URL =
+  import.meta.env.VITE_WEB_TERMINAL_URL || 'https://app.tradenet.org/'

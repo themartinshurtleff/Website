@@ -9,6 +9,7 @@ export default function SignUpPage() {
   const [email, setEmail]       = useState('')
   const [password, setPassword] = useState('')
   const [confirm, setConfirm]   = useState('')
+  const [marketingOptIn, setMarketingOptIn] = useState(false)
   const [error, setError]       = useState('')
   const [loading, setLoading]   = useState(false)
   const [captchaToken, setCaptchaToken] = useState('')
@@ -43,7 +44,7 @@ export default function SignUpPage() {
     try {
       const normalizedEmail = email.trim().toLowerCase()
       const redirectTo = new URL(returnTo, window.location.origin).toString()
-      const data = await signUp(normalizedEmail, password, redirectTo, captchaToken)
+      const data = await signUp(normalizedEmail, password, redirectTo, captchaToken, marketingOptIn)
       if (data.session) navigate(returnTo)
       else setConfirmationEmail(normalizedEmail)
     } catch (err) {
@@ -133,6 +134,21 @@ export default function SignUpPage() {
             />
           </div>
 
+          <label
+            htmlFor="marketing-opt-in"
+            className="flex cursor-pointer items-start gap-3 rounded-lg border border-white/[0.08] px-3.5 py-3 text-sm text-[#A1A1AA] transition-colors hover:border-white/[0.14]"
+          >
+            <input
+              id="marketing-opt-in"
+              type="checkbox"
+              checked={marketingOptIn}
+              onChange={e => setMarketingOptIn(e.target.checked)}
+              disabled={loading}
+              className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-[#c9a84c] disabled:cursor-not-allowed"
+            />
+            <span>Send me product updates, launch news, and occasional offers.</span>
+          </label>
+
           <AuthCaptcha
             ref={captchaRef}
             action="signup"
@@ -154,7 +170,9 @@ export default function SignUpPage() {
 
         <p className="text-[11px] text-[#3F3F46] mt-6 text-center leading-relaxed">
           By creating an account you agree to our{' '}
-          <Link to="/terms-of-service" className="underline hover:text-[#71717A]">Terms of Service</Link>.
+          <Link to="/terms-of-service" className="underline hover:text-[#71717A]">Terms of Service</Link>
+          {' '}and acknowledge our{' '}
+          <Link to="/privacy-policy" className="underline hover:text-[#71717A]">Privacy Policy</Link>.
         </p>
       </motion.div>
     </main>
